@@ -1,4 +1,6 @@
 <div align="center">
+<br>
+<img alt="Icon" src="public/welcome.png" height="50">
 
 # Avantages Jeunes Connect
 Une application mobile pour la carte avantages jeunes en Bourgogne Franche-Comté.
