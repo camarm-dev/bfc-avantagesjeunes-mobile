@@ -59,6 +59,18 @@ const categories = {
     }
 }
 
+const secteurs = {
+    "1": {
+        nom: "Besançon"
+    },
+    "11": {
+        nom: "Arbois - Poligny - Salins"
+    },
+    "82": {
+        nom: "Avantages sur Internet"
+    }
+}
+
 
 export type {
     Suggestion,
@@ -66,5 +78,6 @@ export type {
 }
 
 export {
-    categories
+    categories,
+    secteurs
 }

@@ -13,7 +13,10 @@
         <img :src="avantage.image_url" alt="Image de l'avantage">
       </div>
       <h2 class="welcome">{{ avantage.offre }}</h2>
-      <p>{{ avantage.secteurs }}</p>
+      <p>
+        -
+        <span v-for="secteur in avantage.secteurs">{{ secteurs[secteur].nom || 'Tout les secteurs' }} -</span>
+      </p>
     </header>
     <div class="ion-margin-auto">
       <ion-chip color="light">
@@ -118,7 +121,7 @@ import {
   Building2,
   MousePointer
 } from "lucide-vue-next";
-import {categories} from "../functions/interfaces";
+import {categories, secteurs} from "../functions/interfaces";
 import Icon from "@/components/Icon.vue";
 </script>
 
