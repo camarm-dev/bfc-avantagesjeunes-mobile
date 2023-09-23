@@ -26,10 +26,11 @@ async function post(url: string, data: any) {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded,application/json',
             'KOREDGE-API-KEY': 'cNkLdXwQc7G8fRe0FGGCOOZcrkJHbY3B'
-        }
-    }
+        },
+        url: url
+    } as any
 
-    return await handleResponse(fetch(url, config))
+    return await handleResponse(fetch(url, config), true, config)
 }
 
 
@@ -39,13 +40,20 @@ async function get(url: string) {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded,application/json',
             'KOREDGE-API-KEY': 'cNkLdXwQc7G8fRe0FGGCOOZcrkJHbY3B'
-        }
-    }
-    return await handleResponse(fetch(url, config))
+        },
+        url: url
+    } as any
+    return await handleResponse(fetch(url, config), true, config)
 }
 
 
-async function handleResponse(request: Promise<Response>, checks = true): Promise<APIResponse> {
+async function handleResponse(request: Promise<Response>, checks = true, requestConfig: Request): Promise<APIResponse> {
+    let requestClone = {
+        method: requestConfig.method,
+        headers: requestConfig.headers,
+        body: requestConfig.body,
+    }
+    if (requestConfig.body) requestClone.body = requestConfig.body
     try {
         const response = await request
         const data = await response.json()
@@ -64,15 +72,12 @@ async function handleResponse(request: Promise<Response>, checks = true): Promis
                 }
                 for (const card of userCards) {
                     if (card.id == localStorage.getItem('currentCardId')) {
-                        const userCreds = card
+                        userCreds = card
                     }
                 }
                 localStorage.setItem('currentCardToken', (await getToken(userCreds.numero, userCreds.password)).token || '')
-                const cloned = (await request).clone()
-                const promisedNewRequest = new Promise(resolve => {
-                    resolve(cloned)
-                })
-                return handleResponse(promisedNewRequest, false)
+                const newRequest = fetch(requestConfig.url, requestClone)
+                return await handleResponse(newRequest,false, requestConfig)
             } else {
                 await displayToast('Error', 'Unable to access API: forbidden. Please (re)login.', 3000, 'danger')
                 setTimeout(() => {

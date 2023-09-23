@@ -1,52 +1,54 @@
 <template>
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Ajouter une carte</ion-title>
-      <ion-buttons slot="end">
-        <ion-button color="medium" @click="closeModals()">
-          <XCircle/>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content class="ion-padding" color="primary">
+  <ion-page>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Ajouter une carte</ion-title>
+        <ion-buttons slot="end">
+          <ion-button color="medium" @click="closeModals()">
+            <XCircle/>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
 
-    <img style="margin: auto; display: block" alt="Carte avantage jeunes 2023 2024 BFC" width="150" src="/carte.png"/>
+      <img style="margin: auto; display: block" alt="Carte avantage jeunes 2023 2024 BFC" width="150" src="/carte.png"/>
 
-    <form class="login">
+      <form class="login">
 
-      <ion-list inset>
-        <ion-item color="secondary">
-          <ion-input label-placement="stacked" label="Numéro de carte" :maxLength="9" required color="light" v-maskito="cardNumberOptions" :value="numero" @input="numero = $event.target.value" type="text" placeholder="00-00-00"></ion-input>
-        </ion-item>
-      </ion-list>
+        <ion-list inset>
+          <ion-item color="secondary">
+            <ion-input label-placement="stacked" label="Numéro de carte" :maxLength="9" required color="light" v-maskito="cardNumberOptions" :value="numero" @input="numero = $event.target.value" type="text" placeholder="00-00-00"></ion-input>
+          </ion-item>
+        </ion-list>
 
-      <ion-list inset>
-        <ion-item color="primary" class="ion-border">
-          <ion-input color="light" label-placement="stacked" label="Mon mot de passe" required :value="password" @input="password = $event.target.value" type="password" placeholder="*******"></ion-input>
-        </ion-item>
-      </ion-list>
+        <ion-list inset>
+          <ion-item class="ion-border">
+            <ion-input color="light" label-placement="stacked" label="Mon mot de passe" required :value="password" @input="password = $event.target.value" type="password" placeholder="*******"></ion-input>
+          </ion-item>
+        </ion-list>
 
-      <ion-list inset>
-        <ion-item color="primary" class="ion-border">
-          <ion-checkbox color="secondary" justify="start" :checked="agree" @input="agree = !agree" label-placement="end" required>
-            <ion-label class="ion-text-wrap" color="light">
-              J'accepte les <a href="/">conditions d'utilisation</a> de Avantages Jeunes Connect
-            </ion-label>
-          </ion-checkbox>
-        </ion-item>
-      </ion-list>
+        <ion-list inset>
+          <ion-item class="ion-border">
+            <ion-checkbox color="secondary" justify="start" :checked="agree" @input="agree = !agree" label-placement="end" required>
+              <ion-label class="ion-text-wrap" color="light">
+                J'accepte les <a href="/">conditions d'utilisation</a> de Avantages Jeunes Connect
+              </ion-label>
+            </ion-checkbox>
+          </ion-item>
+        </ion-list>
 
-      <ion-button color="secondary" expand="full" type="button" @click="login()">Ajouter</ion-button>
+        <ion-button color="secondary" expand="full" type="button" @click="login()">Ajouter</ion-button>
 
-    </form>
+      </form>
 
-  </ion-content>
+    </ion-content>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonTitle, IonInput, IonButton, IonList, IonChip } from "@ionic/vue";
-import { XCircle, BadgeInfo, HelpCircle } from "lucide-vue-next";
+import { IonTitle, IonInput, IonButton, IonList, IonPage } from "@ionic/vue";
+import { XCircle } from "lucide-vue-next";
 import { maskito as vMaskito } from '@maskito/vue';
 
 const cardNumberOptions = {
@@ -91,6 +93,7 @@ export default {
       }
       const response = await getToken(this.numero.replaceAll('-', ''), this.password)
       const token = response.token
+      console.log(token)
       if (token) {
         const cards = getConnectedCards()
         const accountId = getIDFromToken(token)

@@ -13,8 +13,7 @@ async function createModal(component: Component, refName: string, refs: any, pro
         component: component as ComponentRef,
         canDismiss: true,
         componentProps: props,
-        // enterAnimation: 'modal-slide-in',
-        // leaveAnimation: 'modal-slide-out'
+        presentingElement: refs['page'].$el
     })
     await refs[refName].value.present()
 }

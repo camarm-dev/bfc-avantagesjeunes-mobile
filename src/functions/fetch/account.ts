@@ -19,9 +19,9 @@ async function getToken(number: string, password: string): Promise<APIResponse> 
             'Content-Type': 'application/x-www-form-urlencoded,application/json',
             'KOREDGE-API-KEY': 'cNkLdXwQc7G8fRe0FGGCOOZcrkJHbY3B'
         }
-    }
+    } as any
 
-    return await handleResponse(fetch(url, config))
+    return await handleResponse(fetch(url, config), true, config)
 }
 
 async function getAccount() {

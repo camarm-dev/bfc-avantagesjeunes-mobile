@@ -11,6 +11,19 @@ ion-nav-link {
     width: max-content;
 }
 
+ion-item.ion-color-secondary ion-input * {
+    color: var(--ion-color-primary) !important;
+}
+
+ion-item.ion-color-secondary ion-input input {
+    color: var(--ion-color-primary) !important;
+    opacity: .5;
+}
+
+ion-item.ion-color-secondary ion-input input::placeholder {
+    color: var(--ion-color-medium) !important;
+}
+
 ion-item, ion-list {
     --background: var(--ion-color-primary-shade);
     --ion-item-border-color: var(--ion-color-primary-tint)
@@ -83,16 +96,22 @@ router-link, a {
     text-decoration: none;
 }
 
-ion-list, ion-list::part(native) {
-    border-radius: 7px;
+ion-list ion-item:first-child {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
-ion-list::part(native) {
-    border-radius: 10px;
+ion-list ion-item:last-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
-ion-list {
-    border-radius: 10px;
+ion-checkbox {
+    --checkbox-background: #fff;
+}
+
+ion-label.ion-color-light {
+    color: var(--ion-color-light) !important;
 }
 
 ion-label ion-progress-bar {

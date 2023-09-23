@@ -56,8 +56,18 @@
         </ion-label>
       </ion-item>
     </ion-list>
-    <ion-list inset>
 
+    <div class="list-title">
+      Actions
+    </div>
+    <ion-list inset>
+      <ion-item button>
+        <Focus class="icon"/>
+        <ion-label>
+          <p>Modifier la photo</p>
+          <h2>Scanner ma carte</h2>
+        </ion-label>
+      </ion-item>
     </ion-list>
   </ion-content>
 </template>
@@ -82,7 +92,8 @@ import {
   SquareAsterisk,
   Euro,
   BadgeCheck,
-  BadgeX
+  BadgeX,
+  Focus
 } from "lucide-vue-next";
 </script>
 
