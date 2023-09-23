@@ -10,3 +10,15 @@ Créée pour rechercher plus facilement les avantages dont vous pouvez bénéfic
 ## Télécharger
 
 SOON: Disponible sur F-droid
+
+## Goals
+
+- [x] Voir sa carte
+- [x] Voir son compte
+- [ ] Voir ses avantages utilisés
+- [ ] Voir ses favoris
+- [ ] Enregistrer un scan de sa carte
+- [ ] Voir les avantages autours sur une carte
+- [ ] Rechercher les avantages de mon secteur
+- [ ] Rechercher des avantages (secteur, type)
+- [ ] Ouvrir un avantage sur une carte
