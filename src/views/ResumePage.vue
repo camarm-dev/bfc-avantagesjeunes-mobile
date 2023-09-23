@@ -14,7 +14,51 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" v-if="loggedIn">
-      <div class="floating"></div>
+      <div class="top-background"></div>
+      <div class="floating">
+        <p>{{ welcome_formula }}, {{ user.carte.prenom }}</p>
+        <h3>{{ user.carte.total }} avantages utilisés</h3>
+        <ion-nav-link router-direction="forward"> <!-- :component="UsedAvantages" -->
+          <p class="footer focusable">Tout voir<ChevronRight/></p>
+        </ion-nav-link>
+      </div>
+      <div class="list-title">Suggestions</div>
+      <div class="horizontal-carousel">
+        <div class="card card-only" v-if="user.suggestions.length <= 0">
+          <ion-note>
+            Aucun avantage suggéré
+          </ion-note>
+        </div>
+        <ion-nav-link :component-props="{ avantage: suggested }" router-direction="forward" :component="InspectAvantage" v-for="suggested in user.suggestions">
+          <div :class="`card focusable ${suggested.type}`">
+            <header>
+              <img alt="Image de l'avantage" :src="suggested.image_url"/>
+            </header>
+            <div class="content">
+              <h3>{{ suggested.offre }}</h3>
+              <p>{{ getInnerContent(suggested.conditions) }}</p>
+            </div>
+          </div>
+        </ion-nav-link>
+
+      </div>
+      <div class="list-title">Mes badges</div>
+      <div class="horizontal-carousel">
+        <div class="card card-only" v-if="!user.badges">
+          <ion-note>
+            Vous n'avez pas de badges...
+          </ion-note>
+        </div>
+      </div>
+      <ion-list inset>
+        <ion-item button>
+          <Map class="icon ion-color-success"/>
+          <ion-label>
+            <p>Autour de moi</p>
+            <h2>Ouvrir la carte</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
       <ion-list inset>
         <ion-nav-link router-direction="forward" :component="MyCard">
           <ion-item button>
@@ -77,23 +121,29 @@ import {
   IonNavLink,
   IonList,
   IonLabel,
-  IonItem, IonChip,
+  IonItem,
+  IonChip,
 } from '@ionic/vue';
 import {
   BadgeInfo,
   HelpCircle,
-  CreditCard
+  CreditCard,
+  Map,
+  ChevronRight
 } from "lucide-vue-next";
 import LoginModal from "@/components/LoginModal.vue";
 import AvantagesJeunesIcon from "@/components/AvantagesJeunesIcon.vue";
 import MyAccount from "@/components/MyAccount.vue";
 import MyCard from "@/components/MyCard.vue";
 import { createModal } from "@/functions/modals";
+import InspectAvantage from "@/components/InspectAvantage.vue";
 </script>
 
 <script lang="ts">
 import { ref } from "vue";
 import {getAccount} from "@/functions/fetch/account";
+import {getAvantage} from "@/functions/fetch/avantages";
+import {Avantage} from "@/functions/interfaces";
 
 let refs = {
   modalLogin: ref(null)
@@ -114,6 +164,7 @@ export default {
       user: {
         image_url: "",
         carte: {
+          total: 0,
           prenom: "",
           nom: "",
           date_naiss: "",
@@ -127,8 +178,11 @@ export default {
           saison: "",
           date_vente: "",
           valid_datefin: ""
-        }
+        },
+        suggestions: [] as any[],
+        badges: [] as [] || false
       } as any,
+      welcome_formula: "Bonjour"
     }
   },
   mounted() {
@@ -142,6 +196,14 @@ export default {
       this.loggedIn = true
       this.refreshAccount()
     }
+
+    const now = new Date()
+    if (now.getHours() > 12) {
+      this.welcome_formula = "Bonne après-midi"
+    }
+    if (now.getHours() > 18) {
+      this.welcome_formula = "Bonne soirée"
+    }
   },
   methods: {
     open(url: string) {
@@ -151,12 +213,22 @@ export default {
       this.$router.push(href)
     },
     refreshAccount() {
-      getAccount().then(user => {
+      getAccount().then(async user => {
         this.user = user
+        let suggestionAvantages = []
+        for (const suggestion of this.user.suggestions) {
+          suggestionAvantages.push(await getAvantage((suggestion.id_avantage)))
+        }
+        this.user.suggestions = suggestionAvantages
       }).catch(err => {
         this.loggedIn = false
       })
     },
+    getInnerContent(html_string: string) {
+      const el = document.createElement('div')
+      el.innerHTML = html_string
+      return el.innerText
+    }
   },
 }
 </script>

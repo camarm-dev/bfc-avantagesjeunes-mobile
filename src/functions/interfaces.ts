@@ -1,70 +1,70 @@
-interface DuleEvent {
-    name: string
-    startsAt: string
-    endsAt: string
-    updatedAt: string
-    displayStartsAt?: string
-    displayEndsAt?: string
-    id?: string
-    _id?: string
+interface Suggestion {
+    id_avantage: 45387
 }
 
-interface DuleNote {
-    name: string
-    content: string
-    updatedAt: string
-    id?: string
-    _id?: string
+interface Avantage {
+    offre: string
+    conditions: string
+    type: string
+    datedebut: string
+    datefin: string
+    saison: string
+    image_url: string
+    note: number
+    nb_note: number
+    secteurs: number[]
+    categories: number[]
 }
 
-interface DuleTask {
-    tasklist: string
-    content: string
-    updatedAt: string
-    checked: boolean
-    id?: string
-    _id?: string
+const categories = {
+    "1": {
+        nom: "Musées",
+        icon: "Landmark"
+    },
+    "2": {
+        nom: "Concert, spectacle, théâtre",
+        icon: "Smile"
+    },
+    "4": {
+        nom: "Voyage",
+        icon: "Compass"
+    },
+    "5": {
+        nom: "Cinéma",
+        icon: "Clapperboard"
+    },
+    "7": {
+        nom: "Sport",
+        icon: "Medal"
+    },
+    "8": {
+        nom: "Arts créatifs",
+        icon: "Brush"
+    },
+    "9": {
+        nom: "Musique",
+        icon: "Music4"
+    },
+    "10": {
+        nom: "Environnement",
+        icon: "Leaf"
+    },
+    "11": {
+        nom: "Informatique",
+        icon: "Cpu"
+    },
+    "12": {
+        nom: "Photographie",
+        icon: "Camera"
+    }
 }
 
-interface DuleTasklist {
-    name: string
-    tasks: DuleTask[]
-    id?: string
-    _id?: string
-}
-
-interface DuleRecentActivityItem {
-    name: string,
-    tasks: number
-    tasksCompleted: number,
-    isTasklist: boolean
-}
-
-interface DuleIncomingEventItem {
-    name: string
-    label: string
-    id: string
-    isReminder: boolean
-}
-
-interface Reminder {
-    ringsAt: Date | string
-    isReminder: boolean
-    name: string
-    notificationDescriptor: number
-}
-
-interface Reminders {
-    [key: string]: Reminder
-}
 
 export type {
-    DuleEvent,
-    DuleNote,
-    DuleTask,
-    DuleTasklist,
-    DuleRecentActivityItem,
-    DuleIncomingEventItem,
-    Reminder,
-    Reminders
+    Suggestion,
+    Avantage
+}
+
+export {
+    categories
 }

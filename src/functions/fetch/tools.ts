@@ -17,18 +17,21 @@ function getIDFromToken(token: string) {
     return JSON.parse(jsonPayload)['id_compte'];
 }
 
-async function post(url: string, data: any) {
-    data['token'] = localStorage.getItem('currentCardToken')
+async function post(url: string, data: any, cors: boolean = true) {
+    if (data) data['token'] = localStorage.getItem('currentCardToken')
 
-    const config = {
+    let config = {
         method: 'POST',
-        body: JSON.stringify(data),
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded,application/json',
-            'KOREDGE-API-KEY': 'cNkLdXwQc7G8fRe0FGGCOOZcrkJHbY3B'
+            'KOREDGE-API-KEY': 'cNkLdXwQc7G8fRe0FGGCOOZcrkJHbY3B',
+            'Sec-Fetch-Site': 'same-site'
         },
+        mode: cors ? 'cors': 'no-cors',
         url: url
     } as any
+
+    if (data) config.body = JSON.stringify(data)
 
     return await handleResponse(fetch(url, config), true, config)
 }
@@ -79,21 +82,21 @@ async function handleResponse(request: Promise<Response>, checks = true, request
                 const newRequest = fetch(requestConfig.url, requestClone)
                 return await handleResponse(newRequest,false, requestConfig)
             } else {
-                await displayToast('Error', 'Unable to access API: forbidden. Please (re)login.', 3000, 'danger')
+                // await displayToast('Error', 'Unable to access API: forbidden. Please (re)login.', 3000, 'danger')
                 localStorage.removeItem('userCards')
                 localStorage.removeItem('currentCardId')
                 localStorage.removeItem('currentCardToken')
-                setTimeout(() => {
-                    location.href = '/resume'
-                }, 3000)
+                // setTimeout(() => {
+                //     location.href = '/resume'
+                // }, 3000)
             }
         } else {
             if (err.response) await displayToast(`Error ${err.response.data.status}`, err.response.data.message, 2000, 'danger')
             else {
-                await displayToast('Error', 'Unable to access API: forbidden. Please (re)login.', 3000, 'danger')
-                setTimeout(() => {
-                    location.href = '/resume'
-                }, 3000)
+                // await displayToast('Error', 'Unable to access API: forbidden. Please (re)login.', 3000, 'danger')
+                // setTimeout(() => {
+                //     location.href = '/resume'
+                // }, 3000)
             }
         }
         err.response.code = err.response.status

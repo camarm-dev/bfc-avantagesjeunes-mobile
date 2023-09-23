@@ -33,14 +33,14 @@ async function getAccount() {
     return (await post(url, data)).compte
 }
 
-function logOut(number: string) {
-    const cards = getConnectedCards()
-    for (const card of cards) {
-        if (card.numero == number) {
-            cards.splice(cards.indexOf(card), 1)
-        }
-    }
-    localStorage.setItem('userCards', JSON.stringify(cards))
+function logOut() {
+    localStorage.removeItem('userCards')
+    localStorage.removeItem('userAppearance')
+    localStorage.removeItem('currentCardToken')
+    localStorage.removeItem('currentCardId')
+    localStorage.removeItem('cardImageRecto')
+    localStorage.removeItem('cardImageVerso')
+    location.reload()
 }
 
 export {

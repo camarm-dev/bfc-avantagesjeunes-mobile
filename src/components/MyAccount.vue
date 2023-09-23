@@ -54,6 +54,14 @@
     <ion-list inset>
       <ion-item button>
 <!--   api/centre_interet/list     -->
+        <LogOut class="icon ion-color-danger"/>
+        <ion-label>
+          <p>Déconnecter ce compte de cet appareil</p>
+          <h2>Se déconnecter</h2>
+        </ion-label>
+      </ion-item>
+      <ion-item button>
+<!--   api/centre_interet/list     -->
         <Zap class="icon"/>
         <ion-label>
           <p>Personnalisez vos suggestions</p>
@@ -92,7 +100,8 @@ import {
   Cake,
   Zap,
   Lock,
-  BadgeAlert
+  BadgeAlert,
+  LogOut
 } from "lucide-vue-next";
 </script>
 
