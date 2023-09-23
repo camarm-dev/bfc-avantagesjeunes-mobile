@@ -9,8 +9,15 @@
   </ion-header>
   <ion-content :fullscreen="true">
     <header class="profile">
-      <div>
-        <img class="card-picture" :src="'/carte.png'" alt="Votre carte">
+      <div class="card-swiper">
+        <swiper :flip-effect="{ slideShadows: false }" :pagination="{ enabled: true, clickable: true, type: 'bullets' }" :modules="modules" :loop="true" effect="flip" :slide-per-view="1">
+          <swiper-slide>
+            <img height="200" class="card-picture" :src="'/carte.png'" alt="Votre carte">
+          </swiper-slide>
+          <swiper-slide>
+            <img height="200" class="card-picture" :src="'/carte-dos.png'" alt="Votre carte">
+          </swiper-slide>
+        </swiper>
       </div>
       <ion-chip class="large-chip" color="success" v-if="user.carte.valid">
         <BadgeCheck class="icon ion-color-success" size="30"/>
@@ -61,11 +68,18 @@
       Actions
     </div>
     <ion-list inset>
-      <ion-item button>
+      <ion-item disabled button>
         <Focus class="icon"/>
         <ion-label>
           <p>Modifier la photo</p>
           <h2>Scanner ma carte</h2>
+        </ion-label>
+      </ion-item>
+      <ion-item disabled class="focusable">
+        <Trash2 class="icon ion-color-danger"/>
+        <ion-label>
+          <p>Réinitialiser les images</p>
+          <h2>Supprimer les photos</h2>
         </ion-label>
       </ion-item>
     </ion-list>
@@ -93,14 +107,26 @@ import {
   Euro,
   BadgeCheck,
   BadgeX,
-  Focus
+  Focus,
+  Trash2
 } from "lucide-vue-next";
+import { EffectFlip, Pagination } from 'swiper/modules'
+
+const modules = [
+    EffectFlip,
+    Pagination
+]
 </script>
 
 <script lang="ts">
+import { Swiper, SwiperSlide } from 'swiper/vue';
 import { createModal } from "@/functions/modals";
 import {getAccount} from "@/functions/fetch/account";
 import {readableDate} from "@/functions/native/dates";
+import 'swiper/css';
+import 'swiper/css/effect-flip';
+import 'swiper/css/pagination';
+import '@ionic/vue/css/ionic-swiper.css';
 
 export default {
   data () {
@@ -138,15 +164,21 @@ export default {
     },
     createModal
   },
+  components: { Swiper, SwiperSlide }
 }
 </script>
 <style>
+.card-swiper {
+  margin-bottom: 25px;
+}
+
 .profile {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 2em;
+  --swiper-pagination-bottom: -25px;
 }
 
 .profile p {
@@ -157,5 +189,20 @@ export default {
 
 .profile p, .profile h2 {
   margin: 0;
+}
+
+.swiper-pagination * {
+  background: var(--ion-color-secondary) !important;
+  box-shadow: 0 0 5px var(--ion-text-color) !important;
+}
+
+.swiper-pagination .swiper-pagination-bullet {
+  background: var(--ion-color-secondary) !important;
+  box-shadow: 0 0 5px var(--ion-text-color) !important;
+}
+
+.swiper-pagination .swiper-pagination-bullet-active {
+  width: 10px !important;
+  height: 10px !important;
 }
 </style>

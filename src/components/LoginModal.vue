@@ -93,7 +93,6 @@ export default {
       }
       const response = await getToken(this.numero.replaceAll('-', ''), this.password)
       const token = response.token
-      console.log(token)
       if (token) {
         const cards = getConnectedCards()
         const accountId = getIDFromToken(token)

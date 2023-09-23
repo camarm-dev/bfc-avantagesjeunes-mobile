@@ -80,8 +80,11 @@ async function handleResponse(request: Promise<Response>, checks = true, request
                 return await handleResponse(newRequest,false, requestConfig)
             } else {
                 await displayToast('Error', 'Unable to access API: forbidden. Please (re)login.', 3000, 'danger')
+                localStorage.removeItem('userCards')
+                localStorage.removeItem('currentCardId')
+                localStorage.removeItem('currentCardToken')
                 setTimeout(() => {
-                    location.href = '/dash/resume'
+                    location.href = '/resume'
                 }, 3000)
             }
         } else {
@@ -89,7 +92,7 @@ async function handleResponse(request: Promise<Response>, checks = true, request
             else {
                 await displayToast('Error', 'Unable to access API: forbidden. Please (re)login.', 3000, 'danger')
                 setTimeout(() => {
-                    location.href = '/dash/resume'
+                    location.href = '/resume'
                 }, 3000)
             }
         }

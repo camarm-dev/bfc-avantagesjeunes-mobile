@@ -196,6 +196,10 @@ input {
     margin-inline-end: 15px;
 }
 
+.card-picture {
+    height: 275px !important;
+}
+
 @media (min-width: 1024px) {
     .ion-page ion-content:nth-child(2) {
         width: 1024px;
