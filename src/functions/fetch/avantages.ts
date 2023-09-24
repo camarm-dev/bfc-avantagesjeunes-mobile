@@ -1,4 +1,4 @@
-import {handleResponse, get, post} from "@/functions/fetch/tools";
+import {get, post} from "@/functions/fetch/tools";
 
 
 async function getAvantage(id: string) {
