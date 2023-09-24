@@ -13,9 +13,9 @@ async function createModal(component: Component, refName: string, refs: any, pro
         component: component as ComponentRef,
         canDismiss: true,
         componentProps: props,
-        presentingElement: isSheet ? null: refs['page'].$el,
-        initialBreakpoint: isSheet ? breakpoints[1]: null,
-        breakpoints: breakpoints,
+        presentingElement: isSheet ? undefined: refs['page'].$el,
+        initialBreakpoint: isSheet ? breakpoints[1]: undefined,
+        breakpoints: isSheet ? breakpoints: undefined,
     })
     await refs[refName].value.present()
 }
