@@ -33,6 +33,17 @@ async function getAccount() {
     return (await post(url, data)).compte
 }
 
+
+async function updateAccount(user: any) {
+    const url = import.meta.env.VITE_API_URL + '/api/compte/update'
+    const data = {
+        token: localStorage.getItem('currentCardToken'),
+        id: localStorage.getItem('currentCardId'),
+        data: user
+    }
+    return await post(url, data)
+}
+
 function logOut() {
     localStorage.removeItem('userCards')
     localStorage.removeItem('userAppearance')
@@ -46,6 +57,7 @@ function logOut() {
 export {
     getToken,
     getAccount,
+    updateAccount,
     logOut,
     getConnectedCards
 }

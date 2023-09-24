@@ -8,14 +8,14 @@ function closeModals() {
     window.dispatchEvent(closeModalEvent)
 }
 
-async function createModal(component: Component, refName: string, refs: any, props = { }, isSheet: boolean = false) {
+async function createModal(component: Component, refName: string, refs: any, props = { }, isSheet: boolean = false, breakpoints: number[] = [0, 0.75, 0.95]) {
     refs[refName].value = await modalController.create({
         component: component as ComponentRef,
         canDismiss: true,
         componentProps: props,
         presentingElement: isSheet ? null: refs['page'].$el,
-        initialBreakpoint: isSheet ? 0.75: null,
-        breakpoints: [0, 0.75, 0.95],
+        initialBreakpoint: isSheet ? breakpoints[1]: null,
+        breakpoints: breakpoints,
     })
     await refs[refName].value.present()
 }

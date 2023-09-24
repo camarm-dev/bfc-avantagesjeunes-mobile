@@ -53,23 +53,20 @@
     </div>
     <ion-list inset>
       <ion-item button>
-<!--   api/centre_interet/list     -->
         <LogOut class="icon ion-color-danger"/>
         <ion-label>
           <p>Déconnecter ce compte de cet appareil</p>
           <h2>Se déconnecter</h2>
         </ion-label>
       </ion-item>
-      <ion-item button>
-<!--   api/centre_interet/list     -->
+      <ion-item button @click="createModal(ModifyInterests, 'modalModifyInterests', refs, { user }, true, [0, 0.65])">
         <Zap class="icon"/>
         <ion-label>
           <p>Personnalisez vos suggestions</p>
           <h2>Mes centres d'intérêts</h2>
         </ion-label>
       </ion-item>
-      <ion-item button>
-<!--   api/centre_interet/list     -->
+      <ion-item disabled button>
         <Lock class="icon ion-color-warning"/>
         <ion-label>
           <p>Renforcer la sécurité de votre compte</p>
@@ -103,12 +100,24 @@ import {
   BadgeAlert,
   LogOut
 } from "lucide-vue-next";
+import ModifyInterests from "@/components/ModifyInterests.vue";
 </script>
 
 <script lang="ts">
 import { createModal } from "@/functions/modals";
 import {getAccount} from "@/functions/fetch/account";
 import {readableDate} from "@/functions/native/dates";
+import {ref} from "vue";
+
+let refs = {
+  modalModifyInterests: ref(null)
+} as any
+
+window.addEventListener('closeModals', () => {
+  Object.keys(refs).forEach(key => {
+    if (refs[key].value) refs[key].value.dismiss()
+  })
+})
 
 export default {
   data () {
@@ -147,6 +156,7 @@ export default {
           },
         },
       ],
+      refs: refs
     }
   },
   mounted() {
