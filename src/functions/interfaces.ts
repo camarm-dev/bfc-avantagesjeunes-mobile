@@ -63,12 +63,38 @@ const secteurs = {
     "1": {
         nom: "Besançon"
     },
+    "3": {
+        nom: "Valdahon"
+    },
+    "2": {
+        nom: "Beaume les Dames"
+    },
+    "4": {
+        nom: "Ornans"
+    },
+    "5": {
+        nom: "Morteau"
+    },
+    "6": {
+        nom: "Pontarlier"
+    },
+    "7": {
+        nom: "Quingey"
+    },
     "11": {
         nom: "Arbois - Poligny - Salins"
+    },
+    "67": {
+        nom: "Auxois"
     },
     "82": {
         nom: "Avantages sur Internet"
     }
+}
+
+const editions = {
+    "1": ["1", "2", "3", "4", "5", "6", "7", "82"],
+    "7": ["67"],
 }
 
 
