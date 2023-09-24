@@ -18,6 +18,12 @@
         <span v-for="secteur in avantage.secteurs">{{ (secteurs[secteur] || { 'nom': 'Tout les secteurs' }).nom }} -</span>
       </p>
     </header>
+    <ion-fab vertical="top" horizontal="end" class="top">
+      <ion-fab-button color="primary" class="small" title="Ajouter aux favoris">
+        <HeartOff size="20" @click="removeFavori(avantage.id_avantage); avantage.espaceperso_coeur = !avantage.espaceperso_coeur" v-if="avantage.espaceperso_coeur" class="ion-color-secondary"/>
+        <Heart size="20" @click="addFavori(avantage.id_avantage); avantage.espaceperso_coeur = !avantage.espaceperso_coeur" v-else class="ion-color-secondary"/>
+      </ion-fab-button>
+    </ion-fab>
     <div class="ion-margin-auto">
       <ion-chip color="light">
         <Star size="10" class="icon ion-color-warning"/>
@@ -111,6 +117,7 @@ import {
   IonItem,
   IonBackButton,
   IonButtons,
+  IonFabButton
 } from '@ionic/vue';
 import {
   CalendarClock,
@@ -120,10 +127,13 @@ import {
   SquareAsterisk,
   Milestone,
   Building2,
-  MousePointer
+  MousePointer,
+  Heart,
+  HeartOff
 } from "lucide-vue-next";
 import {categories, secteurs} from "../functions/interfaces";
 import Icon from "@/components/Icon.vue";
+import {addFavori, removeFavori} from "@/functions/fetch/avantages";
 </script>
 
 <script lang="ts">
@@ -198,5 +208,14 @@ ion-chip {
   left: 0;
   top: 9.5em;
   rotate: 180deg;
+}
+
+ion-fab.top {
+  top: 60px
+}
+
+ion-fab-button.small {
+  width: 35px;
+  height: 35px;
 }
 </style>

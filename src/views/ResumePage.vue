@@ -42,17 +42,28 @@
         </ion-nav-link>
 
       </div>
-      <div class="list-title">Mes badges</div>
+      <div class="list-title">Mes favoris</div>
       <div class="horizontal-carousel">
-        <div class="card card-only" v-if="!user.badges">
+        <div class="card card-only" v-if="!user.favoris">
           <ion-note>
-            Vous n'avez pas de badges...
+            Vous n'avez pas d'avantages favoris...
           </ion-note>
         </div>
+        <ion-nav-link :component-props="{ avantage: favori }" router-direction="forward" :component="InspectAvantage" v-for="favori in user.favoris">
+          <div :class="`card focusable ${favori.type}`">
+            <header>
+              <img alt="Image de l'avantage" :src="favori.image_url"/>
+            </header>
+            <div class="content">
+              <h3>{{ favori.offre }}</h3>
+              <p>{{ getInnerContent(favori.conditions) }}</p>
+            </div>
+          </div>
+        </ion-nav-link>
       </div>
       <ion-list inset>
-        <ion-item button>
-          <Map class="icon ion-color-success"/>
+        <ion-item @click="createModal(Map, 'modalMap', refs, {}, true)" button>
+          <MapIcon class="icon ion-color-success"/>
           <ion-label>
             <p>Autour de moi</p>
             <h2>Ouvrir la carte</h2>
@@ -128,7 +139,7 @@ import {
   BadgeInfo,
   HelpCircle,
   CreditCard,
-  Map,
+  MapIcon,
   ChevronRight
 } from "lucide-vue-next";
 import LoginModal from "@/components/LoginModal.vue";
@@ -137,16 +148,17 @@ import MyAccount from "@/components/MyAccount.vue";
 import MyCard from "@/components/MyCard.vue";
 import { createModal } from "@/functions/modals";
 import InspectAvantage from "@/components/InspectAvantage.vue";
+import Map from "@/components/Map.vue";
 </script>
 
 <script lang="ts">
 import { ref } from "vue";
 import {getAccount} from "@/functions/fetch/account";
 import {getAvantage} from "@/functions/fetch/avantages";
-import {Avantage} from "@/functions/interfaces";
 
 let refs = {
-  modalLogin: ref(null)
+  modalLogin: ref(null),
+  modalMap: ref(null)
 } as any
 
 window.addEventListener('closeModals', () => {
@@ -180,7 +192,7 @@ export default {
           valid_datefin: ""
         },
         suggestions: [] as any[],
-        badges: [] as [] || false
+        favoris: [] as [] || false
       } as any,
       welcome_formula: "Bonjour"
     }
@@ -220,6 +232,12 @@ export default {
           suggestionAvantages.push(await getAvantage((suggestion.id_avantage)))
         }
         this.user.suggestions = suggestionAvantages
+
+        let avantagesFavoris = []
+        for (const favori of this.user.favoris) {
+          avantagesFavoris.push(await getAvantage((favori)))
+        }
+        this.user.favoris = avantagesFavoris
       }).catch(err => {
         this.loggedIn = false
       })
