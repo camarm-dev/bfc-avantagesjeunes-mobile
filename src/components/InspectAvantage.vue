@@ -15,7 +15,7 @@
       <h2 class="welcome">{{ avantage.offre }}</h2>
       <p>
         -
-        <span v-for="secteur in avantage.secteurs">{{ secteurs[secteur].nom || 'Tout les secteurs' }} -</span>
+        <span v-for="secteur in avantage.secteurs">{{ (secteurs[secteur] || { 'nom': 'Tout les secteurs' }).nom }} -</span>
       </p>
     </header>
     <div class="ion-margin-auto">
@@ -72,6 +72,7 @@
     <div class="list-title">
       Avantage par
     </div>
+<!--  TODO: ouvrir dans map  -->
     <ion-list inset v-for="org in avantage.organismes">
       <ion-item>
         <Building2 class="icon"/>

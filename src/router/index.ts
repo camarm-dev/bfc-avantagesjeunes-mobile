@@ -15,10 +15,10 @@ const routes: Array<RouteRecordRaw> = [
         path: 'resume',
         component: () => import('@/views/ResumePage.vue')
       },
-      // {
-      //   path: 'search',
-      //   component: () => import('@/views/EventsPage.vue')
-      // }
+      {
+        path: 'search',
+        component: () => import('@/views/SearchPage.vue')
+      }
     ]
   }
 ]
