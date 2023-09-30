@@ -17,8 +17,8 @@ SOON: Disponible sur F-droid
 
 - [x] Voir sa carte
 - [x] Voir son compte
+- [x] Voir ses favoris
 - [ ] Voir ses avantages utilisés
-- [ ] Voir ses favoris
 - [ ] Enregistrer un scan de sa carte
 - [ ] Voir les avantages autours sur une carte
 - [ ] Rechercher les avantages de mon secteur
