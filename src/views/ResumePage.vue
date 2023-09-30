@@ -233,6 +233,8 @@ export default {
         }
         this.user.suggestions = suggestionAvantages
 
+        if (!this.user.favoris) this.user.favoris = []
+
         let avantagesFavoris = []
         for (const favori of this.user.favoris) {
           avantagesFavoris.push(await getAvantage((favori)))
