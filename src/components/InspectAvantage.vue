@@ -20,8 +20,8 @@
     </header>
     <ion-fab vertical="top" horizontal="end" class="top">
       <ion-fab-button color="primary" class="small" title="Ajouter aux favoris">
-        <HeartOff size="20" @click="removeFavori(avantage.id_avantage); avantage.espaceperso_coeur = !avantage.espaceperso_coeur" v-if="avantage.espaceperso_coeur" class="ion-color-secondary"/>
-        <Heart size="20" @click="addFavori(avantage.id_avantage); avantage.espaceperso_coeur = !avantage.espaceperso_coeur" v-else class="ion-color-secondary"/>
+        <HeartOff size="20" @click="removeFavori(avantage.id_avantage); isFavori = !isFavori" v-if="isFavori" class="ion-color-secondary"/>
+        <Heart size="20" @click="addFavori(avantage.id_avantage); isFavori = !isFavori" v-else class="ion-color-secondary"/>
       </ion-fab-button>
     </ion-fab>
     <div class="ion-margin-auto">
@@ -29,15 +29,25 @@
         <Star size="10" class="icon ion-color-warning"/>
         {{ avantage.note }} / 5 ({{ avantage.nb_note }} avis)
       </ion-chip>
-      <ion-chip :class="avantage.type" color="secondary" v-for="category in avantage.categories">
-        <Icon size="10" class="icon" :name="categories[category].icon"/>
-        {{ categories[category].nom }}
+      <ion-chip v-if="rubriques[category] != undefined" :class="avantage.type" color="secondary" v-for="category in avantage.categories">
+        <Icon size="10" class="icon" :name="rubriques[category].icon"/>
+        {{ rubriques[category].nom }}
       </ion-chip>
     </div>
+
+    <ion-list inset>
+      <ion-item disabled button color="secondary">
+        <Ticket class="icon ion-color-primary"/>
+        <ion-label class="ion-color-primary">
+          <h2>Utiliser l'avantage</h2>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
     <div class="list-title">
       Informations de l'avantage
     </div>
-    <ion-list inset>
+    <ion-list v-if="avantage.conditions != ''" inset>
       <ion-item class="description" v-html="avantage.conditions"/>
     </ion-list>
 
@@ -78,7 +88,6 @@
     <div class="list-title">
       Avantage par
     </div>
-<!--  TODO: ouvrir dans map  -->
     <ion-list inset v-for="org in avantage.organismes">
       <ion-item>
         <Building2 class="icon"/>
@@ -101,6 +110,28 @@
           <p>Site</p>
           <h2>{{ org.site }}</h2>
         </ion-label>
+      </ion-item>
+      <ion-item v-if="org.site2" @click="open(org.site2)">
+        <MousePointer class="icon ion-color-tertiary"/>
+        <ion-label>
+          <p>Site Secondaire</p>
+          <h2>{{ org.site2 }}</h2>
+        </ion-label>
+      </ion-item>
+      <!--  TODO: ouvrir dans map  -->
+      <ion-item button>
+        <ion-label>
+          <p>Voir sur la carte</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <div class="list-title">
+      Image
+    </div>
+    <ion-list inset>
+      <ion-item style="height: max-content" class="description">
+        <img style="display: block; margin: 1em auto 1em auto; border-radius: 10px" :src="avantage.image_url" alt="Image de l'avantage">
       </ion-item>
     </ion-list>
   </ion-content>
@@ -129,9 +160,10 @@ import {
   Building2,
   MousePointer,
   Heart,
-  HeartOff
+  HeartOff,
+  Ticket
 } from "lucide-vue-next";
-import {categories, secteurs} from "../functions/interfaces";
+import {secteurs, rubriques} from "../functions/interfaces";
 import Icon from "@/components/Icon.vue";
 import {addFavori, removeFavori} from "@/functions/fetch/avantages";
 </script>
@@ -140,7 +172,15 @@ import {addFavori, removeFavori} from "@/functions/fetch/avantages";
 import {readableDate} from "@/functions/native/dates";
 
 export default {
-  props: ['avantage'],
+  props: [
+    'avantage',
+    'favori'
+  ],
+  data() {
+    return {
+      isFavori: this.favori == undefined ? false: this.favori
+    }
+  },
   methods: {
     open(url: string) {
       window.open(url)
@@ -203,7 +243,7 @@ ion-chip {
   position: absolute;
   width: 100vw;
   height: 9em;
-  background: linear-gradient(var(--ion-color-primary) 10%, #081F3300 112%);
+  background: linear-gradient(var(--ion-color-primary) 10%, #081F3300 100%);
   z-index: 50;
   left: 0;
   top: 9.5em;

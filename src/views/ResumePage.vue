@@ -29,7 +29,7 @@
             Aucun avantage suggéré
           </ion-note>
         </div>
-        <ion-nav-link :component-props="{ avantage: suggested }" router-direction="forward" :component="InspectAvantage" v-for="suggested in user.suggestions">
+        <ion-nav-link :component-props="{ avantage: suggested, favori: favoris_ids.includes(suggested.id_avantage) }" router-direction="forward" :component="InspectAvantage" v-for="suggested in user.suggestions">
           <div :class="`card focusable ${suggested.type}`">
             <header>
               <img alt="Image de l'avantage" :src="suggested.image_url"/>
@@ -49,7 +49,7 @@
             Vous n'avez pas d'avantages favoris...
           </ion-note>
         </div>
-        <ion-nav-link :component-props="{ avantage: favori }" router-direction="forward" :component="InspectAvantage" v-for="favori in user.favoris">
+        <ion-nav-link :component-props="{ avantage: favori, favori: true }" router-direction="forward" :component="InspectAvantage" v-for="favori in user.favoris">
           <div :class="`card focusable ${favori.type}`">
             <header>
               <img alt="Image de l'avantage" :src="favori.image_url"/>
@@ -192,8 +192,9 @@ export default {
           valid_datefin: ""
         },
         suggestions: [] as any[],
-        favoris: [] as [] || false
+        favoris: [] as [] || false,
       } as any,
+      favoris_ids: [],
       welcome_formula: "Bonjour"
     }
   },
@@ -234,6 +235,7 @@ export default {
         this.user.suggestions = suggestionAvantages
 
         if (!this.user.favoris) this.user.favoris = []
+        this.favoris_ids = this.user.favoris
 
         let avantagesFavoris = []
         for (const favori of this.user.favoris) {
