@@ -7,7 +7,7 @@
       <ion-title>Avantage</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-content :fullscreen="true">
+  <ion-content ref="content" :fullscreen="true">
     <header class="avantage">
       <div class="image-wrapper">
         <img :src="avantage.image_url" alt="Image de l'avantage">
@@ -119,7 +119,7 @@
         </ion-label>
       </ion-item>
       <!--  TODO: ouvrir dans map  -->
-      <ion-item button>
+      <ion-item button @click="openMap(org.nom, `${org.adresse}, ${org.cp} ${org.commune}`)">
         <ion-label>
           <p>Voir sur la carte</p>
         </ion-label>
@@ -148,7 +148,7 @@ import {
   IonItem,
   IonBackButton,
   IonButtons,
-  IonFabButton
+  IonFabButton,
 } from '@ionic/vue';
 import {
   CalendarClock,
@@ -166,10 +166,15 @@ import {
 import {secteurs, rubriques} from "../functions/interfaces";
 import Icon from "@/components/Icon.vue";
 import {addFavori, removeFavori} from "@/functions/fetch/avantages";
+import {createModal} from "@/functions/modals";
 </script>
 
 <script lang="ts">
 import {readableDate} from "@/functions/native/dates";
+import {ref} from "vue";
+import {getPosition} from "@/functions/fetch/geolocation";
+import {createModal} from "@/functions/modals";
+import Map from "@/components/Map.vue";
 
 export default {
   props: [
@@ -184,6 +189,47 @@ export default {
   methods: {
     open(url: string) {
       window.open(url)
+    },
+    toggleBlurPage() {
+      this.$refs.content.$el.classList.toggle('blured')
+    },
+    async openMap(org: string, address: string) {
+      this.toggleBlurPage()
+
+      const refs = {
+        modalMap: ref(null),
+      }
+      window.addEventListener('closeModals', () => {
+        Object.keys(refs).forEach(key => {
+          if (refs[key].value) refs[key].value.dismiss()
+        })
+        this.toggleBlurPage()
+      })
+
+      const coords = await this.getAvantageCoords(address)
+
+      const geojson = {
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: coords
+              },
+              properties: {
+                title: org,
+                description: address
+              }
+            }
+          ]
+      }
+
+      await createModal(Map, 'modalMap', refs, { markers: geojson, center: coords, zoom: 11 }, false, [], true)
+    },
+    async getAvantageCoords(address: string) {
+      const coords = await getPosition(address)
+      return [coords.lon, coords.lat]
     }
   }
 }
@@ -257,5 +303,11 @@ ion-fab.top {
 ion-fab-button.small {
   width: 35px;
   height: 35px;
+}
+
+.blured::part(background) {
+  z-index: 8;
+  content: '';
+  background-color: var(--ion-color-primary);
 }
 </style>

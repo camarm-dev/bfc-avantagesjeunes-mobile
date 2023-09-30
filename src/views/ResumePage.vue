@@ -44,7 +44,7 @@
       </div>
       <div class="list-title">Mes favoris</div>
       <div class="horizontal-carousel">
-        <div class="card card-only" v-if="!user.favoris">
+        <div class="card card-only" v-if="!user.favoris || user.favoris.length == 0">
           <ion-note>
             Vous n'avez pas d'avantages favoris...
           </ion-note>
@@ -62,7 +62,7 @@
         </ion-nav-link>
       </div>
       <ion-list inset>
-        <ion-item @click="createModal(Map, 'modalMap', refs, {}, true)" button>
+        <ion-item @click="createModal(Map, 'modalMap', refs, {}, false, [], true)" button>
           <MapIcon class="icon ion-color-success"/>
           <ion-label>
             <p>Autour de moi</p>
@@ -80,6 +80,11 @@
             </ion-label>
           </ion-item>
         </ion-nav-link>
+      </ion-list>
+      <ion-list inset>
+        <ion-item>
+          <ion-note class="ion-padding">Dataset d'avantages révision {{ rev }}</ion-note>
+        </ion-item>
       </ion-list>
     </ion-content>
 
@@ -173,6 +178,7 @@ export default {
     return {
       loggedIn: false,
       refs: refs,
+      rev: '99f013',
       user: {
         image_url: "",
         carte: {
