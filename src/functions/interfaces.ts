@@ -56,6 +56,22 @@ const categories = {
     "12": {
         nom: "Photographie",
         icon: "Camera"
+    },
+}
+
+const rubriques = {
+    ...categories,
+    "90": {
+        nom: "Manifestations Sportives",
+        icon: "Trophy"
+    },
+    "96": {
+        nom: "Livre, papeterie",
+        icon: "BookOpen"
+    },
+    "119": {
+        nom: "Bibliothèque, ludothèque, médiathèque",
+        icon: "Library"
     }
 }
 
@@ -105,5 +121,6 @@ export type {
 
 export {
     categories,
-    secteurs
+    secteurs,
+    rubriques
 }
