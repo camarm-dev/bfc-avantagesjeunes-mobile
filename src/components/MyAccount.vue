@@ -38,7 +38,7 @@
           <h2>{{ user.carte.email|| "Non renseigné" }}</h2>
         </ion-label>
         <BadgeAlert id="verify-email-alert" v-if="!user.carte.email_accepte" slot="end" class="focusable ion-color-danger"/>
-        <ion-alert :buttons="verifyEmailButtons" class="ion-color-primary" :sub-header="user.carte.email || 'Non renseigné'" trigger="verify-email-alert" header="Email non vérifiée" message="Votre addresse email n'a pas été vérifiée. Ignorez ou demandez une vérification si-dessous et cliquez sur le lien reçu par mail."/>
+        <ion-alert :buttons="verifyEmailButtons" class="ion-color-primary" :sub-header="user.carte.email || 'Non renseigné'" trigger="verify-email-alert" header="Email non vérifiée" message="Votre addresse email n'a pas été vérifiée."/>
       </ion-item>
       <ion-item>
         <Cake class="icon ion-color-secondary"/>
@@ -144,16 +144,6 @@ export default {
         {
           text: 'Ignorer',
           role: 'cancel',
-          handler: () => {
-            console.log('Alert canceled');
-          },
-        },
-        {
-          text: 'Vérifier',
-          role: 'confirm',
-          handler: () => {
-            console.log('Alert confirmed');
-          },
         },
       ],
       refs: refs
