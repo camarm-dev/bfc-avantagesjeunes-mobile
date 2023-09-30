@@ -59,7 +59,7 @@
           <h2>Se déconnecter</h2>
         </ion-label>
       </ion-item>
-      <ion-item button @click="createModal(ModifyInterests, 'modalModifyInterests', refs, { user }, true, [0, 0.65])">
+      <ion-item button @click="createModal(ModifyInterests, 'modalModifyInterests', refs, { user }, true, [0, 0.75, 0.9])">
         <Zap class="icon"/>
         <ion-label>
           <p>Personnalisez vos suggestions</p>
