@@ -160,6 +160,7 @@ import Map from "@/components/Map.vue";
 import { ref } from "vue";
 import {getAccount} from "@/functions/fetch/account";
 import {getAvantage} from "@/functions/fetch/avantages";
+import {get} from "@/functions/fetch/tools";
 
 let refs = {
   modalLogin: ref(null),
@@ -223,6 +224,8 @@ export default {
     if (now.getHours() > 18) {
       this.welcome_formula = "Bonne soirée"
     }
+
+    get(`https://backoffice.avantagesjeunes.com/api/avantage/list/1/250?timestamp=1694785685`)
   },
   methods: {
     open(url: string) {

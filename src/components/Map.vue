@@ -22,7 +22,8 @@ import {closeModals} from "@/functions/modals";
 </script>
 
 <script lang="ts">
-import mapboxgl from "mapbox-gl";
+import mapboxgl from "mapbox-gl"
+import "mapbox-gl/dist/mapbox-gl.css"
 mapboxgl.accessToken = "pk.eyJ1IjoiY2FtYXJtLWRldiIsImEiOiJja3B6czl2bGowa2g2Mm5ycmdqMThhOHEzIn0.H-PjLIG_jQqZqvz3gPvjeQ"
 
 export default {
@@ -45,7 +46,21 @@ export default {
       })
 
       map.on('load', () => {
-        map.addSource('markers', this.markers)
+        for (const feature of this.markers.features) {
+          const el = document.createElement('div');
+          el.className = 'marker';
+
+          const popup = new mapboxgl.Popup({ offset: 25 })
+              .setHTML(
+                  `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
+              )
+
+          new mapboxgl.Marker(el)
+              .setLngLat(feature.geometry.coordinates)
+              .setPopup(popup)
+              .addTo(map);
+        }
+        // map.addSource('markers', this.markers)
       })
 
 
@@ -53,12 +68,12 @@ export default {
     }, 500)
   },
   unmounted() {
-    this.map.remove()
+    // this.map.remove()
   }
 }
 </script>
 
-<style scoped>
+<style>
 .map-wrapper {
   height: 100%;
   width: 100%;
@@ -70,12 +85,48 @@ export default {
 }
 
 .marker {
-  background-image: url('/marker.png');
-  background-color: red;
+  content: url('/marker.png');
   background-size: cover;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+  width: 22px;
   cursor: pointer;
+  object-fit: fill;
+}
+
+.mapboxgl-popup {
+  max-width: 150px;
+  max-height: 100px;
+}
+
+.mapboxgl-popup-content {
+  background-color: var(--ion-color-primary);
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  max-width: 250px;
+  max-height: 150px;
+  border-radius: 7px;
+}
+
+.mapboxgl-popup-content p {
+  color: var(--ion-color-medium)
+}
+
+.mapboxgl-popup-content h2 {
+  margin: 0
+}
+
+.mapboxgl-popup-close-button {
+  right: 0;
+  top: 0;
+  background-color: var(--ion-color-primary-tint);
+  font-size: 24px;
+  padding: 0 2.5px 2.5px;
+}
+
+.mapboxgl-popup-close-button:hover {
+  background-color: var(--ion-color-primary-shade);
+}
+
+.mapboxgl-popup-tip {
+  border-top-color: var(--ion-color-primary) !important;
 }
 </style>

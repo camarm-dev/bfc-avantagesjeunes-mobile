@@ -15,7 +15,7 @@
       <h2 class="welcome">{{ avantage.offre }}</h2>
       <p>
         -
-        <span v-for="secteur in avantage.secteurs">{{ (secteurs[secteur] || { 'nom': 'Tout les secteurs' }).nom }} -</span>
+        <span v-for="secteur in avantage.secteurs">{{ (secteurs[secteur] || { 'nom': 'Tout les secteurs' }).nom }} -&nbsp;</span>
       </p>
     </header>
     <ion-fab vertical="top" horizontal="end" class="top">
