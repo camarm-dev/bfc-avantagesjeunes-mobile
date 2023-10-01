@@ -10,12 +10,7 @@ const config: CapacitorConfig = {
       "androidScaleType": "CENTER_CROP",
       "splashFullScreen": true,
       "splashImmersive": false,
-      "backgroundColor": "#EBF8EF"
-    },
-    "LocalNotifications": {
-      "smallIcon": "ic_stat_notify",
-      "iconColor": "#EBF8EF",
-      "sound": "/public/tone.ogg"
+      "backgroundColor": "#081F32"
     }
   },
   server: {

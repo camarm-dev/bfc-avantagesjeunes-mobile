@@ -49,9 +49,6 @@ export default {
 }
 </script>
 <style>
-ion-toolbar {
-  //padding-top: .5em
-}
 
 ion-toolbar .sc-ion-searchbar-ios-h {
   padding-top: 15px;
