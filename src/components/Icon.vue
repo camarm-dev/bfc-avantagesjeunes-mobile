@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { Clapperboard, Camera, Compass, Brush, Leaf, Cpu, Music4, Medal, Landmark, Smile, BookOpen, Library, Trophy } from 'lucide-vue-next'
+import { Clapperboard, Camera, Compass, Brush, Leaf, Cpu, Music4, Medal, Landmark, Smile, BookOpen, Library, Trophy, HeartPulse, Donut } from 'lucide-vue-next'
 
 const icons = {
   Clapperboard,
@@ -15,7 +15,9 @@ const icons = {
   Smile,
   BookOpen,
   Library,
-  Trophy
+  Trophy,
+  HeartPulse,
+  Donut
 }
 
 const props = defineProps({
