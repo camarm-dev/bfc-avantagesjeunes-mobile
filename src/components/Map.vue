@@ -27,7 +27,7 @@ import "mapbox-gl/dist/mapbox-gl.css"
 mapboxgl.accessToken = "pk.eyJ1IjoiY2FtYXJtLWRldiIsImEiOiJja3B6czl2bGowa2g2Mm5ycmdqMThhOHEzIn0.H-PjLIG_jQqZqvz3gPvjeQ"
 
 export default {
-  props: ['markers', 'center', 'zoom'],
+  props: ['markers', 'center', 'zoom', 'user'],
   data() {
     return {
       map: {} as mapboxgl.Map,
@@ -46,21 +46,38 @@ export default {
       })
 
       map.on('load', () => {
-        for (const feature of this.markers.features) {
-          const el = document.createElement('div');
-          el.className = 'marker';
+        if (this.markers) {
+          for (const feature of this.markers.features) {
+            const el = document.createElement('div');
+            el.className = 'marker';
+            const moreAdvantages = feature.properties.otherAdvantages.length > 0 ? `${feature.properties.otherAdvantages.length} autres avantages disponibles ici`: ''
+            const popup = new mapboxgl.Popup({ offset: 25 })
+                .setHTML(
+                    `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>${moreAdvantages}`
+                )
+
+            new mapboxgl.Marker(el)
+                .setLngLat(feature.geometry.coordinates)
+                .setPopup(popup)
+                .addTo(map);
+          }
+        }
+
+        if (this.user) {
+          const el = document.createElement('img');
+          el.className = 'user';
+          el.src = this.user.image
 
           const popup = new mapboxgl.Popup({ offset: 25 })
               .setHTML(
-                  `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
+                  `<h3>You</h3><p>${this.user.name}</p>`
               )
 
           new mapboxgl.Marker(el)
-              .setLngLat(feature.geometry.coordinates)
+              .setLngLat(this.user.coordinates)
               .setPopup(popup)
               .addTo(map);
         }
-        // map.addSource('markers', this.markers)
       })
 
 
@@ -84,6 +101,15 @@ export default {
   flex: 1
 }
 
+.user {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--ion-color-primary);
+  cursor: pointer;
+}
+
 .marker {
   content: url('/marker.png');
   background-size: cover;
@@ -102,7 +128,7 @@ export default {
   text-align: center;
   font-family: 'Open Sans', sans-serif;
   max-width: 250px;
-  max-height: 150px;
+  height: max-content;
   border-radius: 7px;
 }
 
@@ -127,6 +153,18 @@ export default {
 }
 
 .mapboxgl-popup-tip {
+  border-top-color: var(--ion-color-primary) !important;
+}
+
+.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+  border-right-color: var(--ion-color-primary) !important;
+}
+
+.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+  border-left-color: var(--ion-color-primary) !important;
+}
+
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
   border-top-color: var(--ion-color-primary) !important;
 }
 </style>

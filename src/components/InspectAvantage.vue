@@ -118,7 +118,6 @@
           <h2>{{ org.site2 }}</h2>
         </ion-label>
       </ion-item>
-      <!--  TODO: ouvrir dans map  -->
       <ion-item button @click="openMap(org.nom, `${org.adresse}, ${org.cp} ${org.commune}`)">
         <ion-label>
           <p>Voir sur la carte</p>
@@ -206,26 +205,32 @@ export default {
         this.toggleBlurPage()
       })
 
-      const coords = await this.getAvantageCoords(address)
+      const features = []
 
+      for (const organisme of this.avantage.organismes) {
+        const coords = organisme.latitude != '' ? [Number(organisme.longitude), Number(organisme.latitude)] : await this.getAvantageCoords(address)
+        features.push({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: coords
+          },
+          properties: {
+            title: org,
+            description: address,
+            otherAdvantages: []
+          }
+        })
+      }
+      
       const geojson = {
           type: 'FeatureCollection',
-          features: [
-            {
-              type: 'Feature',
-              geometry: {
-                type: 'Point',
-                coordinates: coords
-              },
-              properties: {
-                title: org,
-                description: address
-              }
-            }
-          ]
+          features: features
       }
 
-      await createModal(Map, 'modalMap', refs, { markers: geojson, center: coords, zoom: 11 }, false, [], true)
+      const zoom = this.avantage.organismes.length === 1 ? 11: 8
+
+      await createModal(Map, 'modalMap', refs, { markers: geojson, center: geojson.features[0].geometry.coordinates, zoom: 11 }, false, [], true)
     },
     async getAvantageCoords(address: string) {
       const coords = await getPosition(address)

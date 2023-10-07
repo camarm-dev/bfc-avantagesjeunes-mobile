@@ -61,13 +61,42 @@
           </div>
         </ion-nav-link>
       </div>
+
+      <ion-list inset v-if="!position">
+        <ion-item @click="askPermission().then(refreshPosition())" color="danger">
+          <Compass size="64" class="icon-ion-color-light"/>
+          <ion-note class="ion-padding" color="light">
+            Activez la localisation en cliquant ici. Vous pourrez voir les avantages autour de vous.
+          </ion-note>
+        </ion-item>
+      </ion-list>
+
       <ion-list inset>
-        <ion-item @click="createModal(Map, 'modalMap', refs, {}, false, [], true)" button>
+        <ion-item :disabled="!position" @click="createModal(Map, 'modalMap', refs, { markers: { features: aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker.coordinates }, false, [], true)" button>
           <MapIcon class="icon ion-color-success"/>
           <ion-label>
             <p>Autour de moi</p>
             <h2>Ouvrir la carte</h2>
           </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>
+            <p>
+              {{ aroundMeAdvantages.count }} avantages autour de moi.
+            </p>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>
+            <p>
+              Rayon de
+            </p>
+          </ion-label>
+          <ion-select interface="popover" @ionChange="getAroundMeAdvantages($event.detail.value)" value="5">
+            <ion-select-option value="5">5 Km</ion-select-option>
+            <ion-select-option value="10">10 Km</ion-select-option>
+            <ion-select-option value="50">50 Km</ion-select-option>
+          </ion-select>
         </ion-item>
       </ion-list>
       <ion-list inset>
@@ -80,11 +109,6 @@
             </ion-label>
           </ion-item>
         </ion-nav-link>
-      </ion-list>
-      <ion-list inset>
-        <ion-item>
-          <ion-note class="ion-padding">Dataset d'avantages révision {{ rev }}</ion-note>
-        </ion-item>
       </ion-list>
     </ion-content>
 
@@ -139,13 +163,16 @@ import {
   IonLabel,
   IonItem,
   IonChip,
+  IonSelect,
+  IonSelectOption
 } from '@ionic/vue';
 import {
   BadgeInfo,
   HelpCircle,
   CreditCard,
   MapIcon,
-  ChevronRight
+  ChevronRight,
+  Compass
 } from "lucide-vue-next";
 import LoginModal from "@/components/LoginModal.vue";
 import AvantagesJeunesIcon from "@/components/AvantagesJeunesIcon.vue";
@@ -154,6 +181,7 @@ import MyCard from "@/components/MyCard.vue";
 import { createModal } from "@/functions/modals";
 import InspectAvantage from "@/components/InspectAvantage.vue";
 import Map from "@/components/Map.vue";
+import {askPermission} from "@/functions/native/geolocation";
 </script>
 
 <script lang="ts">
@@ -161,6 +189,8 @@ import { ref } from "vue";
 import {getAccount} from "@/functions/fetch/account";
 import {getAvantage} from "@/functions/fetch/avantages";
 import {get} from "@/functions/fetch/tools";
+import {hasPermission} from "@/functions/native/geolocation";
+import {getPosition} from "@/functions/fetch/geolocation";
 
 let refs = {
   modalLogin: ref(null),
@@ -171,13 +201,14 @@ window.addEventListener('closeModals', () => {
   Object.keys(refs).forEach(key => {
     if (refs[key].value) refs[key].value.dismiss()
   })
-  window.dispatchEvent(new Event('reload'))
 })
 
 export default {
   data () {
     return {
       loggedIn: false,
+      position: true,
+      user_marker: null,
       refs: refs,
       rev: '99f013',
       user: {
@@ -202,6 +233,9 @@ export default {
         favoris: [] as [] || false,
       } as any,
       favoris_ids: [],
+      aroundMeAdvantages: {
+        count: 0
+      },
       welcome_formula: "Bonjour"
     }
   },
@@ -225,7 +259,6 @@ export default {
       this.welcome_formula = "Bonne soirée"
     }
 
-    get(`https://backoffice.avantagesjeunes.com/api/avantage/list/1/250?timestamp=1694785685`)
   },
   methods: {
     open(url: string) {
@@ -233,6 +266,16 @@ export default {
     },
     goTo(href: string) {
       this.$router.push(href)
+    },
+    async refreshPosition() {
+      this.position = true
+      // this.position = await hasPermission()
+      this.user_marker = {
+        // coords: await getPosition(),
+        coordinates: [6.0258598544333974, 47.23521554332734],
+        image: this.user.image_url || '/avatar.png',
+        name: `${this.user.carte.prenom} ${this.user.carte.nom}`
+      }
     },
     refreshAccount() {
       getAccount().then(async user => {
@@ -251,6 +294,8 @@ export default {
           avantagesFavoris.push(await getAvantage((favori)))
         }
         this.user.favoris = avantagesFavoris
+        await this.refreshPosition()
+        await this.getAroundMeAdvantages()
       }).catch(err => {
         this.loggedIn = false
       })
@@ -259,6 +304,9 @@ export default {
       const el = document.createElement('div')
       el.innerHTML = html_string
       return el.innerText
+    },
+    async getAroundMeAdvantages(radius: string = '5') {
+      this.aroundMeAdvantages = await get(`http://0.0.0.0:8000/around-me?longitude=6.346122081727215&latitude=47.14396225689256&radius=${radius}`)
     }
   },
 }

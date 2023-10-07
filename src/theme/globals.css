@@ -110,8 +110,13 @@ ion-checkbox {
     --checkbox-background: #fff;
 }
 
-ion-label.ion-color-light {
+ion-label.ion-color-light, ion-note.ion-color-light {
     color: var(--ion-color-light) !important;
+}
+
+.icon.ion-color-light, .icon-ion-color-light {
+    color: var(--ion-color-light);
+    stroke: var(--ion-color-light);
 }
 
 ion-label ion-progress-bar {
