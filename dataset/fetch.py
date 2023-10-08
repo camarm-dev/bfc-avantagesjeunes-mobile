@@ -48,11 +48,11 @@ def get_location(address: str):
 
 
 def start_fetch_while():
-    page = 1
+    page = 29
     parsed = 0
-    places = 0
+    places = 43399
     failed = 0
-    duplicated = 0
+    duplicated = 41853
     valid_date = int(datetime.datetime.now().strftime('%Y%M%d'))
     response = fetch(page)
     total = len(response['results'])
@@ -64,9 +64,12 @@ def start_fetch_while():
                 if not silent:
                     print(f"\033[A\033[KL'avantage \"{avantage['offre']}\" n'est plus valide (depuis le {avantage['datefin']}) !\n")
                 continue
+            if type(avantage.get('organismes')) != list:
+                continue
             for org in avantage.get('organismes', []):
                 if not org.get('latitude', None):
                     location = get_location(f"{org['adresse']}, {org['cp']} {org['commune']}")
+                    sleep(.1)
                     if not location[1]:
                         if not silent:
                             print(f"\033[A\033[KImpossible de trouver la position de {org['adresse']}, {org['cp']} {org['commune']}\n")
@@ -93,18 +96,18 @@ def start_fetch_while():
                     places += 1
                     found_advantage['other_advantages'].append(parsed_advantage)
                     database.update_one({"loc": parsed_advantage['loc']}, {'$set': {'other_advantages': found_advantage['other_advantages']}})
-                    sleep(.1)
                     continue
                 database.insert_one(parsed_advantage)
                 places += 1
                 sleep(.1)
             print(f'\033[A\033[KPage n°{page} | {parsed}/{total} avantages traités | {places} lieux référencés | {failed} échecs de localisation de lieux | {duplicated} lieux en doublons fusionnés')
 
-        response = fetch(page)
+        response = fetch(page + 1)
         success = is_success(response)
         if success:
             page += 1
-            total += len(response['results'])
+            if response.get('results', None):
+                total += len(response['results'])
 
 
 if __name__ == '__main__':

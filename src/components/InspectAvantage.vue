@@ -230,7 +230,7 @@ export default {
 
       const zoom = this.avantage.organismes.length === 1 ? 11: 8
 
-      await createModal(Map, 'modalMap', refs, { markers: geojson, center: geojson.features[0].geometry.coordinates, zoom: 11 }, false, [], true)
+      await createModal(Map, 'modalMap', refs, { markers: geojson, center: geojson.features[0].geometry.coordinates, zoom: zoom }, false, [], true)
     },
     async getAvantageCoords(address: string) {
       const coords = await getPosition(address)
