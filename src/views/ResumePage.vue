@@ -268,11 +268,10 @@ export default {
       this.$router.push(href)
     },
     async refreshPosition() {
-      this.position = true
-      // this.position = await hasPermission()
+      // this.position = true
+      this.position = await hasPermission()
       this.user_marker = {
-        // coords: await getPosition(),
-        coordinates: [6.0258598544333974, 47.23521554332734],
+        coordinates: this.position ? await getPosition(): [6.0258598544333974, 47.23521554332734],
         image: this.user.image_url || '/avatar.png',
         name: `${this.user.carte.prenom} ${this.user.carte.nom}`
       }
