@@ -9,18 +9,30 @@ Une application mobile pour la carte avantages jeunes en Bourgogne Franche-Comt�
 
 Créée pour rechercher plus facilement les avantages dont vous pouvez bénéficier, Avantages Jeunes Connect est une application non officielle !
 
+
+> [!IMPORTANT]   
+> Avantages Jeunes Connect est une application non-officielle
+
+
 ## Télécharger
 
-SOON: Disponible sur F-droid
+
+> [!NOTE]   
+> Arrive bientôt:
+> - [ ] Télécharger depuis avantages-jeunes-connect.camarm.fr
+>   - [ ] Télécharger APK
+>   - [ ] Télécharger IPA
+> - [ ] Télécharger depuis F-droid
+> - [ ] Télécharger depuis Altstore
+
 
 ## Goals
 
 - [x] Voir sa carte
 - [x] Voir son compte
 - [x] Voir ses favoris
-- [ ] Voir ses avantages utilisés
+- [x] Voir les avantages autours sur une carte
+- [x] Ouvrir un avantage sur une carte
 - [ ] Enregistrer un scan de sa carte
-- [ ] Voir les avantages autours sur une carte
-- [ ] Rechercher les avantages de mon secteur
+- [ ] Voir ses avantages utilisés
 - [ ] Rechercher des avantages (secteur, type)
-- [ ] Ouvrir un avantage sur une carte
