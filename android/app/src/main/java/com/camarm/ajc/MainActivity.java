@@ -1,4 +1,4 @@
-package com.camarm.dule;
+package com.camarm.ajc;
 
 import com.getcapacitor.BridgeActivity;
 

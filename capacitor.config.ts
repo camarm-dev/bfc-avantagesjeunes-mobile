@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.camarm.dule',
-  appName: 'Dule',
+  appId: 'com.camarm.ajc',
+  appName: 'Avantages Jeunes',
   webDir: 'dist',
   plugins: {
     "SplashScreen": {

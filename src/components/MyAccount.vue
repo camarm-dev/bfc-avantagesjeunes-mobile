@@ -52,7 +52,7 @@
       Actions
     </div>
     <ion-list inset>
-      <ion-item button>
+      <ion-item button @click="logOut()">
         <LogOut class="icon ion-color-danger"/>
         <ion-label>
           <p>Déconnecter ce compte de cet appareil</p>
@@ -101,6 +101,7 @@ import {
   LogOut
 } from "lucide-vue-next";
 import ModifyInterests from "@/components/ModifyInterests.vue";
+import {logOut} from "@/functions/fetch/account";
 </script>
 
 <script lang="ts">

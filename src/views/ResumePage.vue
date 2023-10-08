@@ -14,6 +14,9 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" v-if="loggedIn">
+      <ion-refresher slot="fixed" @ionRefresh="refresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
       <div class="top-background"></div>
       <div class="floating">
         <p>{{ welcome_formula }}, {{ user.carte.prenom }}</p>
@@ -72,7 +75,7 @@
       </ion-list>
 
       <ion-list inset>
-        <ion-item :disabled="!position" @click="createModal(Map, 'modalMap', refs, { markers: { features: aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker.coordinates }, false, [], true)" button>
+        <ion-item @click="createModal(Map, 'modalMap', refs, { markers: { features: aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker.coordinates, zoom: getZoom() }, false, [], true)" button>
           <MapIcon class="icon ion-color-success"/>
           <ion-label>
             <p>Autour de moi</p>
@@ -92,7 +95,8 @@
               Rayon de
             </p>
           </ion-label>
-          <ion-select interface="popover" @ionChange="getAroundMeAdvantages($event.detail.value)" value="5">
+          <ion-select interface="popover" @ionChange="getAroundMeAdvantages($event.detail.value)" value="1">
+            <ion-select-option value="1">1 Km</ion-select-option>
             <ion-select-option value="5">5 Km</ion-select-option>
             <ion-select-option value="10">10 Km</ion-select-option>
             <ion-select-option value="50">50 Km</ion-select-option>
@@ -146,6 +150,9 @@
             </ion-label>
           </ion-item>
         </ion-list>
+        <ion-note class="ion-color-medium ion-margin-auto underline" v-if="hasLoggedInFields()">
+          <a href="/resume" @click="reload()">Utiliser le compte précédant</a>
+        </ion-note>
       </div>
     </ion-content>
   </ion-page>
@@ -164,7 +171,9 @@ import {
   IonItem,
   IonChip,
   IonSelect,
-  IonSelectOption
+  IonSelectOption,
+  IonRefresher,
+  IonRefresherContent
 } from '@ionic/vue';
 import {
   BadgeInfo,
@@ -189,7 +198,7 @@ import { ref } from "vue";
 import {getAccount} from "@/functions/fetch/account";
 import {getAvantage} from "@/functions/fetch/avantages";
 import {get} from "@/functions/fetch/tools";
-import {hasPermission} from "@/functions/native/geolocation";
+import {hasPermission, getCurrentLocation} from "@/functions/native/geolocation";
 import {getPosition} from "@/functions/fetch/geolocation";
 
 let refs = {
@@ -236,7 +245,8 @@ export default {
       aroundMeAdvantages: {
         count: 0
       },
-      welcome_formula: "Bonjour"
+      radius: '1',
+      welcome_formula: "Bonjour",
     }
   },
   mounted() {
@@ -261,6 +271,16 @@ export default {
 
   },
   methods: {
+    async refresh(event: CustomEvent) {
+      await this.refreshAccount()
+      event.target.complete()
+    },
+    hasLoggedInFields() {
+      return localStorage.getItem('userCards') && localStorage.getItem('currentCardToken')
+    },
+    reload() {
+      location.reload()
+    },
     open(url: string) {
       window.open(url)
     },
@@ -268,10 +288,9 @@ export default {
       this.$router.push(href)
     },
     async refreshPosition() {
-      // this.position = true
       this.position = await hasPermission()
       this.user_marker = {
-        coordinates: this.position ? await getPosition(): [6.0258598544333974, 47.23521554332734],
+        coordinates: this.position ? await getCurrentLocation(): [6.0258598544333974, 47.23521554332734],
         image: this.user.image_url || '/avatar.png',
         name: `${this.user.carte.prenom} ${this.user.carte.nom}`
       }
@@ -304,8 +323,24 @@ export default {
       el.innerHTML = html_string
       return el.innerText
     },
-    async getAroundMeAdvantages(radius: string = '5') {
-      this.aroundMeAdvantages = await get(`http://0.0.0.0:8000/around-me?longitude=6.346122081727215&latitude=47.14396225689256&radius=${radius}`)
+    async getAroundMeAdvantages(radius: string = '1') {
+      this.radius = radius
+      const coordinates = this.position ? await getCurrentLocation(): [6.0258598544333974, 47.23521554332734]
+      this.aroundMeAdvantages = await get(`http://192.168.1.140:8000/around-me?longitude=${coordinates[0]}&latitude=${coordinates[1]}&radius=${radius}`)
+    },
+    getZoom() {
+      switch (this.radius) {
+        case '1':
+          return 14
+        case '5':
+          return 11
+        case '10':
+          return 9
+        case '50':
+          return 7
+        default:
+          return 11
+      }
     }
   },
 }
@@ -329,5 +364,22 @@ export default {
 
 .login-button svg, .login-button svg * {
   color: #fff !important;
+}
+
+.ion-justify-content-center {
+  display: flex;
+  justify-content: center
+}
+
+.ion-margin-auto {
+  display: block
+}
+
+ion-note.underline a {
+  text-decoration: underline;
+}
+
+ion-refresher {
+  z-index: 50;
 }
 </style>

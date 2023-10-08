@@ -99,8 +99,11 @@ async function handleResponse(request: Promise<Response>, checks = true, request
                 // }, 3000)
             }
         }
-        err.response.code = err.response.status
-        return err.response
+        if (err.response) {
+            err.response.code = err.response.status
+            return err.response
+        }
+        return { code: 500, message: 'Unknown error occurred', data: {} }
     }
 }
 

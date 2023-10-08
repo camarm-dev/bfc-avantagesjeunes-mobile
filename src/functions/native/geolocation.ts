@@ -9,7 +9,7 @@ async function askPermission() {
     await Geolocation.requestPermissions()
 }
 
-async function getPosition() {
+async function getCurrentLocation() {
     const coordinates = await Geolocation.getCurrentPosition()
     return [coordinates.longitude, coordinates.latitude]
 }
@@ -17,5 +17,5 @@ async function getPosition() {
 export {
     hasPermission,
     askPermission,
-    getPosition
+    getCurrentLocation
 }
