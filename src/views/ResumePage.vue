@@ -138,7 +138,7 @@
         </ion-row>
         <ion-note class="ion-text-center">
           <p>
-            Ajouter vos cartes, accédez à vos avantages utilisés et recherchez plus facilement ceux dont vous pouvez bénéficiez !
+            Ajouter votre carte, accédez à vos avantages utilisés et recherchez plus facilement ceux dont vous pouvez bénéficiez !
           </p>
         </ion-note>
         <ion-list inset>
@@ -219,7 +219,6 @@ export default {
       position: true,
       user_marker: null,
       refs: refs,
-      rev: '99f013',
       user: {
         image_url: "",
         carte: {
@@ -312,7 +311,9 @@ export default {
           avantagesFavoris.push(await getAvantage((favori)))
         }
         this.user.favoris = avantagesFavoris
-        await this.refreshPosition()
+        await this.refreshPosition().catch((e) => {
+          this.position = false
+        })
         await this.getAroundMeAdvantages()
       }).catch(err => {
         this.loggedIn = false

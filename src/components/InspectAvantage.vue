@@ -148,6 +148,7 @@ import {
   IonBackButton,
   IonButtons,
   IonFabButton,
+  IonFab
 } from '@ionic/vue';
 import {
   CalendarClock,
