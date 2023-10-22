@@ -5,6 +5,9 @@
         <ion-back-button text="Retour"></ion-back-button>
       </ion-buttons>
       <ion-title>Avantage</ion-title>
+      <ion-buttons slot="end" @click="shareAdvantage()">
+        <ion-icon slot="icon-only" :icon="shareOutline"></ion-icon>
+      </ion-buttons>
     </ion-toolbar>
   </ion-header>
   <ion-content ref="content" :fullscreen="true">
@@ -148,8 +151,10 @@ import {
   IonBackButton,
   IonButtons,
   IonFabButton,
-  IonFab
+  IonFab,
+  IonIcon
 } from '@ionic/vue';
+import { shareOutline } from 'ionicons/icons'
 import {
   CalendarClock,
   Sparkles,
@@ -175,6 +180,7 @@ import {ref} from "vue";
 import {getPosition} from "@/functions/fetch/geolocation";
 import {createModal} from "@/functions/modals";
 import Map from "@/components/Map.vue";
+import { Share } from '@capacitor/share'
 
 export default {
   props: [
@@ -189,6 +195,21 @@ export default {
   methods: {
     open(url: string) {
       window.open(url)
+    },
+    async shareAdvantage() {
+      const url = `https://www.avantagesjeunes.com/avantage/${this.avantage.id_avantage}`
+      console.log(await this.getFileUrl(this.avantage.image_url))
+      try {
+        await Share.share({
+          title: `${this.avantage.offre}`,
+          text: 'Regarde cet avantage que j\'ai trouvé sur Avantages Jeunes Connect',
+          url: url,
+          dialogTitle: 'Partager cet avantage'
+        })
+      } catch {
+        await navigator.clipboard.write(url)
+        alert("Lien copié dans le presse papier")
+      }
     },
     toggleBlurPage() {
       this.$refs.content.$el.classList.toggle('blured')
@@ -315,5 +336,9 @@ ion-fab-button.small {
   z-index: 8;
   content: '';
   background-color: var(--ion-color-primary);
+}
+
+ion-fab.top {
+  right: 5px;
 }
 </style>
