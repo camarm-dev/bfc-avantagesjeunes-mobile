@@ -2,10 +2,45 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-searchbar color="tertiary" show-clear-button="always" animated="true" placeholder="Rechercher un avantage"></ion-searchbar>
+        <ion-searchbar show-clear-button="always" :animated="true" placeholder="Rechercher un avantage"></ion-searchbar>
+      </ion-toolbar>
+      <ion-toolbar style="height: max-content">
+        <ion-list inset class="list-border">
+          <ion-accordion-group>
+            <ion-accordion value="first">
+              <ion-item slot="header">
+                <Settings2 slot="start" class="ion-color-medium"/>
+                <ion-label>Filtres</ion-label>
+              </ion-item>
+              <ion-list slot="content">
+                <ion-item>
+                  <ion-label>
+                    <p>Rubrique</p>
+                  </ion-label>
+                  <ion-select interface="action-sheet" :interface-options="{ color: 'primary' }" placeholder="Toutes" value="all">
+                    <ion-select-option value="all">Toutes</ion-select-option>
+                    <ion-select-option>Cinéma</ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item>
+                  <ion-label>
+                    <p>Secteur</p>
+                  </ion-label>
+                  <ion-select interface="action-sheet" placeholder="Toutes" value="all">
+                    <ion-select-option value="all">Tous</ion-select-option>
+                    <ion-select-option>Besancon</ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-list>
+            </ion-accordion>
+          </ion-accordion-group>
+        </ion-list>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
+      <ion-content>
+
+      </ion-content>
     </ion-content>
   </ion-page>
 </template>
@@ -17,8 +52,14 @@ import {
   IonHeader,
   IonToolbar,
   IonContent,
+  IonSearchbar,
+  IonAccordion,
+  IonAccordionGroup,
+  IonItem,
+  IonLabel
 } from '@ionic/vue';
 import {
+  Settings2
 } from "lucide-vue-next";
 </script>
 
@@ -49,6 +90,21 @@ export default {
 }
 </script>
 <style>
+ion-header {
+  height: max-content;
+}
+
+.list-border {
+  border-width: 0.55px;
+  border-color: var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-250, #c8c7cc)));
+  border-style: solid;
+}
+
+ion-item-divider {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-end: 5px
+}
 
 ion-toolbar .sc-ion-searchbar-ios-h {
   padding-top: 15px;
