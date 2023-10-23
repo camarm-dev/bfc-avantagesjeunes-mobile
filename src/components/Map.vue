@@ -70,7 +70,7 @@ export default {
 
           const popup = new mapboxgl.Popup({ offset: 25 })
               .setHTML(
-                  `<h3>You</h3><p>${this.user.name}</p>`
+                  `<h3>Moi</h3><p>${this.user.name}</p>`
               )
 
           new mapboxgl.Marker(el)
