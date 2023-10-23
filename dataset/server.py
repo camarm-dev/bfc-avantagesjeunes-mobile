@@ -1,8 +1,9 @@
+from hashlib import md5
+
 import pymongo
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 
 app = FastAPI(title='Avantages Jeunes Mobile API', description='Permet de trouver les avantages autour d\'une position GPS.')
 app.add_middleware(
@@ -64,5 +65,20 @@ async def around_me(longitude: float, latitude: float, radius: int = 1):
     return response
 
 
+@app.get('/')
+async def root():
+    return {
+        'message': 'Welcome to Avantages Jeunes Connect API !',
+        'version': version,
+        'dataset': dataset_revision
+    }
+
+
 if __name__ == '__main__':
+    print("[Startup] Retrieving dataset & version")
+    timestamp = list(database.find().sort("_id", pymongo.DESCENDING).limit(1))[0]['_id'].generation_time
+    doc_number = database.count_documents({})
+    dataset_revision = str(md5(f"num:{doc_number};time:f{timestamp}".encode()).hexdigest())[0:7]
+    version = '1.0'
+    print(f"[Startup] Version {version}, dataset {dataset_revision}")
     uvicorn.run(app=app, host='0.0.0.0')

@@ -114,6 +114,13 @@
           </ion-item>
         </ion-nav-link>
       </ion-list>
+      <ion-list inset>
+        <ion-item button @click="createModal(ExperimentalModal, 'modalExperimental', refs)">
+          <ion-label>
+            <p>Fonctionnalités expérimentales 🧪</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
     </ion-content>
 
     <ion-content class="ion-display-flex" v-else :fullscreen="true">
@@ -191,6 +198,7 @@ import { createModal } from "@/functions/modals";
 import InspectAvantage from "@/components/InspectAvantage.vue";
 import Map from "@/components/Map.vue";
 import {askPermission} from "@/functions/native/geolocation";
+import ExperimentalModal from "@/components/ExperimentalModal.vue";
 </script>
 
 <script lang="ts">
@@ -203,7 +211,8 @@ import {getPosition} from "@/functions/fetch/geolocation";
 
 let refs = {
   modalLogin: ref(null),
-  modalMap: ref(null)
+  modalMap: ref(null),
+  modalExperimental: ref(null)
 } as any
 
 window.addEventListener('closeModals', () => {
@@ -327,7 +336,7 @@ export default {
     async getAroundMeAdvantages(radius: string = '1') {
       this.radius = radius
       const coordinates = this.position ? await getCurrentLocation(): [6.0258598544333974, 47.23521554332734]
-      this.aroundMeAdvantages = await get(`http://192.168.1.140:8000/around-me?longitude=${coordinates[0]}&latitude=${coordinates[1]}&radius=${radius}`)
+      this.aroundMeAdvantages = await get(`${localStorage.getItem('userApiUrl')}/around-me?longitude=${coordinates[0]}&latitude=${coordinates[1]}&radius=${radius}`)
     },
     getZoom() {
       switch (this.radius) {

@@ -39,10 +39,10 @@
     </div>
 
     <ion-list inset>
-      <ion-item disabled button color="secondary">
+      <ion-item :disabled="!isUseAdvantageFunctionalityEnabled()" button color="secondary" class="gradient-button">
         <Ticket class="icon ion-color-primary"/>
         <ion-label class="ion-color-primary">
-          <h2>Utiliser l'avantage</h2>
+          <h2 class="ion-color-primary">Utiliser l'avantage</h2>
         </ion-label>
       </ion-item>
     </ion-list>
@@ -195,6 +195,9 @@ export default {
   methods: {
     open(url: string) {
       window.open(url)
+    },
+    isUseAdvantageFunctionalityEnabled() {
+      return (localStorage.getItem('userUseAdvantage') || 'false') == 'true'
     },
     async shareAdvantage() {
       const url = `https://www.avantagesjeunes.com/avantage/${this.avantage.id_avantage}`

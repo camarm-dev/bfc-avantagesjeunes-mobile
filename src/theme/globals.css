@@ -175,6 +175,16 @@ input {
     background: var(--background);
 }
 
+.ion-color-secondary.gradient-button ion-label, .ion-color-secondary.gradient-button ion-label *, .ion-color-secondary.gradient-button .icon * {
+    --color: var(--ion-color-primary);
+    color: var(--color) !important;
+}
+
+.ion-color-secondary.gradient-button:hover ion-label, .ion-color-secondary.gradient-button:hover ion-label *, .ion-color-secondary.gradient-button:hover .icon * {
+    --color: var(--ion-color-primary-shade);
+    color: var(--color) !important;
+}
+
 .ion-color-secondary:hover::part(native), .ion-color-secondary:hover::part(native)::after {
     --background: linear-gradient(90deg, #c7b571, var(--ion-color-secondary-shade));
     background: var(--background);
