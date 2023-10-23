@@ -24,6 +24,22 @@ async function removeFavori(id_avantage: string) {
     return await post(url, data)
 }
 
+async function checkAvailability(id_avantage: string) {
+    const url = import.meta.env.VITE_API_URL + '/api/carte/checkAvantageAvailabilities'
+    const data = {
+        id_avantage: id_avantage,
+        array_id: [localStorage.getItem('currentCardId')]
+    }
+    return await post(url, data)
+}
+
+async function useAdvantage(id_avantage: string) {
+    const url = import.meta.env.VITE_API_URL + '/api/carte/'
+    const data = {
+
+    }
+}
+
 export {
     getAvantage,
     addFavori,
