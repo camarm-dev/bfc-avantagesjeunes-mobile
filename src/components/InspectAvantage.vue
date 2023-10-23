@@ -198,7 +198,6 @@ export default {
     },
     async shareAdvantage() {
       const url = `https://www.avantagesjeunes.com/avantage/${this.avantage.id_avantage}`
-      console.log(await this.getFileUrl(this.avantage.image_url))
       try {
         await Share.share({
           title: `${this.avantage.offre}`,
@@ -211,12 +210,7 @@ export default {
         alert("Lien copié dans le presse papier")
       }
     },
-    toggleBlurPage() {
-      this.$refs.content.$el.classList.toggle('blured')
-    },
     async openMap(org: string, address: string) {
-      this.toggleBlurPage()
-
       const refs = {
         modalMap: ref(null),
       }
@@ -224,7 +218,6 @@ export default {
         Object.keys(refs).forEach(key => {
           if (refs[key].value) refs[key].value.dismiss()
         })
-        this.toggleBlurPage()
       })
 
       const features = []
