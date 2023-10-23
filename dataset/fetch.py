@@ -115,8 +115,8 @@ if __name__ == '__main__':
 
     mongo = pymongo.MongoClient(open('.mongodb').read())
     if input("Réinitialiser la base [Y/n] ?").lower() == 'y':
-        mongo.Dataset.drop_collection('avantages_test')
-    database = mongo.Dataset.avantages_test
+        mongo.Dataset.drop_collection('avantages')
+    database = mongo.Dataset.avantages
 
     before = datetime.datetime.now()
 
