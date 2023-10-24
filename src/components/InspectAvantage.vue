@@ -39,11 +39,16 @@
     </div>
 
     <ion-list inset>
-      <ion-item :disabled="!isUseAdvantageFunctionalityEnabled()" button color="secondary" class="gradient-button">
+      <ion-item @click="useAdvantage()" :disabled="!isUseAdvantageFunctionalityEnabled()" button color="secondary" class="gradient-button">
         <Ticket class="icon ion-color-primary"/>
         <ion-label class="ion-color-primary">
           <h2 class="ion-color-primary">Utiliser l'avantage</h2>
         </ion-label>
+      </ion-item>
+      <ion-item v-if="avantage.organismes.length > 1">
+        <ion-select :value="selectedOrg" interface="action-sheet" @ionChange="selectedOrg = $event.detail.value" placeholder="Séléctionnez un lieu">
+          <ion-select-option v-for="org in avantage.organismes" :value="org.id_organisme">{{ org.commune }}, {{ org.cp }}</ion-select-option>
+        </ion-select>
       </ion-item>
     </ion-list>
 
@@ -181,6 +186,10 @@ import {getPosition} from "@/functions/fetch/geolocation";
 import {createModal} from "@/functions/modals";
 import Map from "@/components/Map.vue";
 import { Share } from '@capacitor/share'
+import {authenticateWithBiometry, setupBiometry} from "@/functions/native/biometry";
+import {displayToast} from "@/functions/toasts";
+import {loadingController} from "@ionic/vue";
+import {checkAvailability, obtainAdvantage} from "@/functions/fetch/avantages";
 
 export default {
   props: [
@@ -189,8 +198,12 @@ export default {
   ],
   data() {
     return {
-      isFavori: this.favori == undefined ? false: this.favori
+      isFavori: this.favori == undefined ? false: this.favori,
+      selectedOrg: this.avantage.organismes[0].id_organisme
     }
+  },
+  mounted() {
+    setupBiometry()
   },
   methods: {
     open(url: string) {
@@ -198,6 +211,23 @@ export default {
     },
     isUseAdvantageFunctionalityEnabled() {
       return (localStorage.getItem('userUseAdvantage') || 'false') == 'true'
+    },
+    async useAdvantage() {
+      const loader = await loadingController.create({
+        message: 'Récupération des informations'
+      })
+      await loader.present()
+      if (!(await checkAvailability(this.avantage.id_avantage))[0].status) {
+        await loader.dismiss()
+        await displayToast('Avantage indisponible', 'Cet avantage est indisponible ou a déjà été utilisé', 2000, 'danger')
+      }
+      await authenticateWithBiometry(() => {
+        loader.dismiss()
+        obtainAdvantage(this.avantage.id_avantage, this.selectedOrg)
+        }, () => {
+        displayToast('Échec d\'authentification', 'Impossible de vous authentifier avec la biométrie', 2000, 'danger')
+        loader.dismiss()
+      })
     },
     async shareAdvantage() {
       const url = `https://www.avantagesjeunes.com/avantage/${this.avantage.id_avantage}`

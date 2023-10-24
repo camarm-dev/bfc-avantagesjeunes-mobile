@@ -138,6 +138,10 @@ ion-label ion-progress-bar {
     margin-top: 12px;
 }
 
+.loading-content {
+    color: #000
+}
+
 .ion-color-warning :not(.toast-header, .toast-message) {
     color: var(--ion-color-warning);
 }
