@@ -367,4 +367,8 @@ ion-fab-button.small {
 ion-fab.top {
   right: 5px;
 }
+
+ion-action-sheet {
+  --button-background-selected: var(--ion-color-step-150, #fff) !important;
+}
 </style>
