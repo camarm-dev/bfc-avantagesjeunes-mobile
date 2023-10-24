@@ -35,4 +35,5 @@ Créée pour rechercher plus facilement les avantages dont vous pouvez bénéfic
 - [x] Ouvrir un avantage sur une carte
 - [ ] Enregistrer un scan de sa carte
 - [ ] Voir ses avantages utilisés
+- [ ] Utiliser un avantage depuis l'app
 - [ ] Rechercher des avantages (secteur, type)
