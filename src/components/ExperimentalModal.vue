@@ -101,11 +101,9 @@ export default {
     }
   },
   mounted() {
-    this.apiUrl = localStorage.getItem('userApiUrl')
+    this.apiUrl = localStorage.getItem('userApiUrl') || 'http://192.168.1.140:8000'
+    localStorage.setItem('userApiUrl', this.apiUrl)
     this.useAdvantage = (localStorage.getItem('userUseAdvantage') || 'false') == 'true'
-    if (!this.apiUrl) {
-      this.changeApiUrl('http://192.168.1.140:8000')
-    }
     this.checkApi()
   },
   methods: {

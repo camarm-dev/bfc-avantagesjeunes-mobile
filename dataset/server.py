@@ -19,10 +19,12 @@ database = mongo.Dataset.avantages_test
 
 def create_index():
     try:
-        database.create_index(('coordinates', '2dsphere'))
+        database.delete_index(('coordinates', '2dsphere'))
+        # database.delete_index(('properties.title', 'text'), ('properties.description', 'text'), ('properties.other_advantages.properties.title', 'text'), ('properties.other_advantages.properties.description', 'text'))
     except Exception as e:
         print(f"[Warn] Cannot delete index: {e}")
     database.create_index(('coordinates', '2dsphere'))
+    # database.create_index(('properties.title', 'text'), ('properties.description', 'text'), ('properties.other_advantages.properties.title', 'text'), ('properties.other_advantages.properties.description', 'text'))
 
 
 def to_geojson(advantage: dict):
