@@ -142,6 +142,11 @@ ion-label ion-progress-bar {
     color: #000
 }
 
+ion-spinner.small {
+    width: 14px;
+    height: 14px
+}
+
 .ion-color-warning :not(.toast-header, .toast-message) {
     color: var(--ion-color-warning);
 }

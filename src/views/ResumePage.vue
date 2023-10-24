@@ -85,7 +85,9 @@
         <ion-item>
           <ion-label>
             <p>
-              {{ aroundMeAdvantages.count }} avantages autour de moi.
+              <ion-spinner class="small" name="crescent" v-if="aroundMeLoading"></ion-spinner>
+              <span v-else>{{ aroundMeAdvantages.count }}</span>
+               avantages autour de moi.
             </p>
           </ion-label>
         </ion-item>
@@ -180,7 +182,8 @@ import {
   IonSelect,
   IonSelectOption,
   IonRefresher,
-  IonRefresherContent
+  IonRefresherContent,
+  IonSpinner
 } from '@ionic/vue';
 import {
   BadgeInfo,
@@ -228,6 +231,7 @@ export default {
       position: true,
       user_marker: null,
       refs: refs,
+      aroundMeLoading: true,
       user: {
         image_url: "",
         carte: {
@@ -334,9 +338,11 @@ export default {
       return el.innerText
     },
     async getAroundMeAdvantages(radius: string = '1') {
+      this.aroundMeLoading = true
       this.radius = radius
       const coordinates = this.position ? await getCurrentLocation(): [6.0258598544333974, 47.23521554332734]
       this.aroundMeAdvantages = await get(`${localStorage.getItem('userApiUrl')}/around-me?longitude=${coordinates[0]}&latitude=${coordinates[1]}&radius=${radius}`)
+      this. aroundMeLoading = false
     },
     getZoom() {
       switch (this.radius) {
