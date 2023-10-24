@@ -35,11 +35,17 @@
         <ion-nav-link :component-props="{ avantage: suggested, favori: favoris_ids.includes(suggested.id_avantage) }" router-direction="forward" :component="InspectAvantage" v-for="suggested in user.suggestions">
           <div :class="`card focusable ${suggested.type}`">
             <header>
-              <img alt="Image de l'avantage" :src="suggested.image_url"/>
+              <img v-if="suggested.image_url" alt="Image de l'avantage" :src="suggested.image_url"/>
+              <ion-skeleton-text class="image" v-else :animated="true"></ion-skeleton-text>
             </header>
-            <div class="content">
+            <div class="content" v-if="suggested.offre">
               <h3>{{ suggested.offre }}</h3>
               <p>{{ getInnerContent(suggested.conditions) }}</p>
+            </div>
+            <div class="content" v-else>
+              <ion-skeleton-text :animated="true" style="width: 80%; margin-top: 2em;"></ion-skeleton-text>
+              <ion-skeleton-text :animated="true" style="width: 100%;"></ion-skeleton-text>
+              <ion-skeleton-text :animated="true" style="width: 20%;"></ion-skeleton-text>
             </div>
           </div>
         </ion-nav-link>
@@ -55,11 +61,17 @@
         <ion-nav-link :component-props="{ avantage: favori, favori: true }" router-direction="forward" :component="InspectAvantage" v-for="favori in user.favoris">
           <div :class="`card focusable ${favori.type}`">
             <header>
-              <img alt="Image de l'avantage" :src="favori.image_url"/>
+              <img v-if="favori.image_url" alt="Image de l'avantage" :src="favori.image_url"/>
+              <ion-skeleton-text class="image" v-else :animated="true" style="width: 100%"></ion-skeleton-text>
             </header>
-            <div class="content">
+            <div class="content" v-if="favori.offre">
               <h3>{{ favori.offre }}</h3>
               <p>{{ getInnerContent(favori.conditions) }}</p>
+            </div>
+            <div class="content" v-else>
+              <ion-skeleton-text :animated="true" style="width: 80%; margin-top: 2em;"></ion-skeleton-text>
+              <ion-skeleton-text :animated="true" style="width: 100%;"></ion-skeleton-text>
+              <ion-skeleton-text :animated="true" style="width: 20%;"></ion-skeleton-text>
             </div>
           </div>
         </ion-nav-link>
@@ -183,7 +195,8 @@ import {
   IonSelectOption,
   IonRefresher,
   IonRefresherContent,
-  IonSpinner
+  IonSpinner,
+  IonSkeletonText
 } from '@ionic/vue';
 import {
   BadgeInfo,
@@ -397,5 +410,19 @@ ion-note.underline a {
 
 ion-refresher {
   z-index: 50;
+}
+
+ion-skeleton-text {
+  height: 1em;
+  border-radius: 5px;
+  --background: rgba(57, 74, 93, 0.7);
+  --background-rgb: 57, 74, 93;
+}
+
+ion-skeleton-text.image {
+  width: 90%;
+  height: 140%;
+  margin: auto;
+  border-radius: 10px;
 }
 </style>
