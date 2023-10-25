@@ -1,6 +1,7 @@
 import {get, post} from "@/functions/fetch/tools";
 import {getAccount} from "@/functions/fetch/account";
 import {displayToast} from "@/functions/toasts";
+import moment from 'moment'
 
 
 async function getAvantage(id: string) {
@@ -41,7 +42,7 @@ async function addTransactionAdvantage(id_avantage: string, id_organisme: string
         array_id: [id_carte],
         id_avantage: id_avantage,
         id_organisme: id_organisme,
-        date_transaction: new Date
+        date_transaction: moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
     }
     return await post(url, data)
 }
@@ -63,7 +64,7 @@ async function obtainAdvantage(id_avantage: string, id_organisme: string) {
     const id_carte = user.carte.id_carte
     const mode_paiement = user.carte.mode_paiement
     await addTransactionAdvantage(id_avantage, id_organisme, id_carte)
-    const response = await getAdvantageCode(id_avantage, id_organisme, id_carte, mode_paiement)
+    const response = await getAdvantageCode(id_avantage, id_organisme, id_carte, mode_paiement) as any
     if (response.status_code == 10) {
         await displayToast('Rendez-vous en magasin', 'Cet avantage ne nécessite pas de code... Présentez vous sur place avec votre carte !', 5000, 'primary')
         return
