@@ -48,11 +48,11 @@ def get_location(address: str):
 
 
 def start_fetch_while():
-    page = 29
+    page = 1
     parsed = 0
-    places = 43399
+    places = 0
     failed = 0
-    duplicated = 41853
+    duplicated = 0
     valid_date = int(datetime.datetime.now().strftime('%Y%M%d'))
     response = fetch(page)
     total = len(response['results'])
@@ -88,6 +88,27 @@ def start_fetch_while():
                     "loc": {
                         "type": "Point",
                         "coordinates": location[0]
+                    },
+                    "metadata": {
+                        "type": avantage["type"],
+                        "datedebut": avantage["datedebut"],
+                        "datefin": avantage["datefin"],
+                        "id": avantage["id_avantage"],
+                        "offre": avantage["offre"],
+                        "note": avantage["note"],
+                        "nb_note": avantage["nb_note"],
+                        "saison": avantage["saison"] if avantage.get('saison') else 2024,
+                        "organismes": [{
+                            "id_organisme": org['id_organisme'],
+                            "nom": org["nom"],
+                            "cp": org["cp"],
+                            "commune": org["commune"],
+                            "adresse": org["adresse"],
+                            "longitude": org["longitude"],
+                            "latitude": org["latitude"],
+                            "site": org["site"],
+                            "site2": org["site2"]
+                        } for org in avantage["organismes"]]
                     }
                 }
                 found_advantage = database.find_one({"loc": parsed_advantage['loc']})
