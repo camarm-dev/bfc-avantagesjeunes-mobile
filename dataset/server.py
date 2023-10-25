@@ -1,11 +1,13 @@
 from hashlib import md5
+from typing import List
 
 import pymongo
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title='Avantages Jeunes Mobile API', description='Permet de trouver les avantages autour d\'une position GPS.')
+app = FastAPI(title='Avantages Jeunes Mobile API',
+              description='Permet de trouver les avantages autour d\'une position GPS.')
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -19,12 +21,13 @@ database = mongo.Dataset.avantages_test
 
 def create_index():
     try:
-        database.delete_index(('coordinates', '2dsphere'))
-        # database.delete_index(('properties.title', 'text'), ('properties.description', 'text'), ('properties.other_advantages.properties.title', 'text'), ('properties.other_advantages.properties.description', 'text'))
+        database.drop_index(['coordinates_2dsphere', 'title_text_description_text_conditions_text'])
+        # database.drop_index(('properties.title', 'text'), ('properties.description', 'text'), ('properties.other_advantages.properties.title', 'text'), ('properties.other_advantages.properties.description', 'text'))
     except Exception as e:
         print(f"[Warn] Cannot delete index: {e}")
-    database.create_index(('coordinates', '2dsphere'))
-    # database.create_index(('properties.title', 'text'), ('properties.description', 'text'), ('properties.other_advantages.properties.title', 'text'), ('properties.other_advantages.properties.description', 'text'))
+    database.create_index([('coordinates', '2dsphere')])
+    database.create_index([('title', 'text'), ('description', 'text'), ('conditions', 'text')],
+                          default_language='french')
 
 
 def to_geojson(advantage: dict):
@@ -43,6 +46,25 @@ def to_geojson(advantage: dict):
     }
 
 
+def to_json(advantage: dict):
+    del advantage['_id']
+    return {
+        "id_avantage": advantage["metadata"]["id"],
+        "conditions": advantage["conditions"],
+        "type": advantage["metadata"]["type"],
+        "datedebut": advantage["metadata"]["datedebut"],
+        "datefin": advantage["metadata"]["datefin"],
+        "secteurs": advantage["secteurs"],
+        "categories": advantage["categories"],
+        "offre": advantage["metadata"]["offre"],
+        "note": advantage["metadata"]["note"],
+        "nb_note": advantage["metadata"]["nb_note"],
+        "saison": advantage["metadata"]["saison"],
+        "organismes": advantage["metadata"]["organismes"],
+        "image_url": advantage["image"]
+    }
+
+
 def perform_query(longitude: float, latitude: float, radius: float = 1):
     return database.find({
         "loc": {
@@ -53,6 +75,20 @@ def perform_query(longitude: float, latitude: float, radius: float = 1):
                 ]
             }
         }
+    })
+
+
+def perform_search_query(expression: str, secteurs: list, rubriques: list):
+    query = {}
+    if len(secteurs) > 0:
+        query["secteurs"] = {"$in": secteurs}
+    if len(rubriques) > 0:
+        query["rubriques"] = {"$in": rubriques}
+    return database.find({
+        "$text": {
+            "$search": expression
+        },
+        **query
     })
 
 
@@ -67,6 +103,15 @@ async def around_me(longitude: float, latitude: float, radius: int = 1):
     return response
 
 
+@app.get('/search')
+async def search(q: str, secteurs: List[str] = [], rubriques: List[str] = []):
+    results = [to_json(document) for document in perform_search_query(q, secteurs, rubriques)]
+    return {
+        "results": results,
+        "count": len(results)
+    }
+
+
 @app.get('/')
 async def root():
     return {
@@ -78,6 +123,9 @@ async def root():
 
 if __name__ == '__main__':
     print("[Startup] Retrieving dataset & version")
+    create_index()
+    result = list(perform_search_query('bowling', [], []))
+    print(result)
     timestamp = list(database.find().sort("_id", pymongo.DESCENDING).limit(1))[0]['_id'].generation_time
     doc_number = database.count_documents({})
     dataset_revision = str(md5(f"num:{doc_number};time:f{timestamp}".encode()).hexdigest())[0:7]
