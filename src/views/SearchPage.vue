@@ -12,7 +12,7 @@
                 <Settings2 slot="start" class="ion-color-medium"/>
                 <ion-label>Filtres</ion-label>
               </ion-item>
-              <ion-list slot="content">
+              <ion-list class="no-radius" slot="content">
                 <ion-item>
                   <ion-label>
                     <p>Rubriques</p>
