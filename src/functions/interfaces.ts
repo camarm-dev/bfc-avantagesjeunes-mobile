@@ -61,6 +61,30 @@ const categories = {
 
 const rubriques = {
     ...categories,
+    "13": {
+        nom: "Articles de sport",
+        icon: "Shirt"
+    },
+    "15": {
+        nom: "Discothèque",
+        icon: "Disc3"
+    },
+    "26": {
+        nom: "Loisirs et arts créatifs",
+        icon: "Palette"
+    },
+    "62": {
+        nom: "Parc de loisirs",
+        icon: "LandPlot"
+    },
+    "87": {
+        nom: "Voyage",
+        icon: "TentTree"
+    },
+    "88": {
+        nom: "Festival, manifestation",
+        icon: "Mic2"
+    },
     "90": {
         nom: "Manifestations Sportives",
         icon: "Trophy"
@@ -73,13 +97,137 @@ const rubriques = {
         nom: "Bibliothèque, ludothèque, médiathèque",
         icon: "Library"
     },
+    "123": {
+        nom: "Musique",
+        icon: "ListMusic"
+    },
+    "124": {
+        nom: "Jardinerie, animalerie et bricolage",
+        icon: "Hammer"
+    },
+    "135": {
+        nom: "BAFA - BAFD",
+        icon: "Baby"
+    },
+    "136": {
+        nom: "Prévention",
+        icon: "Shield"
+    },
+    "137": {
+        nom: "Commerce équitable, économie sociale et solidaire",
+        icon: "Wheat"
+    },
+    "138": {
+        nom: "Échanges, conférences, débats",
+        icon: "MessageCircle"
+    },
+    "140": {
+        nom: "Musée et patrimoine",
+        icon: "Wheat"
+    },
+    "141": {
+        nom: "Activités de loisirs",
+        icon: "FerrisWheel"
+    },
+    "142": {
+        nom: "Activités de plein air",
+        icon: "MountainSnow"
+    },
+    "143": {
+        nom: "Activités nautiques",
+        icon: "Sailboat"
+    },
+    "144": {
+        nom: "Pratiques sportives",
+        icon: "Dumbbell"
+    },
+    "145": {
+        nom: "Hébergement, vacances",
+        icon: "BedSingle"
+    },
+    "146": {
+        nom: "Sports d'hiver",
+        icon: "Snowflake"
+    },
     "147": {
         nom: "Actions restos du coeur",
         icon: "Donut"
     },
+    "149": {
+        nom: "PSC1",
+        icon: "LifeBuoy"
+    },
+    "150": {
+        nom: "Environnement",
+        icon: "Sprout"
+    },
+    "151": {
+        nom: "Beauté et bien-être",
+        icon: "SmilePlus"
+    },
+    "152": {
+        nom: "Décoration et fête",
+        icon: "Flower"
+    },
+    "153": {
+        nom: "Déplacement, véhicule et permis",
+        icon: "Car"
+    },
+    "154": {
+        nom: "Enfant",
+        icon: "Smile"
+    },
+    "155": {
+        nom: "Formation, conseil",
+        icon: "GraduationCap"
+    },
+    "156": {
+        nom: "Informatique, Internet",
+        icon: "ServerCrash"
+    },
+    "157": {
+        nom: "Imprimerie, photocopie",
+        icon: "Printer"
+    },
+    "158": {
+        nom: "Jeux",
+        icon: "Dices"
+    },
+    "159": {
+        nom: "Habitat",
+        icon: "LampCeiling"
+    },
+    "160": {
+        nom: "Mode",
+        icon: "Shirt"
+    },
+    "161": {
+        nom: "Presse, petites annonces",
+        icon: "Newspaper"
+    },
+    "162": {
+        nom: "Photo",
+        icon: "Aperture"
+    },
+    "163": {
+        nom: "Restaurants et gourmandises",
+        icon: "CakeSlice"
+    },
+    "164": {
+        nom: "Téléphone",
+        icon: "Phone"
+    },
     "165": {
         nom: "Santé",
         icon: "HeartPulse"
+    },
+    "167": {
+        nom: "Assurance, banque",
+        icon: "CreditCard"
+    },
+    "169": {
+        nom: "Produits bio, produits régionaux, fruits et légumes",
+        icon: "Vegan"
     }
 }
 

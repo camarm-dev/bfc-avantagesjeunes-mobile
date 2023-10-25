@@ -29,12 +29,12 @@
     </ion-fab>
     <div class="ion-margin-auto">
       <ion-chip color="light">
-        <Star size="10" class="icon ion-color-warning"/>
+        <Star size="9" class="icon small-icon ion-color-warning"/>
         {{ avantage.note }} / 5 ({{ avantage.nb_note }} avis)
       </ion-chip>
-      <ion-chip v-if="rubriques[category] != undefined" :class="avantage.type" color="secondary" v-for="category in avantage.categories">
-        <Icon size="10" class="icon" :name="rubriques[category].icon"/>
-        {{ rubriques[category].nom }}
+      <ion-chip :class="avantage.type" color="secondary" v-for="rubriqueId in avantage.categories">
+        <Icon size="9" class="icon small-icon" :name="rubriques[rubriqueId].icon"/>
+        {{ rubriques[rubriqueId].nom }}
       </ion-chip>
     </div>
 
@@ -366,6 +366,11 @@ ion-fab-button.small {
 
 ion-fab.top {
   right: 5px;
+}
+
+.icon.small-icon {
+  width: 22px;
+  height: 22px;
 }
 
 ion-action-sheet {
