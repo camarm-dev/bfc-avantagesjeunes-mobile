@@ -32,7 +32,7 @@
         <Star size="9" class="icon small-icon ion-color-warning"/>
         {{ avantage.note }} / 5 ({{ avantage.nb_note }} avis)
       </ion-chip>
-      <ion-chip :class="avantage.type" color="secondary" v-for="rubriqueId in avantage.categories">
+      <ion-chip :class="type || avantage.type" color="secondary" v-for="rubriqueId in avantage.categories">
         <Icon size="9" class="icon small-icon" :name="rubriques[rubriqueId].icon"/>
         {{ rubriques[rubriqueId].nom }}
       </ion-chip>
@@ -194,7 +194,8 @@ import {checkAvailability, obtainAdvantage} from "@/functions/fetch/avantages";
 export default {
   props: [
     'avantage',
-    'favori'
+    'favori',
+    'type'
   ],
   data() {
     return {

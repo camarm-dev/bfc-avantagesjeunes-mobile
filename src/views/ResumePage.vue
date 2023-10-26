@@ -21,10 +21,11 @@
       <div class="floating">
         <p>{{ welcome_formula }}, {{ user.carte.prenom }}</p>
         <h3>{{ user.carte.total }} avantages utilisés</h3>
-        <ion-nav-link router-direction="forward"> <!-- :component="UsedAvantages" -->
+        <ion-nav-link router-direction="forward" :component="UsedAvantages" :component-props="{ total: user.carte.total, avantages: user.suggestions, favoris: favoris_ids }"> <!-- :component="UsedAvantages" -->
           <p class="footer focusable">Tout voir<ChevronRight/></p>
         </ion-nav-link>
       </div>
+
       <div class="list-title">Suggestions</div>
       <div class="horizontal-carousel">
         <div class="card card-only" v-if="user.suggestions.length <= 0">
@@ -178,11 +179,11 @@ import AvantagesJeunesIcon from "@/components/AvantagesJeunesIcon.vue";
 import MyAccount from "@/components/MyAccount.vue";
 import MyCard from "@/components/MyCard.vue";
 import { createModal } from "@/functions/modals";
-import InspectAvantage from "@/components/InspectAvantage.vue";
 import Map from "@/components/Map.vue";
 import {askPermission} from "@/functions/native/geolocation";
 import ExperimentalModal from "@/components/ExperimentalModal.vue";
 import AvantageCard from "@/components/AvantageCard.vue";
+import UsedAvantages from "@/components/UsedAvantages.vue";
 </script>
 
 <script lang="ts">
@@ -191,7 +192,6 @@ import {getAccount} from "@/functions/fetch/account";
 import {getAvantage} from "@/functions/fetch/avantages";
 import {get} from "@/functions/fetch/tools";
 import {hasPermission, getCurrentLocation} from "@/functions/native/geolocation";
-import {getPosition} from "@/functions/fetch/geolocation";
 
 let refs = {
   modalLogin: ref(null),
