@@ -32,24 +32,7 @@
             Aucun avantage suggéré
           </ion-note>
         </div>
-        <ion-nav-link :component-props="{ avantage: suggested, favori: favoris_ids.includes(suggested.id_avantage) }" router-direction="forward" :component="InspectAvantage" v-for="suggested in user.suggestions">
-          <div :class="`card focusable ${suggested.type}`">
-            <header>
-              <img v-if="suggested.image_url" alt="Image de l'avantage" :src="suggested.image_url"/>
-              <ion-skeleton-text class="image" v-else :animated="true"></ion-skeleton-text>
-            </header>
-            <div class="content" v-if="suggested.offre">
-              <h3>{{ suggested.offre }}</h3>
-              <p>{{ getInnerContent(suggested.conditions) }}</p>
-            </div>
-            <div class="content" v-else>
-              <ion-skeleton-text :animated="true" style="width: 80%; margin-top: 2em;"></ion-skeleton-text>
-              <ion-skeleton-text :animated="true" style="width: 100%;"></ion-skeleton-text>
-              <ion-skeleton-text :animated="true" style="width: 20%;"></ion-skeleton-text>
-            </div>
-          </div>
-        </ion-nav-link>
-
+        <AvantageCard :favori="favoris_ids.includes(suggested.id_avantage)" :avantage="suggested" v-for="suggested in user.suggestions"/>
       </div>
       <div class="list-title">Mes favoris</div>
       <div class="horizontal-carousel">
@@ -58,23 +41,7 @@
             Vous n'avez pas d'avantages favoris...
           </ion-note>
         </div>
-        <ion-nav-link :component-props="{ avantage: favori, favori: true }" router-direction="forward" :component="InspectAvantage" v-for="favori in user.favoris">
-          <div :class="`card focusable ${favori.type}`">
-            <header>
-              <img v-if="favori.image_url" alt="Image de l'avantage" :src="favori.image_url"/>
-              <ion-skeleton-text class="image" v-else :animated="true" style="width: 100%"></ion-skeleton-text>
-            </header>
-            <div class="content" v-if="favori.offre">
-              <h3>{{ favori.offre }}</h3>
-              <p>{{ getInnerContent(favori.conditions) }}</p>
-            </div>
-            <div class="content" v-else>
-              <ion-skeleton-text :animated="true" style="width: 80%; margin-top: 2em;"></ion-skeleton-text>
-              <ion-skeleton-text :animated="true" style="width: 100%;"></ion-skeleton-text>
-              <ion-skeleton-text :animated="true" style="width: 20%;"></ion-skeleton-text>
-            </div>
-          </div>
-        </ion-nav-link>
+        <AvantageCard :favori="true" :avantage="favori" v-for="favori in user.favoris"/>
       </div>
 
       <ion-list inset v-if="!position">
@@ -215,6 +182,7 @@ import InspectAvantage from "@/components/InspectAvantage.vue";
 import Map from "@/components/Map.vue";
 import {askPermission} from "@/functions/native/geolocation";
 import ExperimentalModal from "@/components/ExperimentalModal.vue";
+import AvantageCard from "@/components/AvantageCard.vue";
 </script>
 
 <script lang="ts">
@@ -344,11 +312,6 @@ export default {
       }).catch(err => {
         this.loggedIn = false
       })
-    },
-    getInnerContent(html_string: string) {
-      const el = document.createElement('div')
-      el.innerHTML = html_string
-      return el.innerText
     },
     async getAroundMeAdvantages(radius: string = '1') {
       this.aroundMeLoading = true

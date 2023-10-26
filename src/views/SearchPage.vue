@@ -68,17 +68,7 @@
         </ion-list>
 
         <ion-list>
-          <ion-nav-link :component-props="{ avantage: avantage, favori: isAvantageFavori(avantage.id_avantage) }" router-direction="forward" :component="InspectAvantage" v-for="avantage in results">
-            <div :class="`card focusable ${avantage.type}`">
-              <header>
-                <img alt="Image de l'avantage" :src="avantage.image_url"/>
-              </header>
-              <div class="content">
-                <h3>{{ avantage.offre }}</h3>
-                <p>{{ getInnerContent(avantage.conditions) }}</p>
-              </div>
-            </div>
-          </ion-nav-link>
+          <AvantageCard :favori="isAvantageFavori(avantage.id_avantage)" :avantage="avantage" v-for="avantage in results"/>
         </ion-list>
 
       </ion-content>
@@ -109,6 +99,7 @@ import {
 } from "lucide-vue-next";
 import { secteurs as listeSecteurs, rubriques as listeRubriques } from "@/functions/interfaces";
 import InspectAvantage from "@/components/InspectAvantage.vue";
+import AvantageCard from "@/components/AvantageCard.vue";
 </script>
 
 <script lang="ts">
