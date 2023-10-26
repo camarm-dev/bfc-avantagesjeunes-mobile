@@ -6,7 +6,7 @@ import {IonNavLink, IonSkeletonText} from "@ionic/vue";
 
 <template>
   <ion-nav-link :component-props="{ avantage: avantage, favori: favori || false, type: type }" router-direction="forward" :component="InspectAvantage">
-    <div :class="`card focusable ${type || avantage.type} ${small ? 'small': ''}`">
+    <div :class="`card focusable ${type || avantage.type} ${small ? 'small': ''} ${expand ? 'expanded': ''}`">
       <header>
         <img v-if="avantage.image_url" alt="Image de l'avantage" :src="avantage.image_url"/>
         <ion-skeleton-text class="image" v-else :animated="true"></ion-skeleton-text>
@@ -26,7 +26,7 @@ import {IonNavLink, IonSkeletonText} from "@ionic/vue";
 
 <script lang="ts">
 export default {
-  props: ['avantage', 'favori', 'type', 'small'],
+  props: ['avantage', 'favori', 'type', 'small', 'expand'],
   methods: {
     getInnerContent(html_string: string) {
       const el = document.createElement('div')

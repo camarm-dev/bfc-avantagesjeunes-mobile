@@ -23,7 +23,17 @@
           Vous n'avez pas encore utilisé d'avantages...
         </ion-note>
       </div>
-      <AvantageCard :expand="true" :avantage="avantage" :type="'green'" :favori="favoris.includes(avantage.avantage_id)" v-for="avantage in avantages"/>
+      <div class="action-item" v-for="avantage in avantages">
+        <AvantageCard :expand="true" :avantage="avantage" :type="'green'" :favori="favoris.includes(avantage.avantage_id)"/>
+        <div class="action">
+          <Clipboard class="bubble-icon"/>
+          <p>Copier</p>
+        </div>
+        <div class="action">
+          <Newspaper class="bubble-icon"/>
+          <p>Voir</p>
+        </div>
+      </div>
     </div>
   </ion-content>
 </template>
@@ -37,6 +47,7 @@ import {
   IonBackButton,
   IonButtons,
 } from '@ionic/vue';
+import { Clipboard, Newspaper } from "lucide-vue-next";
 import AvantageCard from "@/components/AvantageCard.vue";
 </script>
 

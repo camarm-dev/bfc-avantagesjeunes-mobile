@@ -273,7 +273,7 @@ ion-toolbar ion-label p {
 }
 
 .top-background.purple {
-    background-color: var(--ion-color-success-tint);
+    background-color: var(--ion-color-success-shade);
 }
 
 .floating {
@@ -324,6 +324,15 @@ ion-toolbar ion-label p {
     text-align: center;
 }
 
+.card.expanded {
+    margin-bottom: 1em;
+}
+
+.card.expanded, .card.expanded header {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
 .card.small {
     width: 10em;
     min-width: 10em;
@@ -365,7 +374,7 @@ ion-chip.unique {
 }
 
 .card.green header {
-    background-color: var(--ion-color-success-shade);
+    background-color: var(--ion-color-success);
 }
 
 ion-chip.green {
@@ -448,4 +457,51 @@ ion-chip.green {
     padding-bottom: 1em;
     grid-template-columns: 1fr 1fr;
     justify-items: center;
+}
+
+.big-list {
+    margin: 1em auto auto;
+    padding-bottom: 1em;
+    width: 95%;
+}
+
+.action-item {
+    display: flex;
+}
+
+.action-item .action {
+    width: 100%;
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.action-item .action {
+    padding-top: 2.5em;
+    border-left: .55px solid rgba(134, 136, 143, 0.21);
+    background: linear-gradient(var(--ion-color-success) 30%, var(--ion-color-primary-shade) 7%);
+}
+
+.action-item .action:hover, .action-item .action:focus, .action-item .action:active {
+    background: linear-gradient(var(--ion-color-success-shade) 30%, var(--ion-color-primary) 7%);
+}
+
+.action-item .action:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.bubble-icon {
+    padding: .35em;
+    width: 32px;
+    height: 32px;
+    background-color: rgba(59, 161, 88, 0.7);
+    clip-path: path("M16 1C4 1 1 4 1 16C1 28 4 31 16 31C28 31 31 28 31 16C31 4 28 1 16 1Z");
+}
+
+.action-item .action p {
+    color: var(--ion-color-medium);
+    margin-top: .2em;
 }
