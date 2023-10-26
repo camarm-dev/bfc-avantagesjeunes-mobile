@@ -67,9 +67,9 @@
           </ion-item>
         </ion-list>
 
-        <ion-list>
-          <AvantageCard :favori="isAvantageFavori(avantage.id_avantage)" :avantage="avantage" v-for="avantage in results"/>
-        </ion-list>
+        <div class="grid-results">
+          <AvantageCard :small="true" :favori="isAvantageFavori(avantage.id_avantage)" :avantage="avantage" v-for="avantage in results"/>
+        </div>
 
       </ion-content>
     </ion-content>
