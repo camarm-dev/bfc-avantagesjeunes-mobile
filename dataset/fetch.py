@@ -108,7 +108,7 @@ def start_fetch_while():
                             "latitude": org["latitude"],
                             "site": org["site"],
                             "site2": org["site2"]
-                        } for org in avantage["organismes"]]
+                        }]
                     }
                 }
                 found_advantage = database.find_one({"loc": parsed_advantage['loc']})
@@ -120,7 +120,6 @@ def start_fetch_while():
                     continue
                 database.insert_one(parsed_advantage)
                 places += 1
-                sleep(.1)
             print(f'\033[A\033[KPage n°{page} | {parsed}/{total} avantages traités | {places} lieux référencés | {failed} échecs de localisation de lieux | {duplicated} lieux en doublons fusionnés')
 
         response = fetch(page + 1)
