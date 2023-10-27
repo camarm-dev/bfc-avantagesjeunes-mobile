@@ -16,7 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 mongo = pymongo.MongoClient(open('.mongodb').read())
-database = mongo.Dataset.avantages_test
+database = mongo.Dataset.avantages
 
 
 def create_index():
