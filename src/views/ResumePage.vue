@@ -103,6 +103,13 @@
           </ion-label>
         </ion-item>
       </ion-list>
+      <ion-list inset>
+        <ion-item button :detail-icon="informationCircle" @click="createModal(LegalModal, 'modalInfos', refs)">
+          <ion-label>
+            <p>Informations légales</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
     </ion-content>
 
     <ion-content class="ion-display-flex" v-else :fullscreen="true">
@@ -184,6 +191,8 @@ import {askPermission} from "@/functions/native/geolocation";
 import ExperimentalModal from "@/components/ExperimentalModal.vue";
 import AvantageCard from "@/components/AvantageCard.vue";
 import UsedAvantages from "@/components/UsedAvantages.vue";
+import {informationCircle} from "ionicons/icons";
+import LegalModal from "@/components/LegalModal.vue";
 </script>
 
 <script lang="ts">
@@ -196,6 +205,7 @@ import {hasPermission, getCurrentLocation} from "@/functions/native/geolocation"
 let refs = {
   modalLogin: ref(null),
   modalMap: ref(null),
+  modalInfos: ref(null),
   modalExperimental: ref(null)
 } as any
 
