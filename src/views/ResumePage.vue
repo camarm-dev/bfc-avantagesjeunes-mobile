@@ -171,7 +171,6 @@ import {
   IonRefresher,
   IonRefresherContent,
   IonSpinner,
-  IonSkeletonText
 } from '@ionic/vue';
 import {
   BadgeInfo,
@@ -193,6 +192,7 @@ import AvantageCard from "@/components/AvantageCard.vue";
 import UsedAvantages from "@/components/UsedAvantages.vue";
 import {informationCircle} from "ionicons/icons";
 import LegalModal from "@/components/LegalModal.vue";
+import {displayToast} from "@/functions/toasts";
 </script>
 
 <script lang="ts">
