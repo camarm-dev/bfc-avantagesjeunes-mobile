@@ -16,14 +16,11 @@ Créée pour rechercher plus facilement les avantages dont vous pouvez bénéfic
 
 ## Télécharger
 
+Vous pouvez télécharger les fichiers exécutables correspondants à votre plateforme sur la page [releases](/releases).
 
 > [!NOTE]   
 > Arrive bientôt:
-> - [ ] Télécharger depuis avantages-jeunes-connect.camarm.fr
->   - [ ] Télécharger APK
->   - [ ] Télécharger IPA
-> - [ ] Télécharger depuis F-droid
-> - [ ] Télécharger depuis Altstore
+> - [ ] Télécharger depuis Google Play Store
 
 
 ## Goals
