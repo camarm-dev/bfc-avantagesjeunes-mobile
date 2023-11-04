@@ -11,7 +11,7 @@ async function askPermission() {
 
 async function getCurrentLocation() {
     const coordinates = await Geolocation.getCurrentPosition()
-    return [coordinates.longitude, coordinates.latitude]
+    return [coordinates.coords.longitude, coordinates.coords.latitude]
 }
 
 export {
