@@ -21,7 +21,7 @@
       <div class="floating">
         <p>{{ welcome_formula }}, {{ user.carte.prenom }}</p>
         <h3>{{ user.carte.total }} avantages utilisés</h3>
-        <ion-nav-link router-direction="forward" :component="UsedAvantages" :component-props="{ total: user.carte.total, avantages: user.suggestions, favoris: favoris_ids }"> <!-- :component="UsedAvantages" -->
+        <ion-nav-link router-direction="forward" :component="UsedAvantages" :component-props="{ total: user.carte.total, avantages: [], favoris: favoris_ids }">
           <p class="footer focusable">Tout voir<ChevronRight/></p>
         </ion-nav-link>
       </div>
