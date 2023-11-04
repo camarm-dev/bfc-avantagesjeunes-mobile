@@ -40,14 +40,6 @@
       </div>
       <ion-list inset>
         <ion-item>
-          <ion-input :clear-input="true" @ionInput="changeApiUrl($event.detail.value)" :value="apiUrl" placeholder="http://x.x.x.x"></ion-input>
-        </ion-item>
-        <ion-item button @click="checkApi().then(() => { toastMessage() })">
-          <ion-label>
-            <p>Tester l'api</p>
-          </ion-label>
-        </ion-item>
-        <ion-item>
           <ion-label>
             <p>Validité</p>
           </ion-label>
@@ -79,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonTitle, IonInput, IonButton, IonList, IonPage, IonToggle } from "@ionic/vue";
+import { IonTitle, IonButton, IonList, IonPage, IonToggle } from "@ionic/vue";
 import { XCircle, BadgeCheck, BadgeX } from "lucide-vue-next";
 </script>
 
@@ -90,7 +82,7 @@ import {displayToast} from "@/functions/toasts";
 export default {
   data() {
     return {
-      apiUrl: '' as any,
+      apiUrl: 'https://api-ajc.camarm.fr' as any,
       validApi: false,
       testedApi: true,
       useAdvantage: false,
@@ -101,28 +93,15 @@ export default {
     }
   },
   mounted() {
-    this.apiUrl = localStorage.getItem('userApiUrl') || 'http://192.168.1.140:8000'
+    this.apiUrl = localStorage.getItem('userApiUrl') || 'https://api-ajc.camarm.fr'
     localStorage.setItem('userApiUrl', this.apiUrl)
     this.useAdvantage = (localStorage.getItem('userUseAdvantage') || 'false') == 'true'
     this.checkApi()
   },
   methods: {
-    changeApiUrl(url: string) {
-      this.apiUrl = url
-      localStorage.setItem('userApiUrl', this.apiUrl)
-    },
     changeUseAdvantageFunctionality(value: boolean) {
       this.useAdvantage = value
       localStorage.setItem('userUseAdvantage', JSON.stringify(this.useAdvantage))
-    },
-    toastMessage() {
-      if (this.validApi) {
-        displayToast('Nouvelle URL d\'API valide', 'API testée avec succès', 2000, 'primary')
-      } else {
-        displayToast('Nouvelle URL d\'API invalide', 'API testée sans succès', 2000, 'danger')
-        this.api.version = 'Aucune'
-        this.api.dataset = 'Aucun'
-      }
     },
     async checkApi() {
       this.testedApi = false
