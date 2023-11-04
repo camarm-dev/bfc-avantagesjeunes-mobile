@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import {IonPage, IonHeader} from '@ionic/vue'
+import {IonPage, IonHeader, IonContent, IonToolbar, IonTitle} from '@ionic/vue'
 import { ChevronDown } from 'lucide-vue-next'
 import {closeModals} from "@/functions/modals";
 </script>
