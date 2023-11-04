@@ -1,7 +1,7 @@
 {
   "name": "avantages-jeunes-connect",
   "private": true,
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "type": "module",
   "license": "MIT",
   "scripts": {
