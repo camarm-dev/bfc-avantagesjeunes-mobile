@@ -55,7 +55,7 @@ def to_json(advantage: dict):
         "datedebut": advantage["metadata"]["datedebut"],
         "datefin": advantage["metadata"]["datefin"],
         "secteurs": advantage["secteurs"],
-        "categories": advantage["categories"],
+        "categories": advantage["rubriques"],
         "offre": advantage["metadata"]["offre"],
         "note": advantage["metadata"]["note"],
         "nb_note": advantage["metadata"]["nb_note"],
