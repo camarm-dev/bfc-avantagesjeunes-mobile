@@ -184,7 +184,7 @@ import {readableDate} from "@/functions/native/dates";
 import {ref} from "vue";
 import {getPosition} from "@/functions/fetch/geolocation";
 import {createModal} from "@/functions/modals";
-import Map from "@/components/Map.vue";
+import MapModal from "@/components/MapModal.vue";
 import { Share } from '@capacitor/share'
 import {authenticateWithBiometry, setupBiometry} from "@/functions/native/biometry";
 import {displayToast} from "@/functions/toasts";
@@ -279,7 +279,7 @@ export default {
 
       const zoom = this.avantage.organismes.length === 1 ? 11: 8
 
-      await createModal(Map, 'modalMap', refs, { markers: geojson, center: geojson.features[0].geometry.coordinates, zoom: zoom }, false, [], true)
+      await createModal(MapModal, 'modalMap', refs, { markers: geojson, center: geojson.features[0].geometry.coordinates, zoom: zoom }, false, [], true)
     },
     async getAvantageCoords(address: string) {
       const coords = await getPosition(address)
