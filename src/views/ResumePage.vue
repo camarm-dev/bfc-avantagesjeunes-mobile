@@ -55,7 +55,7 @@
       </ion-list>
 
       <ion-list inset>
-        <ion-item @click="createModal(Map, 'modalMap', refs, { markers: { features: aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker.coordinates, zoom: getZoom() }, false, [], true)" button>
+        <ion-item @click="openAroundMeMap()" button>
           <MapIcon class="icon ion-color-success"/>
           <ion-label>
             <p>Autour de moi</p>
@@ -184,15 +184,12 @@ import LoginModal from "@/components/LoginModal.vue";
 import AvantagesJeunesIcon from "@/components/AvantagesJeunesIcon.vue";
 import MyAccount from "@/components/MyAccount.vue";
 import MyCard from "@/components/MyCard.vue";
-import { createModal } from "@/functions/modals";
-import Map from "@/components/Map.vue";
 import {askPermission} from "@/functions/native/geolocation";
 import ExperimentalModal from "@/components/ExperimentalModal.vue";
 import AvantageCard from "@/components/AvantageCard.vue";
 import UsedAvantages from "@/components/UsedAvantages.vue";
 import {informationCircle} from "ionicons/icons";
 import LegalModal from "@/components/LegalModal.vue";
-import {displayToast} from "@/functions/toasts";
 </script>
 
 <script lang="ts">
@@ -201,6 +198,8 @@ import {getAccount} from "@/functions/fetch/account";
 import {getAvantage} from "@/functions/fetch/avantages";
 import {get} from "@/functions/fetch/tools";
 import {hasPermission, getCurrentLocation} from "@/functions/native/geolocation";
+import {createModal} from "@/functions/modals";
+import MapModal from "@/components/MapModal.vue";
 
 let refs = {
   modalLogin: ref(null),
@@ -220,7 +219,7 @@ export default {
     return {
       loggedIn: false,
       position: true,
-      user_marker: null,
+      user_marker: null as any,
       refs: refs,
       aroundMeLoading: true,
       user: {
@@ -246,7 +245,8 @@ export default {
       } as any,
       favoris_ids: [],
       aroundMeAdvantages: {
-        count: 0
+        count: 0,
+        results: []
       },
       radius: '1',
       welcome_formula: "Bonjour",
@@ -258,7 +258,7 @@ export default {
       this.refreshAccount()
     })
 
-    refs['page'] = this.$refs.page
+    this.refs['page'] = this.$refs.page
 
     if (localStorage.getItem('userCards') && localStorage.getItem('currentCardToken')) {
       this.loggedIn = true
@@ -275,6 +275,15 @@ export default {
 
   },
   methods: {
+    async openAroundMeMap() {
+      const refs = {
+        modalMap: ref(null) as any
+      }
+      window.addEventListener('closeModals', () => {
+        refs.modalMap.value.dismiss()
+      })
+      await createModal(MapModal, 'modalMap', refs, { markers: { features: this.aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker.coordinates, zoom: this.getZoom() }, false, [], true)
+    },
     async refresh(event: CustomEvent) {
       await this.refreshAccount()
       event.target.complete()
@@ -328,8 +337,8 @@ export default {
       this.aroundMeLoading = true
       this.radius = radius
       const coordinates = this.position ? await getCurrentLocation(): [6.0258598544333974, 47.23521554332734]
-      this.aroundMeAdvantages = await get(`${localStorage.getItem('userApiUrl') || 'https://api-ajc.camarm.fr/'}/around-me?longitude=${coordinates[0]}&latitude=${coordinates[1]}&radius=${radius}`)
-      this. aroundMeLoading = false
+      this.aroundMeAdvantages = await get(`https://api-ajc.camarm.fr/around-me?longitude=${coordinates[0]}&latitude=${coordinates[1]}&radius=${radius}`)
+      this.aroundMeLoading = false
     },
     getZoom() {
       switch (this.radius) {
@@ -344,7 +353,8 @@ export default {
         default:
           return 11
       }
-    }
+    },
+    createModal
   },
 }
 </script>
