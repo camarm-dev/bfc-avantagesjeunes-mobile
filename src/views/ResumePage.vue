@@ -277,8 +277,11 @@ export default {
   methods: {
     async openAroundMeMap() {
       const refs = {
-        modalMap: ref(null)
+        modalMap: ref(null) as any
       }
+      window.addEventListener('closeModals', () => {
+        refs.modalMap.value.dismiss()
+      })
       await createModal(MapModal, 'modalMap', refs, { markers: { features: this.aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker.coordinates, zoom: this.getZoom() }, false, [], true)
     },
     async refresh(event: CustomEvent) {
