@@ -25,13 +25,15 @@
       </div>
       <div class="action-item" v-for="avantage in avantages">
         <AvantageCard :expand="true" :avantage="avantage" :type="'green'" :favori="favoris.includes(avantage.avantage_id)"/>
-        <div class="action">
-          <Clipboard class="bubble-icon"/>
+        <div class="action" @click="copy(avantage.id_transaction)">
+          <ClipboardIcon class="bubble-icon"/>
           <p>Copier</p>
         </div>
         <div class="action">
-          <Newspaper class="bubble-icon"/>
-          <p>Voir</p>
+          <ion-nav-link router-direction="forward" :component="InspectUsedAvantage" :component-props="{ avantage: avantage }">
+            <Newspaper class="bubble-icon"/>
+            <p>Voir</p>
+          </ion-nav-link>
         </div>
       </div>
     </div>
@@ -45,15 +47,31 @@ import {
   IonContent,
   IonTitle,
   IonBackButton,
-  IonButtons,
+  IonButtons, IonNavLink,
 } from '@ionic/vue';
-import { Clipboard, Newspaper } from "lucide-vue-next";
+import { ClipboardIcon, Newspaper } from "lucide-vue-next";
 import AvantageCard from "@/components/AvantageCard.vue";
+import InspectUsedAvantage from "@/components/InspectUsedAvantage.vue";
 </script>
 
 <script lang="ts">
+import {displayToast} from "@/functions/toasts";
+import { Clipboard } from '@capacitor/clipboard';
+
 export default {
-  props: ['total', 'avantages', 'favoris']
+  props: ['total', 'avantages', 'favoris'],
+  methods: {
+    async copy(text: string) {
+      try {
+        await Clipboard.write({
+          string: text
+        })
+        await displayToast('', 'Identifiant de transaction copié !', 3000, 'success')
+      } catch {
+        await displayToast('', 'Copie impossible !', 3000, 'danger')
+      }
+    }
+  }
 }
 </script>
 <style>

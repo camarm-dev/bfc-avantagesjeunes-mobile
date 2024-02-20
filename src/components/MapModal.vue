@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-header>
-      <ion-toolbar  @click="closeModals()">
+      <ion-toolbar  @click="this.$router.goBack()">
         <ion-title>
           <ChevronDown class="focusable" @click="closeModals()"/>
         </ion-title>

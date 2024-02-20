@@ -20,8 +20,8 @@
       <div class="top-background"></div>
       <div class="floating">
         <p>{{ welcome_formula }}, {{ user.carte.prenom }}</p>
-        <h3>{{ user.carte.total }} avantages utilisés</h3>
-        <ion-nav-link router-direction="forward" :component="UsedAvantages" :component-props="{ total: user.carte.total, avantages: [], favoris: favoris_ids }">
+        <h3>{{ usedAdvantages.length }} avantages utilisés</h3>
+        <ion-nav-link router-direction="forward" :component="UsedAvantages" :component-props="{ total: usedAdvantages.length, avantages: usedAdvantages, favoris: favoris_ids }">
           <p class="footer focusable">Tout voir<ChevronRight/></p>
         </ion-nav-link>
       </div>
@@ -241,8 +241,10 @@ export default {
           valid_datefin: ""
         },
         suggestions: [] as any[],
+        transactions: [] as any[],
         favoris: [] as [] || false,
       } as any,
+      usedAdvantages: [] as any[],
       favoris_ids: [],
       aroundMeAdvantages: {
         count: 0,
@@ -316,6 +318,16 @@ export default {
           suggestionAvantages.push(await getAvantage((suggestion.id_avantage)))
         }
         this.user.suggestions = suggestionAvantages
+
+        let usedAdvantages = []
+        for (const advantage of this.user.transactions) {
+          const object = await getAvantage((advantage.rid_avantage)) as any
+          object.id_transaction = advantage.id_transaction
+          object.date_transaction = advantage.date_transaction
+          object.type_transaction = advantage.type
+          usedAdvantages.push(object)
+        }
+        this.usedAdvantages = usedAdvantages
 
         if (!this.user.favoris) this.user.favoris = []
         this.favoris_ids = this.user.favoris
