@@ -53,7 +53,7 @@ def start_fetch_while():
     places = 0
     failed = 0
     duplicated = 0
-    valid_date = int(datetime.datetime.now().strftime('%Y%M%d'))
+    valid_date = int(datetime.datetime.now().strftime('%Y%m%d'))
     response = fetch(page)
     total = len(response['results'])
     success = is_success(response)
@@ -131,12 +131,13 @@ def start_fetch_while():
 
 
 if __name__ == '__main__':
+    # Version 04/24
     silent = '-s' in sys.argv or '--silent' in sys.argv
 
     mongo = pymongo.MongoClient(open('.mongodb').read())
     if input("Réinitialiser la base [Y/n] ?").lower() == 'y':
-        mongo.Dataset.drop_collection('avantages')
-    database = mongo.Dataset.avantages
+        mongo.Dataset.drop_collection('avantages_0424')
+    database = mongo.Dataset.avantages_0424
 
     before = datetime.datetime.now()
 
