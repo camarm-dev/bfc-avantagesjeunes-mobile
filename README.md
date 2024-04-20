@@ -31,8 +31,8 @@ Vous pouvez télécharger les fichiers exécutables correspondants à votre plat
 - [x] Voir les avantages autours sur une carte
 - [x] Ouvrir un avantage sur une carte
 - [x] Rechercher des avantages (secteur, type)
-- [ ] Enregistrer un scan de sa carte
-- [ ] Voir ses avantages utilisés
+- [x] Enregistrer un scan de sa carte
+- [x] Voir ses avantages utilisés
 - [ ] Utiliser un avantage depuis l'app
 
 
