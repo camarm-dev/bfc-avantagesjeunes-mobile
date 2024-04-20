@@ -23,7 +23,7 @@ async function takePhoto(text: string) {
         resultType: CameraResultType.Base64,
         source: CameraSource.Camera,
         quality: 100,
-        allowEditing: true,
+        allowEditing: false,
         promptLabelHeader: text
     })
 }

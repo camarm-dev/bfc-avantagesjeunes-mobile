@@ -128,13 +128,13 @@ import 'swiper/css';
 import 'swiper/css/effect-flip';
 import 'swiper/css/pagination';
 import '@ionic/vue/css/ionic-swiper.css';
-import {saveCardImage} from "@/functions/native/camera";
-import {displayToast} from "@/functions/toasts";
 import FullscreenCardModal from "@/components/FullscreenCardModal.vue";
 import {ref} from "vue";
+import ScanCardModal from "@/components/ScanCardModal.vue";
 
 let refs = {
-  modalFullscreen: ref(null)
+  modalFullscreen: ref(null),
+  modalScanCard: ref(null)
 } as any
 
 window.addEventListener('closeModals', () => {
@@ -181,12 +181,7 @@ export default {
       })
     },
     async scanCard() {
-      const callback = () => {
-        saveCardImage('backCardImage', 'Ajoutez une photo du dos de votre carte et recadrez là.', () => {
-          displayToast('Images enregistrées', 'Les photos de ta carte ont bien été modifiées', 3000, 'success')
-        })
-      }
-      await saveCardImage('frontCardImage', 'Ajoutez une photo du devant de votre carte et recadrez là.', callback)
+      await createModal(ScanCardModal, 'modalScanCard', refs, {}, true, [0, 0.95], true)
     },
     async openCardFullscreen() {
       await createModal(FullscreenCardModal, 'modalFullscreen', refs, { front: this.frontCardImage, back: this.backCardImage }, true, [0, 0.9], true)

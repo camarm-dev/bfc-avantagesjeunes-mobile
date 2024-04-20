@@ -81,6 +81,6 @@ export default {
 </script>
 <style scoped>
 .cropper {
-  max-height: 90vh;
+  max-height: 80vh;
 }
 </style>
