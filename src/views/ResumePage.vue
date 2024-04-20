@@ -278,13 +278,7 @@ export default {
   },
   methods: {
     async openAroundMeMap() {
-      const refs = {
-        modalMap: ref(null) as any
-      }
-      await createModal(MapModal, 'modalMap', refs, { markers: { features: this.aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker.coordinates, zoom: this.getZoom() }, false, [], true)
-      window.addEventListener('closeModals', () => {
-        refs.modalMap.value.dismiss()
-      })
+      await createModal(MapModal, 'modalMap', refs, { markers: { features: this.aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker?.coordinates || [6.0258598544333974, 47.23521554332734], zoom: this.getZoom() }, false, [], true)
     },
     async refresh(event: CustomEvent) {
       await this.refreshAccount()
