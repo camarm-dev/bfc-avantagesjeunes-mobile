@@ -226,6 +226,7 @@ input {
 
 .card-picture {
     height: 275px !important;
+    border-radius: 18px;
 }
 
 @media (min-width: 1024px) {

@@ -60,7 +60,6 @@ async function getAdvantageCode(id_avantage: string, id_organisme: string, id_ca
 
 async function obtainAdvantage(id_avantage: string, id_organisme: string) {
     const user = await getAccount()
-    console.log(id_organisme)
     const id_carte = user.carte.id_carte
     const mode_paiement = user.carte.mode_paiement
     await addTransactionAdvantage(id_avantage, id_organisme, id_carte)
@@ -73,6 +72,7 @@ async function obtainAdvantage(id_avantage: string, id_organisme: string) {
         await displayToast('Échec', 'Une erreur inconnue est survenue...', 2000, 'danger')
         return
     }
+    await displayToast('Avantage confirmé', 'Retrouvez le code et les instructions dans la page avantages utilisés !', 3000, 'success')
 }
 
 export {

@@ -5,19 +5,17 @@
         <ion-back-button text="Retour"></ion-back-button>
       </ion-buttons>
       <ion-title>Ma carte</ion-title>
+      <ion-buttons slot="end">
+        <ion-button @click="openCardFullscreen()">
+          <ion-icon slot="icon-only" :icon="scanOutline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-toolbar>
   </ion-header>
   <ion-content :fullscreen="true">
     <header class="profile">
       <div class="card-swiper">
-        <swiper :flip-effect="{ slideShadows: false }" :pagination="{ enabled: true, clickable: true, type: 'bullets' }" :modules="modules" :loop="true" effect="flip" :slide-per-view="1">
-          <swiper-slide>
-            <img height="200" class="card-picture" :src="'/carte.png'" alt="Votre carte">
-          </swiper-slide>
-          <swiper-slide>
-            <img height="200" class="card-picture" :src="'/carte-dos.png'" alt="Votre carte">
-          </swiper-slide>
-        </swiper>
+        <img height="200" class="card-picture" :src="frontCardImage" alt="Votre carte">
       </div>
       <ion-chip class="large-chip" color="success" v-if="user.carte.valid">
         <BadgeCheck class="icon ion-color-success" size="30"/>
@@ -29,6 +27,7 @@
         {{ user.carte.numero }}
       </ion-chip>
     </header>
+
     <div class="list-title">
       Mes informations
     </div>
@@ -68,14 +67,14 @@
       Actions
     </div>
     <ion-list inset>
-      <ion-item disabled button>
+      <ion-item button @click="scanCard()">
         <Focus class="icon"/>
         <ion-label>
           <p>Modifier la photo</p>
           <h2>Scanner ma carte</h2>
         </ion-label>
       </ion-item>
-      <ion-item disabled class="focusable">
+      <ion-item button @click="removeCardScans()">
         <Trash2 class="icon ion-color-danger"/>
         <ion-label>
           <p>Réinitialiser les images</p>
@@ -97,7 +96,8 @@ import {
   IonLabel,
   IonItem,
   IonBackButton,
-  IonButtons
+  IonButtons,
+  IonIcon
 } from '@ionic/vue';
 import {
   Fingerprint,
@@ -111,6 +111,7 @@ import {
   Trash2
 } from "lucide-vue-next";
 import { EffectFlip, Pagination } from 'swiper/modules'
+import {scanOutline} from "ionicons/icons";
 
 const modules = [
     EffectFlip,
@@ -127,10 +128,27 @@ import 'swiper/css';
 import 'swiper/css/effect-flip';
 import 'swiper/css/pagination';
 import '@ionic/vue/css/ionic-swiper.css';
+import {saveCardImage} from "@/functions/native/camera";
+import {displayToast} from "@/functions/toasts";
+import FullscreenCardModal from "@/components/FullscreenCardModal.vue";
+import {ref} from "vue";
+
+let refs = {
+  modalFullscreen: ref(null)
+} as any
+
+window.addEventListener('closeModals', () => {
+  Object.keys(refs).forEach(key => {
+    if (refs[key].value) refs[key].value.dismiss()
+  })
+})
+
 
 export default {
   data () {
     return {
+      frontCardImage: localStorage.getItem('frontCardImage') || "/carte.png",
+      backCardImage: localStorage.getItem('backCardImage') || "/carte-dos.png",
       user: {
         image_url: "",
         carte: {
@@ -162,7 +180,23 @@ export default {
         this.user.carte.date_vente = readableDate(this.user.carte.date_vente)
       })
     },
-    createModal
+    async scanCard() {
+      const callback = () => {
+        saveCardImage('backCardImage', 'Ajoutez une photo du dos de votre carte et recadrez là.', () => {
+          displayToast('Images enregistrées', 'Les photos de ta carte ont bien été modifiées', 3000, 'success')
+        })
+      }
+      await saveCardImage('frontCardImage', 'Ajoutez une photo du devant de votre carte et recadrez là.', callback)
+    },
+    async openCardFullscreen() {
+      await createModal(FullscreenCardModal, 'modalFullscreen', refs, { front: this.frontCardImage, back: this.backCardImage }, true, [0, 0.9], true)
+    },
+    removeCardScans() {
+      localStorage.removeItem('frontCardImage')
+      localStorage.removeItem('backCardImage')
+      this.frontCardImage = "/carte.png"
+      this.backCardImage = "/carte-dos.png"
+    }
   },
   components: { Swiper, SwiperSlide }
 }
