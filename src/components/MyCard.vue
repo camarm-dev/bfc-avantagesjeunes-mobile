@@ -15,7 +15,7 @@
   <ion-content :fullscreen="true">
     <header class="profile">
       <div class="card-swiper">
-        <img height="200" class="card-picture" :src="frontCardImage" alt="Votre carte">
+        <img @click="openCardFullscreen()" height="200" class="card-picture" :src="frontCardImage" alt="Votre carte">
       </div>
       <ion-chip class="large-chip" color="success" v-if="user.carte.valid">
         <BadgeCheck class="icon ion-color-success" size="30"/>
