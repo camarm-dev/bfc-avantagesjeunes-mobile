@@ -66,13 +66,6 @@
           <h2>Mes centres d'intérêts</h2>
         </ion-label>
       </ion-item>
-      <ion-item disabled button>
-        <Lock class="icon ion-color-warning"/>
-        <ion-label>
-          <p>Renforcer la sécurité de votre compte</p>
-          <h2>Changer mon mot de passe</h2>
-        </ion-label>
-      </ion-item>
     </ion-list>
   </ion-content>
 </template>
