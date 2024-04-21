@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import {IonPage, IonHeader, IonContent, IonToolbar, IonTitle, IonIcon} from '@ionic/vue'
+import {IonPage, IonHeader, IonContent, IonToolbar, IonTitle, IonIcon, IonNote, IonList, IonButtons, IonButton} from '@ionic/vue'
 import {checkmarkOutline, closeOutline} from "ionicons/icons";
 import {
   RotateCcw,
