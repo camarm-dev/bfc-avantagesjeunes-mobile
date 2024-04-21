@@ -98,7 +98,9 @@ import {
   IonItem,
   IonBackButton,
   IonButtons,
-  IonIcon
+  IonIcon,
+  IonChip,
+  IonButton
 } from '@ionic/vue';
 import {
   Fingerprint,

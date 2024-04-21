@@ -47,7 +47,9 @@ import {
   IonContent,
   IonTitle,
   IonBackButton,
-  IonButtons, IonNavLink,
+  IonButtons,
+  IonNavLink,
+  IonNote
 } from '@ionic/vue';
 import { ClipboardIcon, Newspaper } from "lucide-vue-next";
 import AvantageCard from "@/components/AvantageCard.vue";

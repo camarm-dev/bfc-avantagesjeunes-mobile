@@ -170,7 +170,10 @@ import {
   IonRefresher,
   IonRefresherContent,
   IonSpinner,
-  IonAvatar
+  IonAvatar,
+  IonNote,
+  IonRow,
+  IonAlert
 } from '@ionic/vue';
 import {
   BadgeInfo,
