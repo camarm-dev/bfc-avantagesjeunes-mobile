@@ -14,7 +14,7 @@
   </ion-header>
   <ion-content :fullscreen="true">
     <header class="profile">
-      <pulse-item>
+      <pulse-item vibrate>
         <div class="card-swiper">
           <img @click="openCardFullscreen()" height="200" class="card-picture" :src="frontCardImage" alt="Votre carte">
         </div>
@@ -187,7 +187,7 @@ export default {
       })
     },
     async scanCard() {
-      await createModal(ScanCardModal, 'modalScanCard', refs, {}, true, [0, 0.95], true)
+      await createModal(ScanCardModal, 'modalScanCard', refs, {}, true, [0, 1], true)
     },
     async openCardFullscreen() {
       await createModal(FullscreenCardModal, 'modalFullscreen', refs, { front: this.frontCardImage, back: this.backCardImage }, true, [0, 0.9], true)

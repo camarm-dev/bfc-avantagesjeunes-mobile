@@ -12,6 +12,12 @@
 import {vibrate} from "@/functions/native/tools";
 
 export default {
+  props: {
+    vibrate: {
+      type: Boolean,
+      default: false
+    }
+  },
   mounted() {
     this.$refs.item.addEventListener('touchstart', this.downEffect)
     this.$refs.item.addEventListener('touchend', this.upEffect)
@@ -26,7 +32,7 @@ export default {
       const item = this.$refs.item
       this.reset()
       item.classList.add('down')
-      vibrate()
+      if (this.vibrate) vibrate()
     },
     upEffect() {
       const item = this.$refs.item
@@ -46,7 +52,7 @@ export default {
 }
 
 .pulsing-item.down {
-  scale: 0.9;
+  scale: 0.92;
 }
 
 .pulsing-item.up {
@@ -59,7 +65,7 @@ export default {
     scale: 0.9;
   }
   30% {
-    scale: 1.05;
+    scale: 1.03;
   }
   100% {
     scale: 1;

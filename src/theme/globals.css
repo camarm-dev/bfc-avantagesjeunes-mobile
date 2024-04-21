@@ -311,8 +311,9 @@ ion-toolbar ion-label p {
     flex-direction: row;
     gap: 20px;
     overflow-x: scroll;
-    overflow-y: hidden;
+    overflow-y: visible;
     padding-bottom: 1em;
+    padding-top: .2em;
 }
 
 .card {
