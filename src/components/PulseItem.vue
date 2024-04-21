@@ -32,7 +32,7 @@ export default {
       const item = this.$refs.item
       this.reset()
       item.classList.add('up')
-      setTimeout(reset, 600)
+      setTimeout(this.reset, 600)
     }
   }
 }
