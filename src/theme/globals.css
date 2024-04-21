@@ -49,8 +49,7 @@ ion-chip .icon {
 
 .large-chip {
     font-size: 1.2em;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding: 8px 10px;
 }
 
 .chip-square {
