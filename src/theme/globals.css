@@ -324,6 +324,10 @@ ion-toolbar ion-label p {
     text-align: center;
 }
 
+.card.full {
+    width: 100%;
+}
+
 .card.expanded {
     margin-bottom: 1em;
 }
@@ -362,6 +366,10 @@ ion-toolbar ion-label p {
 
 .card.unique header {
     background-color: #5749a9;
+}
+
+.card.news header {
+    background-color: #1f388f;
 }
 
 ion-chip.unique {
