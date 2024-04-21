@@ -88,9 +88,10 @@ import {
   IonAccordionGroup,
   IonItem,
   IonLabel,
-  IonNavLink,
+  IonSpinner,
   IonSelect,
-  IonSelectOption
+  IonSelectOption,
+  IonList
 } from '@ionic/vue';
 import {
   Settings2,
