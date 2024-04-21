@@ -36,11 +36,13 @@
 
       </ion-list>
       <br>
-      <ion-list>
-        <ion-item :detail-icon="checkmarkOutline" :disabled="!(frontImageDone && backImageDone)" color="success" button @click="close()">
-          Terminer
-        </ion-item>
-      </ion-list>
+      <pulse-item>
+        <ion-list>
+          <ion-item :detail-icon="checkmarkOutline" :disabled="!(frontImageDone && backImageDone)" color="success" button @click="close()">
+            Terminer
+          </ion-item>
+       </ion-list>
+      </pulse-item>
       <br>
       <ion-list>
         <ion-note>
@@ -55,6 +57,7 @@
 import {IonPage, IonContent, IonItem, IonLabel, IonIcon, IonNote, IonList, IonProgressBar} from '@ionic/vue'
 import {Check} from 'lucide-vue-next';
 import {checkmarkOutline, helpOutline} from "ionicons/icons";
+import PulseItem from "@/components/PulseItem.vue"
 </script>
 
 <script lang="ts">
