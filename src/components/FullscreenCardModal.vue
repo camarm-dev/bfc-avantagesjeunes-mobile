@@ -11,7 +11,6 @@
           </swiper-slide>
         </swiper>
       </div>
-      <br>
       <ion-item color="black" lines="none">
         <SunDim slot="start"/>
         <ion-label>
@@ -52,8 +51,8 @@ export default {
   },
   methods: {
     async getBrightness() {
-      const { brightness: currentBrightness } = await ScreenBrightness.getBrightness()
-      return currentBrightness
+      const { brightness } = await ScreenBrightness.getBrightness()
+      return brightness
     },
     async setBrightness(value: number) {
       await ScreenBrightness.setBrightness({ brightness: value / 100 })
@@ -70,6 +69,7 @@ export default {
 
 .fullscreen img {
   height: 100% !important;
+  max-height: 450px !important;
   width: auto !important;
 }
 
