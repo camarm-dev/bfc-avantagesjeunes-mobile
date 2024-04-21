@@ -20,7 +20,7 @@
       <br>
       <ion-list>
         <ion-item @click="scanCardFront()" :disabled="frontImageDone" button>
-          <Check :class="`icon ion-color${frontImageDone ? 'success': 'medium'}`"/>
+          <Check :class="`icon ion-color-${frontImageDone ? 'success': 'medium'}`"/>
           <ion-label>
             <p>Scanner le devant de la carte</p>
             <h3>Capturer la face avant</h3>
@@ -37,7 +37,7 @@
       </ion-list>
       <br>
       <ion-list>
-        <ion-item :detail-icon="checkmarkOutline" :disabled="!frontImageDone && !backImageDone" color="success" button @click="close()">
+        <ion-item :detail-icon="checkmarkOutline" :disabled="!(frontImageDone && backImageDone)" color="success" button @click="close()">
           Terminer
         </ion-item>
       </ion-list>
