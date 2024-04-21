@@ -18,6 +18,11 @@ export default {
       default: false
     }
   },
+  data() {
+    return {
+      animated: false
+    }
+  },
   mounted() {
     this.$refs.item.addEventListener('touchstart', this.downEffect)
     this.$refs.item.addEventListener('touchend', this.upEffect)
@@ -32,13 +37,18 @@ export default {
       const item = this.$refs.item
       this.reset()
       item.classList.add('down')
+      this.animated = true
       if (this.vibrate) vibrate()
+      setTimeout(() => { this.animated = false }, 250)
     },
     upEffect() {
       const item = this.$refs.item
-      this.reset()
+      if (this.animated) {
+        setTimeout(this.upEffect, 50)
+        return
+      }
       item.classList.add('up')
-      setTimeout(this.reset, 600)
+      setTimeout(this.reset, 500)
     }
   }
 }
@@ -46,7 +56,7 @@ export default {
 
 <style scoped>
 .pulsing-item {
-  transition: .5s ease-in-out;
+  transition: .25s ease-in-out;
   overflow: visible;
   z-index: 1000;
 }
