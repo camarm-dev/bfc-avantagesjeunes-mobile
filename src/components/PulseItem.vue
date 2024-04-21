@@ -32,6 +32,7 @@ export default {
       const item = this.$refs.item
       this.reset()
       item.classList.add('up')
+      setTimeout(reset, 600)
     }
   }
 }
@@ -40,6 +41,8 @@ export default {
 <style scoped>
 .pulsing-item {
   transition: .5s ease-in-out;
+  overflow: visible;
+  z-index: 1000;
 }
 
 .pulsing-item.down {
