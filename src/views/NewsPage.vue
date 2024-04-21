@@ -30,6 +30,12 @@
         <NewsCard :loading="false" :article="article"/>
         <br>
       </div>
+      <ion-note v-if="endReached" class="ion-padding-start" style="display: block">
+        Toutes les actualités ont été chargées...
+      </ion-note>
+      <ion-infinite-scroll v-else @ionInfinite="loadMore">
+        <ion-infinite-scroll-content></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
     </ion-content>
   </ion-page>
 </template>
@@ -47,18 +53,20 @@ import {
   IonButtons
 } from '@ionic/vue';
 import NewsCard from "@/components/NewsCard.vue";
-import {globeOutline, informationOutline, newspaperOutline} from "ionicons/icons";
+import {globeOutline, newspaperOutline} from "ionicons/icons";
 </script>
 
 <script lang="ts">
 import {getNews} from "@/functions/fetch/news";
+import {InfiniteScrollCustomEvent} from "@ionic/vue";
 
 export default {
   data () {
     return {
       news: [] as any[],
       page: 1,
-      loading: true
+      loading: true,
+      endReached: false
     }
   },
   mounted() {
@@ -69,10 +77,23 @@ export default {
   methods: {
     async fetchNews() {
       this.news = (await getNews(this.page)).results as any[]
-      console.log(this.news)
     },
     openInBrowser() {
       window.open('https://www.avantagesjeunes.com/compte/news')
+    },
+    loadMore(event: InfiniteScrollCustomEvent) {
+      this.page += 1
+      getNews(this.page).then(response => {
+        const success = response.status || response.results
+        if (success) {
+          for (const article of response.results) {
+            this.news.push(article)
+          }
+        } else {
+          this.endReached = true
+        }
+        event.target.complete()
+      })
     }
   }
 }
