@@ -68,7 +68,7 @@
         </ion-list>
 
         <div class="grid-results">
-          <AvantageCard :small="true" :favori="isAvantageFavori(avantage.id_avantage)" :avantage="avantage" v-for="avantage in results"/>
+          <AvantageCard :used="used.includes(avantage.id_avantage)" :small="true" :favori="isAvantageFavori(avantage.id_avantage)" :avantage="avantage" v-for="avantage in results"/>
         </div>
 
       </ion-content>
@@ -117,12 +117,16 @@ export default {
       secteurs: [],
       rubriques: [],
       favoris: [],
+      used: [],
       searchTimeout: setTimeout(() => {}, 100)
     }
   },
   mounted() {
     getAccount().then(user => {
       this.favoris = user.favoris
+      for (const object in user.transactions) {
+        this.used.push(object.rid_avantage)
+      }
       if (!this.favoris) this.favoris = []
     })
   },

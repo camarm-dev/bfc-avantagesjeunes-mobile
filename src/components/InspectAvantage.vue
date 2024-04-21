@@ -38,7 +38,7 @@
     </div>
 
     <ion-list inset>
-      <ion-item @click="useAdvantage()" :disabled="!isUseAdvantageFunctionalityEnabled()" button color="secondary" class="gradient-button">
+      <ion-item @click="useAdvantage()" :disabled="!isUseAdvantageFunctionalityEnabled() || used" button color="secondary" class="gradient-button">
         <Ticket class="icon ion-color-primary"/>
         <ion-label class="ion-color-primary">
           <h2 class="ion-color-primary">Utiliser l'avantage</h2>
@@ -48,6 +48,12 @@
         <ion-select :value="selectedOrg" interface="action-sheet" @ionChange="selectedOrg = $event.detail.value" placeholder="Séléctionnez un lieu">
           <ion-select-option v-for="org in avantage.organismes" :value="org.id_organisme">{{ org.commune }}, {{ org.cp }}</ion-select-option>
         </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-icon :icon="informationOutline" slot="start" color="medium"/>
+        <ion-note v-if="used">
+          Avantage déjà utilisé.
+        </ion-note>
       </ion-item>
     </ion-list>
 
@@ -156,9 +162,10 @@ import {
   IonButtons,
   IonFabButton,
   IonFab,
-  IonIcon
+  IonIcon,
+  IonNote
 } from '@ionic/vue';
-import { shareOutline } from 'ionicons/icons'
+import {informationOutline, shareOutline} from 'ionicons/icons'
 import {
   CalendarClock,
   Sparkles,
@@ -172,10 +179,9 @@ import {
   HeartOff,
   Ticket
 } from "lucide-vue-next";
-import {secteurs, rubriques} from "../functions/interfaces";
+import {secteurs, rubriques} from "@/functions/interfaces";
 import Icon from "@/components/Icon.vue";
 import {addFavori, removeFavori} from "@/functions/fetch/avantages";
-import {createModal} from "@/functions/modals";
 </script>
 
 <script lang="ts">
@@ -194,7 +200,8 @@ export default {
   props: [
     'avantage',
     'favori',
-    'type'
+    'type',
+    'used'
   ],
   data() {
     return {

@@ -32,7 +32,7 @@
             Aucun avantage suggéré
           </ion-note>
         </div>
-        <AvantageCard :favori="favoris_ids.includes(suggested.id_avantage)" :avantage="suggested" v-for="suggested in user.suggestions"/>
+        <AvantageCard :used="usedAdvantagesIds.includes(suggested.id_avantage)" :favori="favoris_ids.includes(suggested.id_avantage)" :avantage="suggested" v-for="suggested in user.suggestions"/>
       </div>
       <div class="list-title">Mes favoris</div>
       <div class="horizontal-carousel">
@@ -41,7 +41,7 @@
             Vous n'avez pas d'avantages favoris...
           </ion-note>
         </div>
-        <AvantageCard :favori="true" :avantage="favori" v-for="favori in user.favoris"/>
+        <AvantageCard :used="usedAdvantagesIds.includes(favori.id_avantage)" :favori="true" :avantage="favori" v-for="favori in user.favoris"/>
       </div>
 
       <ion-list inset v-if="!position">
@@ -250,6 +250,7 @@ export default {
         count: 0,
         results: []
       },
+      usedAdvantagesIds: [],
       radius: '1',
       welcome_formula: "Bonjour",
     }
@@ -320,6 +321,7 @@ export default {
           object.date_transaction = advantage.date_transaction
           object.type_transaction = advantage.type
           usedAdvantages.push(object)
+          this.usedAdvantagesIds.push(advantage.rid_avantage)
         }
         this.usedAdvantages = usedAdvantages
 
