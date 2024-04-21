@@ -311,7 +311,7 @@ ion-toolbar ion-label p {
     flex-direction: row;
     gap: 20px;
     overflow-x: scroll;
-    overflow-y: visible;
+    overflow-y: hidden;
     padding-bottom: 1em;
     padding-top: .2em;
 }
