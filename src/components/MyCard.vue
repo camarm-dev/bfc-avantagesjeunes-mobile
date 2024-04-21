@@ -40,7 +40,8 @@
         </ion-label>
       </ion-item>
       <ion-item>
-        <SquareAsterisk class="icon ion-color-success"/>
+        <SquareAsterisk v-if="user.carte.valid" class="icon ion-color-success"/>
+        <SquareAsterisk v-else class="icon ion-color-danger"/>
         <ion-label>
           <p>Saison de validité</p>
           <h2>{{ user.carte.saison }}</h2>
