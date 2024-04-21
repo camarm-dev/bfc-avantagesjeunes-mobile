@@ -230,7 +230,9 @@ export default {
       }
       await authenticateWithBiometry(() => {
         loader.dismiss()
-        obtainAdvantage(this.avantage.id_avantage, this.selectedOrg)
+        obtainAdvantage(this.avantage.id_avantage, this.selectedOrg).then(() => {
+          this.used = true
+        })
         }, () => {
         displayToast('Échec d\'authentification', 'Impossible de vous authentifier avec la biométrie', 2000, 'danger')
         loader.dismiss()
