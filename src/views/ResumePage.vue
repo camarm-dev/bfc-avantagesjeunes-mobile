@@ -2,10 +2,9 @@
   <ion-page ref="page">
     <ion-header>
       <ion-toolbar v-if="loggedIn">
-        <ion-label slot="start">
-          <p>Bienvenue,</p>
-          <h4>{{ user.carte.prenom }}</h4>
-        </ion-label>
+        <ion-avatar slot="start">
+          <img src="/icon-foreground.png" alt="Logo AJC">
+        </ion-avatar>
         <div slot="end" class="focusable">
           <ion-nav-link router-direction="forward" :component="MyAccount">
             <img class="profile-picture small" :src="user.image_url || '/avatar.png'" alt="Votre photo">
@@ -46,7 +45,7 @@
       </div>
 
       <ion-list inset v-if="!position">
-        <ion-item @click="askPermission().then(refreshPosition())" color="danger">
+        <ion-item @click="askPermission().then(refreshPosition)" color="danger">
           <Compass size="64" class="icon-ion-color-light"/>
           <ion-note class="ion-padding" color="light">
             Activez la localisation en cliquant ici. Vous pourrez voir les avantages autour de vous.
@@ -171,6 +170,7 @@ import {
   IonRefresher,
   IonRefresherContent,
   IonSpinner,
+  IonAvatar
 } from '@ionic/vue';
 import {
   BadgeInfo,
