@@ -52,6 +52,9 @@ export default {
       progressInt: this.badge.target
     }
   },
+  mounted() {
+    this.getProgress()
+  },
   methods: {
     getProgress() {
       const category = this.user[this.badge.target_type]
