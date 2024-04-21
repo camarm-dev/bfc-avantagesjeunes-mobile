@@ -11,14 +11,23 @@
           </swiper-slide>
         </swiper>
       </div>
+      <br>
+      <ion-item color="black" lines="none">
+        <SunDim slot="start"/>
+        <ion-label>
+          <ion-range :value="brightness * 100" @ionChange="setBrightness($event.detail.value)"/>
+        </ion-label>
+        <Sun slot="end"/>
+      </ion-item>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import {IonPage, IonContent} from '@ionic/vue'
+import {IonPage, IonContent, IonRange, IonItem, IonLabel} from '@ionic/vue'
 import { EffectFlip, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Sun, SunDim } from "lucide-vue-next";
 
 const modules = [
   EffectFlip,
@@ -27,8 +36,31 @@ const modules = [
 </script>
 
 <script lang="ts">
+import { ScreenBrightness } from '@capacitor-community/screen-brightness';
+
 export default {
-  props: ['front', 'back']
+  props: ['front', 'back'],
+  data() {
+    return {
+      brightness: 0.5
+    }
+  },
+  mounted() {
+    this.getBrightness().then(value => {
+      this.brightness = value
+    })
+  },
+  methods: {
+    async getBrightness() {
+      const { brightness: currentBrightness } = await ScreenBrightness.getBrightness()
+      return currentBrightness
+    },
+    async setBrightness(value: number) {
+      await ScreenBrightness.setBrightness({ brightness: value / 100 })
+      this.brightness = value / 100
+      console.log(this.brightness)
+    }
+  }
 }
 </script>
 <style>
@@ -43,6 +75,11 @@ export default {
 
 .fullscreen .swiper-pagination {
   bottom: -2em !important;
+}
+
+ion-range {
+  --bar-background: var(--ion-color-medium);
+  --bar-background-active: var(--ion-color-secondary);
 }
 </style>
 

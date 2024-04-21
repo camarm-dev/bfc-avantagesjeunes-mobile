@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@aparajita/capacitor-biometric-auth": "^5.2.1",
+    "@capacitor-community/screen-brightness": "^5.0.0",
     "@capacitor/android": "5.2.2",
     "@capacitor/app": "^5.0.6",
     "@capacitor/camera": "^5.0.9",
