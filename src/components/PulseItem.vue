@@ -38,8 +38,7 @@ export default {
       this.reset()
       item.classList.add('down')
       this.animated = true
-      if (this.vibrate) vibrate()
-      setTimeout(() => { this.animated = false }, 250)
+      setTimeout(() => { this.animated = false; if (this.vibrate) vibrate() }, 250)
     },
     upEffect() {
       const item = this.$refs.item
