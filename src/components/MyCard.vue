@@ -14,9 +14,11 @@
   </ion-header>
   <ion-content :fullscreen="true">
     <header class="profile">
-      <div class="card-swiper">
-        <img @click="openCardFullscreen()" height="200" class="card-picture" :src="frontCardImage" alt="Votre carte">
-      </div>
+      <pulse-item>
+        <div class="card-swiper">
+          <img @click="openCardFullscreen()" height="200" class="card-picture" :src="frontCardImage" alt="Votre carte">
+        </div>
+      </pulse-item>
       <ion-chip class="large-chip" color="success" v-if="user.carte.valid">
         <BadgeCheck class="icon ion-color-success" size="30"/>
         {{ user.carte.numero }}
@@ -115,6 +117,7 @@ import {
 } from "lucide-vue-next";
 import { EffectFlip, Pagination } from 'swiper/modules'
 import {scanOutline} from "ionicons/icons";
+import PulseItem from "@/components/PulseItem.vue"
 
 const modules = [
     EffectFlip,
