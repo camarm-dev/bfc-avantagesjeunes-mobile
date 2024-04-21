@@ -43,15 +43,16 @@
         </div>
         <AvantageCard :used="usedAdvantagesIds.includes(favori.id_avantage)" :favori="true" :avantage="favori" v-for="favori in user.favoris"/>
       </div>
-
-      <ion-list inset v-if="!position">
-        <ion-item @click="askPermission().then(refreshPosition)" color="danger">
-          <Compass size="64" class="icon-ion-color-light"/>
-          <ion-note class="ion-padding" color="light">
-            Activez la localisation en cliquant ici. Vous pourrez voir les avantages autour de vous.
-          </ion-note>
-        </ion-item>
-      </ion-list>
+      <pulse-item vibrate>
+        <ion-list inset v-if="!position">
+          <ion-item @click="askPermission().then(refreshPosition)" color="danger">
+            <Compass size="64" class="icon-ion-color-light"/>
+            <ion-note class="ion-padding" color="light">
+              Activez la localisation en cliquant ici. Vous pourrez voir les avantages autour de vous.
+            </ion-note>
+          </ion-item>
+        </ion-list>
+      </pulse-item>
 
       <ion-list inset>
         <ion-item @click="openAroundMeMap()" button>
@@ -193,6 +194,7 @@ import AvantageCard from "@/components/AvantageCard.vue";
 import UsedAvantages from "@/components/UsedAvantages.vue";
 import {informationCircle} from "ionicons/icons";
 import LegalModal from "@/components/LegalModal.vue";
+import PulseItem from "@/components/PulseItem.vue";
 </script>
 
 <script lang="ts">
