@@ -2,12 +2,12 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title>Actualités</ion-title>
-        <ion-buttons :collapse="true" slot="end">
-          <ion-button>
-            <ion-icon slot="icon-only" :icon="informationOutline"/>
+        <ion-buttons slot="start">
+          <ion-button @click="openInBrowser()">
+            <ion-icon slot="icon-only" :icon="globeOutline"/>
           </ion-button>
         </ion-buttons>
+        <ion-title>Actualités</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">
@@ -16,7 +16,7 @@
           <ion-title size="large">Actualités</ion-title>
           <ion-buttons :collapse="true" slot="end">
             <ion-button>
-              <ion-icon slot="icon-only" :icon="informationOutline"/>
+              <ion-icon slot="icon-only" :icon="newspaperOutline"/>
             </ion-button>
           </ion-buttons>
         </ion-toolbar>
@@ -47,7 +47,7 @@ import {
   IonButtons
 } from '@ionic/vue';
 import NewsCard from "@/components/NewsCard.vue";
-import {informationOutline} from "ionicons/icons";
+import {globeOutline, informationOutline, newspaperOutline} from "ionicons/icons";
 </script>
 
 <script lang="ts">
@@ -70,6 +70,9 @@ export default {
     async fetchNews() {
       this.news = (await getNews(this.page)).results as any[]
       console.log(this.news)
+    },
+    openInBrowser() {
+      window.open('https://www.avantagesjeunes.com/compte/news')
     }
   }
 }
