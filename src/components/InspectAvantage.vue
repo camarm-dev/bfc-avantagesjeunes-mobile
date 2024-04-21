@@ -49,9 +49,9 @@
           <ion-select-option v-for="org in avantage.organismes" :value="org.id_organisme">{{ org.commune }}, {{ org.cp }}</ion-select-option>
         </ion-select>
       </ion-item>
-      <ion-item>
+      <ion-item v-if="used">
         <ion-icon :icon="informationOutline" slot="start" color="medium"/>
-        <ion-note v-if="used">
+        <ion-note>
           Avantage déjà utilisé.
         </ion-note>
       </ion-item>
