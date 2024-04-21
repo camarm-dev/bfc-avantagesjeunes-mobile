@@ -163,7 +163,11 @@ import {
   IonFabButton,
   IonFab,
   IonIcon,
-  IonNote
+  IonNote,
+  IonList,
+  IonSelect,
+  IonSelectOption,
+  IonChip
 } from '@ionic/vue';
 import {informationOutline, shareOutline} from 'ionicons/icons'
 import {
