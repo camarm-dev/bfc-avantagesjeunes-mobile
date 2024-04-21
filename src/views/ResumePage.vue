@@ -25,6 +25,10 @@
         </ion-nav-link>
       </div>
 
+      <div class="list-title" v-if="user.badges">Mes badges</div>
+      <div class="horizontal-carousel" v-if="user.badges">
+        <UserBadge :badge="BADGES[badge.id_badge]" :date="badge.datetime" :key="badge.id_badge" :user="user" v-for="badge in user.badges"/>
+      </div>
       <div class="list-title">Suggestions</div>
       <div class="horizontal-carousel">
         <div class="card card-only" v-if="user.suggestions.length <= 0">
@@ -195,6 +199,8 @@ import UsedAvantages from "@/components/UsedAvantages.vue";
 import {informationCircle} from "ionicons/icons";
 import LegalModal from "@/components/LegalModal.vue";
 import PulseItem from "@/components/PulseItem.vue";
+import {BADGES} from "@/functions/fetch/badges";
+import UserBadge from "@/components/UserBadge.vue";
 </script>
 
 <script lang="ts">
