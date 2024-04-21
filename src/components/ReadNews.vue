@@ -11,7 +11,7 @@
     </ion-toolbar>
   </ion-header>
   <ion-content ref="content" :fullscreen="true" class="ion-padding no-top">
-    <header class="avantage">
+    <header class="news">
       <div class="image-wrapper">
         <img :src="article.image_url" alt="Couverture de l'article">
       </div>
@@ -99,7 +99,7 @@ export default {
   rotate: 180deg;
 }
 
-.avantage {
+.news {
   display: flex;
   flex-direction: column;
   justify-content: center;
