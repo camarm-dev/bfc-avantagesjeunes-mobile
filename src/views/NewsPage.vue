@@ -50,7 +50,10 @@ import {
   IonTitle,
   IonIcon,
   IonNote,
-  IonButtons
+  IonButtons,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonButton
 } from '@ionic/vue';
 import NewsCard from "@/components/NewsCard.vue";
 import {globeOutline, newspaperOutline} from "ionicons/icons";
