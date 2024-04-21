@@ -78,20 +78,7 @@ export default {
   }
 }
 </script>
-<style>
-.article-content a {
-  color: var(--ion-color-secondary) !important;
-}
-
-.article-content strong, .article-content b {
-  font-weight: bold;
-}
-
-.article-content img {
-  width: 100% !important;
-  height: auto !important;
-}
-
+<style scoped>
 .image-wrapper img {
   height: 15em;
   max-height: 15em;
@@ -117,6 +104,21 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+</style>
+<style>
+.article-content a {
+  color: var(--ion-color-secondary) !important;
+  text-decoration: none !important;
+}
+
+.article-content strong, .article-content b {
+  font-weight: bold;
+}
+
+.article-content img {
+  width: 100% !important;
+  height: auto !important;
 }
 
 .no-top {
