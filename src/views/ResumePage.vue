@@ -10,6 +10,7 @@
             <img class="profile-picture small" :src="user.image_url || '/avatar.png'" alt="Votre photo">
           </ion-nav-link>
         </div>
+        <ion-progress-bar color="secondary" v-if="loading" type="indeterminate"></ion-progress-bar>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" v-if="loggedIn">
@@ -264,6 +265,7 @@ export default {
       usedAdvantagesIds: [],
       radius: '1',
       welcome_formula: "Bonjour",
+      loading: false
     }
   },
   mounted() {
@@ -317,6 +319,7 @@ export default {
       }
     },
     refreshAccount() {
+      this.loading = true
       getAccount().then(async user => {
         this.user = user
         let suggestionAvantages = []
@@ -348,6 +351,7 @@ export default {
           this.position = false
         })
         await this.getAroundMeAdvantages()
+        this.loading = false
       }).catch(err => {
         this.loggedIn = false
       })
