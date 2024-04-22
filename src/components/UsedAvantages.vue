@@ -66,11 +66,12 @@ export default {
     async copy(text: string) {
       try {
         await Clipboard.write({
-          string: text
+          string: text.toString(),
+          label: 'Avantage: identifiant de transaction'
         })
         await displayToast('', 'Identifiant de transaction copié !', 3000, 'success')
-      } catch {
-        await displayToast('', 'Copie impossible !', 3000, 'danger')
+      } catch (e) {
+        await displayToast('', `Copie impossible ! ${e} ${text}`, 3000, 'danger')
       }
     }
   }
