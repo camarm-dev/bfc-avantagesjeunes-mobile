@@ -32,7 +32,8 @@
           <ion-item class="ion-border">
             <ion-checkbox color="secondary" justify="start" :checked="agree" @input="agree = !agree" label-placement="end" required>
               <ion-label class="ion-text-wrap" color="light">
-                J'accepte les <a href="https://github.com/camarm-dev/bfc-avantagesjeunes-mobile/blob/main/CGU.md" target="_blank">conditions d'utilisation</a> de Avantages Jeunes Connect
+                J'accepte les <a href="https://github.com/camarm-dev/bfc-avantagesjeunes-mobile/blob/main/CGU.md" target="_blank">conditions d'utilisation</a> de Avantages Jeunes Connect et j'ai pris connaissance du
+                <a href="https://github.com/camarm-dev/bfc-avantagesjeunes-mobile">code</a> et de <a href="https://github.com/camarm-dev/bfc-avantagesjeunes-mobile/blob/main/LICENSE">sa license</a>.
               </ion-label>
             </ion-checkbox>
           </ion-item>

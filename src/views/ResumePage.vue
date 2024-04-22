@@ -127,14 +127,18 @@
         </ion-label>
         <br>
         <ion-row class="ion-justify-content-center">
-          <ion-chip id="open-info-alert" class="chip-square" color="secondary">
-            <BadgeInfo size="36" class="ion-color-primary"/>
-          </ion-chip>
+          <pulse-item vibrate>
+            <ion-chip id="open-info-alert" class="chip-square" color="secondary">
+              <BadgeInfo size="36" class="ion-color-primary"/>
+            </ion-chip>
+          </pulse-item>
           <ion-alert class="ion-color-primary" sub-header="avantagesjeunes.com" trigger="open-info-alert" header="Informations" message="Avantages Jeunes Connect est une application non officielle open source développée par un unique étudiant. Nous nous dédommageons de tous dysfonctionnement créé."/>
           <br>
-          <ion-chip id="open-question-alert" class="chip-square" color="tertiary">
-            <HelpCircle size="36" class="ion-color-tertiary"/>
-          </ion-chip>
+          <pulse-item vibrate>
+            <ion-chip id="open-question-alert" class="chip-square" color="tertiary">
+              <HelpCircle size="36" class="ion-color-tertiary"/>
+            </ion-chip>
+          </pulse-item>
           <ion-alert class="ion-color-primary" sub-header="avantagesjeunes.com" trigger="open-question-alert" header="Informations" message="Si c'est votre première connexion, merci de finir l'activation de votre compte sur avantagesjeunes.com/login avant de vous connecter sur Avantages Jeunes Connect"/>
         </ion-row>
         <ion-note class="ion-text-center">
@@ -179,7 +183,8 @@ import {
   IonAvatar,
   IonNote,
   IonRow,
-  IonAlert
+  IonAlert,
+  IonProgressBar
 } from '@ionic/vue';
 import {
   BadgeInfo,
@@ -383,19 +388,19 @@ export default {
 </script>
 <style>
 .login-button ion-label h2 {
-  color: var(--ion-color-tertiary) !important;
+  color: var(--ion-background-color) !important;
 }
 
 .login-button:hover ion-label h2 {
-  color: var(--ion-color-tertiary-tint) !important;
+  color: var(--ion-color-primary) !important;
 }
 
 .login-button ion-label p {
-  color: var(--ion-color-tertiary-tint) !important;
+  color: var(--ion-color-contrast) !important;
 }
 
 .login-button:hover ion-label p {
-  color: var(--ion-color-tertiary-contrast) !important;
+  color: var(--ion-color-contrast) !important;
 }
 
 .login-button svg, .login-button svg * {
