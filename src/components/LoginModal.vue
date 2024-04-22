@@ -79,14 +79,14 @@ import {vibrate} from "@/functions/native/tools";
 import {getIDFromToken} from "@/functions/fetch/tools";
 
 export default {
+  data() {
+    return {
+      numero: "",
+      password: "",
+      agree: false
+    }
+  },
   methods: {
-    data() {
-      return {
-        numero: "",
-        password: "",
-        agree: false
-      }
-    },
     async login () {
       if (!this.agree) {
         await displayToast('Conditions d\'utilisation', 'Veuillez accepter les conditions d\'utilisation pour ajouter une carte', 2000, 'danger')
