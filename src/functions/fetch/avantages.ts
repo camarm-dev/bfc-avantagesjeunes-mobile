@@ -4,9 +4,38 @@ import {displayToast} from "@/functions/toasts";
 import moment from 'moment'
 
 
+export function getCacheStats() {
+    const cache = getAvantagesCache()
+    return { length: Object.keys(cache).length, size: (new Blob([JSON.stringify(cache)])).size }
+}
+
+function getAvantagesCache(): {} {
+    return JSON.parse(localStorage.getItem('advantagesCache') || '{}')
+}
+
+function isCached(id: string) {
+    return getAvantagesCache().hasOwnProperty(id)
+}
+
+function getCachedAdvantage(id: string) {
+    const cache = getAvantagesCache() as any
+    return cache[id]
+}
+
+function cacheAdvantage(id: string, document: object) {
+    let cache = getAvantagesCache() as any
+    cache[id] = document
+    localStorage.setItem('advantagesCache', JSON.stringify(cache))
+}
+
 async function getAvantage(id: string) {
+    if (isCached(id)) {
+        return getCachedAdvantage(id)
+    }
     const url = import.meta.env.VITE_API_URL + '/api/avantage/detail/' + id
-    return await get(url)
+    const document = await get(url)
+    cacheAdvantage(id, document)
+    return document
 }
 
 async function addFavori(id_avantage: string) {
