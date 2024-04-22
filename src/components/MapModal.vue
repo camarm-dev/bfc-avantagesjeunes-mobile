@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-header>
-      <ion-toolbar  @click="closeModals()">
+      <ion-toolbar @click="closeModals()">
         <ion-title>
           <ChevronDown class="focusable" @click="closeModals()"/>
         </ion-title>

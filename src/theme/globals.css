@@ -49,8 +49,7 @@ ion-chip .icon {
 
 .large-chip {
     font-size: 1.2em;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding: 8px 10px;
 }
 
 .chip-square {
@@ -226,6 +225,7 @@ input {
 
 .card-picture {
     height: 275px !important;
+    border-radius: 18px;
 }
 
 @media (min-width: 1024px) {
@@ -313,6 +313,7 @@ ion-toolbar ion-label p {
     overflow-x: scroll;
     overflow-y: hidden;
     padding-bottom: 1em;
+    padding-top: .2em;
 }
 
 .card {
@@ -322,6 +323,10 @@ ion-toolbar ion-label p {
     min-width: 15em;
     height: 10em;
     text-align: center;
+}
+
+.card.full {
+    width: 100%;
 }
 
 .card.expanded {
@@ -362,6 +367,10 @@ ion-toolbar ion-label p {
 
 .card.unique header {
     background-color: #5749a9;
+}
+
+.card.news header {
+    background-color: #1f388f;
 }
 
 ion-chip.unique {

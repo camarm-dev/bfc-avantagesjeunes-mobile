@@ -16,9 +16,8 @@
         <img :src="avantage.image_url" alt="Image de l'avantage">
       </div>
       <h2 class="welcome">{{ avantage.offre }}</h2>
-      <p>
-        -
-        <span v-for="secteur in avantage.secteurs">{{ (secteurs[secteur] || { 'nom': 'Tout les secteurs' }).nom }} -&nbsp;</span>
+      <p class="carousel-el">
+        <span v-for="secteur in avantage.secteurs">{{ (secteurs[secteur] || { 'nom': 'Tout les secteurs' }).nom }}{{ avantage.secteurs.indexOf(secteur) == avantage.secteurs.length -1 ? '': '&nbsp;—&nbsp;' }}</span>
       </p>
     </header>
     <ion-fab vertical="top" horizontal="end" class="top">
@@ -27,7 +26,7 @@
         <Heart size="20" @click="addFavori(avantage.id_avantage); isFavori = !isFavori" v-else class="ion-color-secondary"/>
       </ion-fab-button>
     </ion-fab>
-    <div class="ion-margin-auto">
+    <div class="ion-margin-auto carousel-el">
       <ion-chip color="light">
         <Star size="9" class="icon small-icon ion-color-warning"/>
         {{ avantage.note }} / 5 ({{ avantage.nb_note }} avis)
@@ -39,7 +38,7 @@
     </div>
 
     <ion-list inset>
-      <ion-item @click="useAdvantage()" :disabled="!isUseAdvantageFunctionalityEnabled()" button color="secondary" class="gradient-button">
+      <ion-item @click="useAdvantage()" :disabled="!isUseAdvantageFunctionalityEnabled() || used" button color="secondary" class="gradient-button">
         <Ticket class="icon ion-color-primary"/>
         <ion-label class="ion-color-primary">
           <h2 class="ion-color-primary">Utiliser l'avantage</h2>
@@ -49,6 +48,12 @@
         <ion-select :value="selectedOrg" interface="action-sheet" @ionChange="selectedOrg = $event.detail.value" placeholder="Séléctionnez un lieu">
           <ion-select-option v-for="org in avantage.organismes" :value="org.id_organisme">{{ org.commune }}, {{ org.cp }}</ion-select-option>
         </ion-select>
+      </ion-item>
+      <ion-item v-if="used">
+        <ion-icon :icon="informationOutline" slot="start" color="medium"/>
+        <ion-note>
+          Avantage déjà utilisé.
+        </ion-note>
       </ion-item>
     </ion-list>
 
@@ -157,9 +162,14 @@ import {
   IonButtons,
   IonFabButton,
   IonFab,
-  IonIcon
+  IonIcon,
+  IonNote,
+  IonList,
+  IonSelect,
+  IonSelectOption,
+  IonChip
 } from '@ionic/vue';
-import { shareOutline } from 'ionicons/icons'
+import {informationOutline, shareOutline} from 'ionicons/icons'
 import {
   CalendarClock,
   Sparkles,
@@ -173,10 +183,9 @@ import {
   HeartOff,
   Ticket
 } from "lucide-vue-next";
-import {secteurs, rubriques} from "../functions/interfaces";
+import {secteurs, rubriques} from "@/functions/interfaces";
 import Icon from "@/components/Icon.vue";
 import {addFavori, removeFavori} from "@/functions/fetch/avantages";
-import {createModal} from "@/functions/modals";
 </script>
 
 <script lang="ts">
@@ -195,7 +204,8 @@ export default {
   props: [
     'avantage',
     'favori',
-    'type'
+    'type',
+    'used'
   ],
   data() {
     return {
@@ -224,7 +234,9 @@ export default {
       }
       await authenticateWithBiometry(() => {
         loader.dismiss()
-        obtainAdvantage(this.avantage.id_avantage, this.selectedOrg)
+        obtainAdvantage(this.avantage.id_avantage, this.selectedOrg).then(() => {
+          this.used = true
+        })
         }, () => {
         displayToast('Échec d\'authentification', 'Impossible de vous authentifier avec la biométrie', 2000, 'danger')
         loader.dismiss()
@@ -271,7 +283,7 @@ export default {
           }
         })
       }
-      
+
       const geojson = {
           type: 'FeatureCollection',
           features: features
@@ -376,5 +388,22 @@ ion-fab.top {
 
 ion-action-sheet {
   --button-background-selected: var(--ion-color-step-150, #fff) !important;
+}
+
+.carousel-el {
+  width: 95% !important;
+  min-width: 95% !important;
+  display: flex !important;
+  flex-direction: row;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+p.carousel-el {
+  padding-left: 2.5%;
+}
+
+.carousel-el ion-chip, .carousel-el span {
+  min-width: max-content;
 }
 </style>

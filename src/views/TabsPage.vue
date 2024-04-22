@@ -7,24 +7,24 @@
           <ResumeIcon class="icon"/>
         </ion-tab-button>
 
-        <ion-tab-button tab="events" href="/search">
+        <ion-tab-button tab="search" href="/search">
           <SearchIcon class="icon"/>
         </ion-tab-button>
 
-<!--        <ion-tab-button tab="tasks" href="/dash/tasks">-->
-<!--          <TasksIcon class="icon"/>-->
-<!--          <ion-label>Tasks</ion-label>-->
-<!--        </ion-tab-button>-->
+        <ion-tab-button tab="news" href="/news">
+          <NewsIcon class="icon"/>
+        </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonPage, IonRouterOutlet } from '@ionic/vue';
+import { IonTabBar, IonTabButton, IonTabs, IonPage, IonRouterOutlet } from '@ionic/vue';
 import {
   Search as SearchIcon,
-  CreditCard as ResumeIcon
+  CreditCard as ResumeIcon,
+  Newspaper as NewsIcon
 } from "lucide-vue-next";
 </script>
 
@@ -58,10 +58,11 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .icon {
   width: 28px;
   height: 28px;
+  margin: 0;
 }
 
 ion-tab-button {
@@ -73,6 +74,6 @@ ion-tab-button * {
 }
 
 ion-tab-button.tab-selected {
-  border-top: 2px solid var(--ion-color-primary);
+  border-top: 2px solid var(--ion-color-secondary);
 }
 </style>

@@ -2,15 +2,15 @@
   <ion-page ref="page">
     <ion-header>
       <ion-toolbar v-if="loggedIn">
-        <ion-label slot="start">
-          <p>Bienvenue,</p>
-          <h4>{{ user.carte.prenom }}</h4>
-        </ion-label>
+        <ion-avatar slot="start">
+          <img src="/icon-foreground.png" alt="Logo AJC">
+        </ion-avatar>
         <div slot="end" class="focusable">
           <ion-nav-link router-direction="forward" :component="MyAccount">
             <img class="profile-picture small" :src="user.image_url || '/avatar.png'" alt="Votre photo">
           </ion-nav-link>
         </div>
+        <ion-progress-bar color="secondary" v-if="loading" type="indeterminate"></ion-progress-bar>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" v-if="loggedIn">
@@ -20,12 +20,16 @@
       <div class="top-background"></div>
       <div class="floating">
         <p>{{ welcome_formula }}, {{ user.carte.prenom }}</p>
-        <h3>{{ user.carte.total }} avantages utilisés</h3>
-        <ion-nav-link router-direction="forward" :component="UsedAvantages" :component-props="{ total: user.carte.total, avantages: [], favoris: favoris_ids }">
+        <h3>{{ usedAdvantages.length }} avantages utilisés</h3>
+        <ion-nav-link router-direction="forward" :component="UsedAvantages" :component-props="{ total: usedAdvantages.length, avantages: usedAdvantages, favoris: favoris_ids }">
           <p class="footer focusable">Tout voir<ChevronRight/></p>
         </ion-nav-link>
       </div>
 
+      <div class="list-title" v-if="user.badges">Mes badges</div>
+      <div class="horizontal-carousel" v-if="user.badges">
+        <UserBadge :badge="BADGES[badge.id_badge]" :date="badge.datetime" :key="badge.id_badge" :user="user" v-for="badge in user.badges"/>
+      </div>
       <div class="list-title">Suggestions</div>
       <div class="horizontal-carousel">
         <div class="card card-only" v-if="user.suggestions.length <= 0">
@@ -33,7 +37,7 @@
             Aucun avantage suggéré
           </ion-note>
         </div>
-        <AvantageCard :favori="favoris_ids.includes(suggested.id_avantage)" :avantage="suggested" v-for="suggested in user.suggestions"/>
+        <AvantageCard :used="usedAdvantagesIds.includes(suggested.id_avantage)" :favori="favoris_ids.includes(suggested.id_avantage)" :avantage="suggested" v-for="suggested in user.suggestions"/>
       </div>
       <div class="list-title">Mes favoris</div>
       <div class="horizontal-carousel">
@@ -42,17 +46,18 @@
             Vous n'avez pas d'avantages favoris...
           </ion-note>
         </div>
-        <AvantageCard :favori="true" :avantage="favori" v-for="favori in user.favoris"/>
+        <AvantageCard :used="usedAdvantagesIds.includes(favori.id_avantage)" :favori="true" :avantage="favori" v-for="favori in user.favoris"/>
       </div>
-
-      <ion-list inset v-if="!position">
-        <ion-item @click="askPermission().then(refreshPosition())" color="danger">
-          <Compass size="64" class="icon-ion-color-light"/>
-          <ion-note class="ion-padding" color="light">
-            Activez la localisation en cliquant ici. Vous pourrez voir les avantages autour de vous.
-          </ion-note>
-        </ion-item>
-      </ion-list>
+      <pulse-item vibrate>
+        <ion-list inset v-if="!position">
+          <ion-item @click="askPermission().then(refreshPosition)" color="danger">
+            <Compass size="64" class="icon-ion-color-light"/>
+            <ion-note class="ion-padding" color="light">
+              Activez la localisation en cliquant ici. Vous pourrez voir les avantages autour de vous.
+            </ion-note>
+          </ion-item>
+        </ion-list>
+      </pulse-item>
 
       <ion-list inset>
         <ion-item @click="openAroundMeMap()" button>
@@ -171,6 +176,10 @@ import {
   IonRefresher,
   IonRefresherContent,
   IonSpinner,
+  IonAvatar,
+  IonNote,
+  IonRow,
+  IonAlert
 } from '@ionic/vue';
 import {
   BadgeInfo,
@@ -190,6 +199,9 @@ import AvantageCard from "@/components/AvantageCard.vue";
 import UsedAvantages from "@/components/UsedAvantages.vue";
 import {informationCircle} from "ionicons/icons";
 import LegalModal from "@/components/LegalModal.vue";
+import PulseItem from "@/components/PulseItem.vue";
+import {BADGES} from "@/functions/fetch/badges";
+import UserBadge from "@/components/UserBadge.vue";
 </script>
 
 <script lang="ts">
@@ -241,15 +253,19 @@ export default {
           valid_datefin: ""
         },
         suggestions: [] as any[],
+        transactions: [] as any[],
         favoris: [] as [] || false,
       } as any,
+      usedAdvantages: [] as any[],
       favoris_ids: [],
       aroundMeAdvantages: {
         count: 0,
         results: []
       },
+      usedAdvantagesIds: [],
       radius: '1',
       welcome_formula: "Bonjour",
+      loading: false
     }
   },
   mounted() {
@@ -276,13 +292,7 @@ export default {
   },
   methods: {
     async openAroundMeMap() {
-      const refs = {
-        modalMap: ref(null) as any
-      }
-      window.addEventListener('closeModals', () => {
-        refs.modalMap.value.dismiss()
-      })
-      await createModal(MapModal, 'modalMap', refs, { markers: { features: this.aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker.coordinates, zoom: this.getZoom() }, false, [], true)
+      await createModal(MapModal, 'modalMap', refs, { markers: { features: this.aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker?.coordinates || [6.0258598544333974, 47.23521554332734], zoom: this.getZoom() }, false, [], true)
     },
     async refresh(event: CustomEvent) {
       await this.refreshAccount()
@@ -309,6 +319,7 @@ export default {
       }
     },
     refreshAccount() {
+      this.loading = true
       getAccount().then(async user => {
         this.user = user
         let suggestionAvantages = []
@@ -316,6 +327,17 @@ export default {
           suggestionAvantages.push(await getAvantage((suggestion.id_avantage)))
         }
         this.user.suggestions = suggestionAvantages
+
+        let usedAdvantages = []
+        for (const advantage of this.user.transactions) {
+          const object = await getAvantage((advantage.rid_avantage)) as any
+          object.id_transaction = advantage.id_transaction
+          object.date_transaction = advantage.date_transaction
+          object.type_transaction = advantage.type
+          usedAdvantages.push(object)
+          this.usedAdvantagesIds.push(advantage.rid_avantage)
+        }
+        this.usedAdvantages = usedAdvantages
 
         if (!this.user.favoris) this.user.favoris = []
         this.favoris_ids = this.user.favoris
@@ -329,6 +351,7 @@ export default {
           this.position = false
         })
         await this.getAroundMeAdvantages()
+        this.loading = false
       }).catch(err => {
         this.loggedIn = false
       })

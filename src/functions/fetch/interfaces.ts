@@ -8,7 +8,7 @@ interface APIResponse {
 
 interface Card {
     numero: string
-    passwrod: string
+    password: string
 }
 
 export type {

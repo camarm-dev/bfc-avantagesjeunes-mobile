@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonTitle, IonButton, IonList, IonPage, IonToggle } from "@ionic/vue";
+import { IonTitle, IonButton, IonList, IonPage, IonToggle, IonLabel, IonItem, IonSpinner, IonContent, IonHeader, IonToolbar, IonButtons } from "@ionic/vue";
 import { XCircle, BadgeCheck, BadgeX } from "lucide-vue-next";
 </script>
 

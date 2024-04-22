@@ -5,20 +5,20 @@
         <ion-back-button text="Retour"></ion-back-button>
       </ion-buttons>
       <ion-title>Ma carte</ion-title>
+      <ion-buttons slot="end">
+        <ion-button @click="openCardFullscreen()">
+          <ion-icon slot="icon-only" :icon="scanOutline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-toolbar>
   </ion-header>
   <ion-content :fullscreen="true">
     <header class="profile">
-      <div class="card-swiper">
-        <swiper :flip-effect="{ slideShadows: false }" :pagination="{ enabled: true, clickable: true, type: 'bullets' }" :modules="modules" :loop="true" effect="flip" :slide-per-view="1">
-          <swiper-slide>
-            <img height="200" class="card-picture" :src="'/carte.png'" alt="Votre carte">
-          </swiper-slide>
-          <swiper-slide>
-            <img height="200" class="card-picture" :src="'/carte-dos.png'" alt="Votre carte">
-          </swiper-slide>
-        </swiper>
-      </div>
+      <pulse-item vibrate>
+        <div class="card-swiper">
+          <img @click="openCardFullscreen()" height="200" class="card-picture" :src="frontCardImage" alt="Votre carte">
+        </div>
+      </pulse-item>
       <ion-chip class="large-chip" color="success" v-if="user.carte.valid">
         <BadgeCheck class="icon ion-color-success" size="30"/>
         {{ user.carte.numero }}
@@ -29,6 +29,7 @@
         {{ user.carte.numero }}
       </ion-chip>
     </header>
+
     <div class="list-title">
       Mes informations
     </div>
@@ -41,7 +42,8 @@
         </ion-label>
       </ion-item>
       <ion-item>
-        <SquareAsterisk class="icon ion-color-success"/>
+        <SquareAsterisk v-if="user.carte.valid" class="icon ion-color-success"/>
+        <SquareAsterisk v-else class="icon ion-color-danger"/>
         <ion-label>
           <p>Saison de validité</p>
           <h2>{{ user.carte.saison }}</h2>
@@ -68,14 +70,14 @@
       Actions
     </div>
     <ion-list inset>
-      <ion-item disabled button>
+      <ion-item button @click="scanCard()">
         <Focus class="icon"/>
         <ion-label>
           <p>Modifier la photo</p>
           <h2>Scanner ma carte</h2>
         </ion-label>
       </ion-item>
-      <ion-item disabled class="focusable">
+      <ion-item button @click="removeCardScans()">
         <Trash2 class="icon ion-color-danger"/>
         <ion-label>
           <p>Réinitialiser les images</p>
@@ -97,7 +99,10 @@ import {
   IonLabel,
   IonItem,
   IonBackButton,
-  IonButtons
+  IonButtons,
+  IonIcon,
+  IonChip,
+  IonButton
 } from '@ionic/vue';
 import {
   Fingerprint,
@@ -111,6 +116,8 @@ import {
   Trash2
 } from "lucide-vue-next";
 import { EffectFlip, Pagination } from 'swiper/modules'
+import {scanOutline} from "ionicons/icons";
+import PulseItem from "@/components/PulseItem.vue"
 
 const modules = [
     EffectFlip,
@@ -127,10 +134,27 @@ import 'swiper/css';
 import 'swiper/css/effect-flip';
 import 'swiper/css/pagination';
 import '@ionic/vue/css/ionic-swiper.css';
+import FullscreenCardModal from "@/components/FullscreenCardModal.vue";
+import {ref} from "vue";
+import ScanCardModal from "@/components/ScanCardModal.vue";
+
+let refs = {
+  modalFullscreen: ref(null),
+  modalScanCard: ref(null)
+} as any
+
+window.addEventListener('closeModals', () => {
+  Object.keys(refs).forEach(key => {
+    if (refs[key].value) refs[key].value.dismiss()
+  })
+})
+
 
 export default {
   data () {
     return {
+      frontCardImage: localStorage.getItem('frontCardImage') || "/carte.png",
+      backCardImage: localStorage.getItem('backCardImage') || "/carte-dos.png",
       user: {
         image_url: "",
         carte: {
@@ -162,7 +186,18 @@ export default {
         this.user.carte.date_vente = readableDate(this.user.carte.date_vente)
       })
     },
-    createModal
+    async scanCard() {
+      await createModal(ScanCardModal, 'modalScanCard', refs, {}, true, [0, 1], true)
+    },
+    async openCardFullscreen() {
+      await createModal(FullscreenCardModal, 'modalFullscreen', refs, { front: this.frontCardImage, back: this.backCardImage }, true, [0, 0.9], true)
+    },
+    removeCardScans() {
+      localStorage.removeItem('frontCardImage')
+      localStorage.removeItem('backCardImage')
+      this.frontCardImage = "/carte.png"
+      this.backCardImage = "/carte-dos.png"
+    }
   },
   components: { Swiper, SwiperSlide }
 }

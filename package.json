@@ -15,8 +15,11 @@
   },
   "dependencies": {
     "@aparajita/capacitor-biometric-auth": "^5.2.1",
+    "@capacitor-community/screen-brightness": "^5.0.0",
     "@capacitor/android": "5.2.2",
     "@capacitor/app": "^5.0.6",
+    "@capacitor/camera": "^5.0.9",
+    "@capacitor/clipboard": "^5.0.7",
     "@capacitor/core": "5.2.2",
     "@capacitor/device": "^5.0.6",
     "@capacitor/dialog": "^5.0.6",
@@ -42,6 +45,7 @@
     "swiper": "^10.3.0",
     "v-calendar": "^3.0.3",
     "vue": "^3.2.45",
+    "vue-advanced-cropper": "^2.8.8",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {

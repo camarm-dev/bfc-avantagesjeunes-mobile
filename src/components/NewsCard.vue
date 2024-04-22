@@ -1,21 +1,21 @@
 <script setup lang="ts">
 
-import InspectAvantage from "@/components/InspectAvantage.vue";
 import {IonNavLink, IonSkeletonText} from "@ionic/vue";
+import ReadNews from "@/components/ReadNews.vue";
 import PulseItem from "@/components/PulseItem.vue"
 </script>
 
 <template>
   <pulse-item>
-    <ion-nav-link :component-props="{ avantage: avantage, favori: favori || false, type: type, used: used }" router-direction="forward" :component="InspectAvantage">
-      <div :class="`card focusable ${type || avantage.type} ${small ? 'small': ''} ${expand ? 'expanded': ''}`">
+    <ion-nav-link :component-props="{ article: article }" router-direction="forward" :component="ReadNews">
+      <div class="card focusable news full">
         <header>
-          <img v-if="avantage.image_url" alt="Image de l'avantage" :src="avantage.image_url"/>
+          <img v-if="article.image_url" alt="Image de l'avantage" :src="article.image_url"/>
           <ion-skeleton-text class="image" v-else :animated="true"></ion-skeleton-text>
         </header>
-        <div class="content" v-if="avantage.offre">
-          <h3>{{ avantage.offre }}</h3>
-          <p>{{ getInnerContent(avantage.conditions) }}</p>
+        <div class="content" v-if="!loading">
+          <h3>{{ article.titre }}</h3>
+          <p>{{ getInnerContent(article.contenu) }}</p>
         </div>
         <div class="content" v-else>
           <ion-skeleton-text :animated="true" style="width: 80%; margin-top: 2em;"></ion-skeleton-text>
@@ -29,7 +29,7 @@ import PulseItem from "@/components/PulseItem.vue"
 
 <script lang="ts">
 export default {
-  props: ['avantage', 'favori', 'type', 'small', 'expand', 'used'],
+  props: ['article', 'loading'],
   methods: {
     getInnerContent(html_string: string) {
       const el = document.createElement('div')
