@@ -99,7 +99,6 @@ import {
   SearchCheck
 } from "lucide-vue-next";
 import { secteurs as listeSecteurs, rubriques as listeRubriques } from "@/functions/interfaces";
-import InspectAvantage from "@/components/InspectAvantage.vue";
 import AvantageCard from "@/components/AvantageCard.vue";
 </script>
 
