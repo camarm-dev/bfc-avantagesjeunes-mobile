@@ -5,8 +5,16 @@
         <ion-back-button text="Retour"></ion-back-button>
       </ion-buttons>
       <ion-title>Avantage</ion-title>
-      <ion-buttons slot="end" @click="shareAdvantage()">
-        <ion-icon slot="icon-only" :icon="shareOutline"></ion-icon>
+      <ion-buttons slot="end">
+        <pulse-item vibrate>
+          <ion-button @click="isFavori ? removeFavori(avantage.id_avantage): addFavori(avantage.id_avantage); timeout(() => { isFavori = !isFavori }, 250)">
+            <ion-icon slot="icon-only" v-if="isFavori" class="red-heart" :icon="heart"></ion-icon>
+            <ion-icon slot="icon-only" v-else :icon="heartOutline"></ion-icon>
+          </ion-button>
+        </pulse-item>
+        <ion-button @click="shareAdvantage()">
+          <ion-icon slot="icon-only" :icon="shareOutline"></ion-icon>
+        </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
@@ -20,12 +28,6 @@
         <span v-for="secteur in avantage.secteurs">{{ (secteurs[secteur] || { 'nom': 'Tout les secteurs' }).nom }}{{ avantage.secteurs.indexOf(secteur) == avantage.secteurs.length -1 ? '': '&nbsp;—&nbsp;' }}</span>
       </p>
     </header>
-    <ion-fab vertical="top" horizontal="end" class="top">
-      <ion-fab-button color="primary" class="small" title="Ajouter aux favoris">
-        <HeartOff size="20" @click="removeFavori(avantage.id_avantage); isFavori = !isFavori" v-if="isFavori" class="ion-color-secondary"/>
-        <Heart size="20" @click="addFavori(avantage.id_avantage); isFavori = !isFavori" v-else class="ion-color-secondary"/>
-      </ion-fab-button>
-    </ion-fab>
     <div class="ion-margin-auto carousel-el">
       <ion-chip color="light">
         <Star size="9" class="icon small-icon ion-color-warning"/>
@@ -160,16 +162,15 @@ import {
   IonItem,
   IonBackButton,
   IonButtons,
-  IonFabButton,
-  IonFab,
   IonIcon,
   IonNote,
   IonList,
   IonSelect,
   IonSelectOption,
-  IonChip
+  IonChip,
+  IonButton
 } from '@ionic/vue';
-import {informationOutline, shareOutline} from 'ionicons/icons'
+import {heart, heartOutline, informationOutline, shareOutline} from 'ionicons/icons'
 import {
   CalendarClock,
   Sparkles,
@@ -179,13 +180,12 @@ import {
   Milestone,
   Building2,
   MousePointer,
-  Heart,
-  HeartOff,
   Ticket
 } from "lucide-vue-next";
 import {secteurs, rubriques} from "@/functions/interfaces";
 import Icon from "@/components/Icon.vue";
 import {addFavori, removeFavori} from "@/functions/fetch/avantages";
+import PulseItem from "@/components/PulseItem.vue";
 </script>
 
 <script lang="ts">
@@ -296,6 +296,9 @@ export default {
     async getAvantageCoords(address: string) {
       const coords = await getPosition(address)
       return [coords.lon, coords.lat]
+    },
+    timeout(handler: CallableFunction, timeout: number) {
+      return setTimeout(handler, timeout)
     }
   }
 }
@@ -405,5 +408,9 @@ p.carousel-el {
 
 .carousel-el ion-chip, .carousel-el span {
   min-width: max-content;
+}
+
+.red-heart {
+  color: #d5595a;
 }
 </style>
