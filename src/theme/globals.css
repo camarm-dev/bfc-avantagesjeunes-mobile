@@ -520,3 +520,9 @@ ion-list ion-nav-link ion-item:last-child {
     border-bottom-right-radius: 0;
     --inner-border-width: 0px 0px 0.55px 0px !important;
 }
+
+ion-list ion-nav-link:last-child ion-item:last-child {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    --inner-border-width: 0 0 0 0 !important;
+}
