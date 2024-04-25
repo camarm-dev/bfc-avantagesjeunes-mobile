@@ -187,7 +187,7 @@ export default {
       })
     },
     async scanCard() {
-      await createModal(ScanCardModal, 'modalScanCard', refs, {}, true, [0, 1], true)
+      await createModal(ScanCardModal, 'modalScanCard', refs, {}, true, [0, 0.9], true)
     },
     async openCardFullscreen() {
       await createModal(FullscreenCardModal, 'modalFullscreen', refs, { front: this.frontCardImage, back: this.backCardImage }, true, [0, 0.9], true)

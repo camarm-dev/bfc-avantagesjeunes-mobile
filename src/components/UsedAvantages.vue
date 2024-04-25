@@ -78,4 +78,14 @@ export default {
 }
 </script>
 <style>
+.action ion-nav-link {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.action p {
+  font-size: .9em;
+}
 </style>
