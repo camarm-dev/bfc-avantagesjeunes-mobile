@@ -13,7 +13,7 @@
   <ion-content ref="content" :fullscreen="true">
     <header class="avantage">
       <div class="image-wrapper">
-        <img :src="avantage.image_url" alt="Image de l'avantage">
+        <img :src="avantage.image_url || '/no-img.png'" alt="Image de l'avantage">
       </div>
       <h2 class="welcome">{{ avantage.offre }}</h2>
       <p class="carousel-el">
