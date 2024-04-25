@@ -148,6 +148,15 @@
         <img style="display: block; margin: 1em auto 1em auto; border-radius: 10px" :src="avantage.image_url" alt="Image de l'avantage">
       </ion-item>
     </ion-list>
+
+    <div class="list-title">
+      Réactions
+    </div>
+    <ion-list inset>
+      <ion-item>
+        <ion-note>Arrive bientôt !</ion-note>
+      </ion-item>
+    </ion-list>
   </ion-content>
 </template>
 
