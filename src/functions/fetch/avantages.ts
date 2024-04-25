@@ -104,10 +104,16 @@ async function obtainAdvantage(id_avantage: string, id_organisme: string) {
     await displayToast('Avantage confirmé', 'Retrouvez le code et les instructions dans la page avantages utilisés !', 3000, 'success')
 }
 
+async function getOrganisme(id_organisme: string) {
+    const url = `https://backoffice.avantagesjeunes.com/api/organisme/detail/${id_organisme}`
+    return await get(url)
+}
+
 export {
     getAvantage,
     addFavori,
     removeFavori,
     obtainAdvantage,
-    checkAvailability
+    checkAvailability,
+    getOrganisme
 }
