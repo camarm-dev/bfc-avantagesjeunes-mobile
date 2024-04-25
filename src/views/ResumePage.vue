@@ -39,7 +39,12 @@
         </div>
         <AvantageCard :used="usedAdvantagesIds.includes(suggested.id_avantage)" :favori="favoris_ids.includes(suggested.id_avantage)" :avantage="suggested" v-for="suggested in user.suggestions"/>
       </div>
-      <div class="list-title">Mes favoris</div>
+      <ion-nav-link :component="FavoritesAvantages" :component-props="{ used: usedAdvantagesIds, avantages: user.favoris }">
+        <div class="list-title button">
+          <div>Mes favoris</div>
+          <ion-icon :icon="chevronForwardOutline" color="medium"/>
+        </div>
+      </ion-nav-link>
       <div class="horizontal-carousel">
         <div class="card card-only" v-if="!user.favoris || user.favoris.length == 0">
           <ion-note>
@@ -184,7 +189,8 @@ import {
   IonNote,
   IonRow,
   IonAlert,
-  IonProgressBar
+  IonProgressBar,
+  IonIcon
 } from '@ionic/vue';
 import {
   BadgeInfo,
@@ -202,11 +208,12 @@ import {askPermission} from "@/functions/native/geolocation";
 import ExperimentalModal from "@/components/ExperimentalModal.vue";
 import AvantageCard from "@/components/AvantageCard.vue";
 import UsedAvantages from "@/components/UsedAvantages.vue";
-import {informationCircle} from "ionicons/icons";
+import {chevronForwardOutline, informationCircle} from "ionicons/icons";
 import LegalModal from "@/components/LegalModal.vue";
 import PulseItem from "@/components/PulseItem.vue";
 import {BADGES} from "@/functions/fetch/badges";
 import UserBadge from "@/components/UserBadge.vue";
+import FavoritesAvantages from "@/components/FavoritesAvantages.vue";
 </script>
 
 <script lang="ts">

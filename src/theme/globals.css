@@ -141,6 +141,21 @@ ion-label ion-progress-bar {
     margin-top: 12px;
 }
 
+.list-title.button {
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 7px 20px -12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: .1s ease-in-out;
+}
+
+.list-title.button:active {
+    background-color: var(--ion-color-primary-tint);
+    scale: 0.95;
+}
+
 .loading-content {
     color: #000
 }
@@ -274,6 +289,11 @@ ion-toolbar ion-label p {
 
 .top-background.purple {
     background-color: var(--ion-color-success-shade);
+}
+
+
+.top-background.red {
+    background-color: #d5595a;
 }
 
 .floating {
