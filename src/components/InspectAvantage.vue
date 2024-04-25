@@ -104,13 +104,15 @@
       Avantage par
     </div>
     <ion-list inset v-for="org in avantage.organismes">
-      <ion-item>
-        <Building2 class="icon"/>
-        <ion-label class="ion-text-wrap">
-          <p>Organisation</p>
-          <h2>{{ org.nom }}</h2>
-        </ion-label>
-      </ion-item>
+      <ion-nav-link router-direction="forward" :component="InspectOrganisme" :component-props="{ id_organisme: org.slug }">
+        <ion-item button>
+          <Building2 class="icon"/>
+          <ion-label class="ion-text-wrap">
+            <p>Organisation</p>
+            <h2>{{ org.nom }}</h2>
+          </ion-label>
+        </ion-item>
+      </ion-nav-link>
       <ion-item>
         <Milestone class="icon ion-color-tertiary"/>
         <ion-label class="ion-text-wrap">
@@ -177,7 +179,8 @@ import {
   IonSelect,
   IonSelectOption,
   IonChip,
-  IonButton
+  IonButton,
+  IonNavLink
 } from '@ionic/vue';
 import {heart, heartOutline, informationOutline, shareOutline} from 'ionicons/icons'
 import {
@@ -195,6 +198,7 @@ import {secteurs, rubriques} from "@/functions/interfaces";
 import Icon from "@/components/Icon.vue";
 import {addFavori, removeFavori} from "@/functions/fetch/avantages";
 import PulseItem from "@/components/PulseItem.vue";
+import InspectOrganisme from "@/components/InspectOrganisme.vue";
 </script>
 
 <script lang="ts">
