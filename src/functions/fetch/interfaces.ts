@@ -4,6 +4,7 @@ interface APIResponse {
     data: any
     token?: string
     compte?: any
+    status: boolean
 }
 
 interface Card {

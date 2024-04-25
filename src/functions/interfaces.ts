@@ -1,21 +1,3 @@
-interface Suggestion {
-    id_avantage: 45387
-}
-
-interface Avantage {
-    offre: string
-    conditions: string
-    type: string
-    datedebut: string
-    datefin: string
-    saison: string
-    image_url: string
-    note: number
-    nb_note: number
-    secteurs: number[]
-    categories: number[]
-}
-
 const categories = {
     "1": {
         nom: "Musées",
@@ -57,6 +39,8 @@ const categories = {
         nom: "Photographie",
         icon: "Camera"
     },
+} as {
+    [key: number | string]: { nom: string, icon: string }
 }
 
 const rubriques = {
@@ -229,6 +213,8 @@ const rubriques = {
         nom: "Produits bio, produits régionaux, fruits et légumes",
         icon: "Vegan"
     }
+} as {
+    [key: number | string]: { nom: string, icon: string }
 }
 
 const secteurs = {
@@ -421,17 +407,15 @@ const secteurs = {
     "94": {
         nom: "Chagny"
     }
+} as {
+    [key: number | string]: { nom: string }
 }
 
 const editions = {
     "1": ["1", "2", "3", "4", "5", "6", "7", "82"],
     "7": ["67"],
-}
-
-
-export type {
-    Suggestion,
-    Avantage
+} as {
+    [key: number | string]: string[]
 }
 
 export {

@@ -39,8 +39,8 @@ export interface Organisme {
     googleplus?: string
     youtube?: string
 
-    latitude: number
-    longitude: number
+    latitude: string
+    longitude: string
 
     applicatif?: boolean
     rid_pack?: number

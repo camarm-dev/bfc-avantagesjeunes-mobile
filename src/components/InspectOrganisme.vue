@@ -115,18 +115,18 @@ import mapboxgl from "mapbox-gl"
 import "mapbox-gl/dist/mapbox-gl.css"
 import {Clipboard} from "@capacitor/clipboard";
 import {displayToast} from "@/functions/toasts";
+import {Organisme} from "@/types/organismes";
+import {Avantage} from "@/types/avantages";
 mapboxgl.accessToken = "pk.eyJ1IjoiY2FtYXJtLWRldiIsImEiOiJja3B6czl2bGowa2g2Mm5ycmdqMThhOHEzIn0.H-PjLIG_jQqZqvz3gPvjeQ"
 
 export default {
   props: ['id_organisme'],
   data() {
     return {
-      org: {
-        avantages: []
-      } as any,
-      avantages: [],
-      usedAdvantagesIds: [],
-      favoris: [],
+      org: {} as Organisme,
+      avantages: [] as Avantage[],
+      usedAdvantagesIds: [] as number[],
+      favoris: [] as number[]
     }
   },
   mounted() {
@@ -144,8 +144,8 @@ export default {
       this.org = await getOrganisme(this.id_organisme)
     },
     loadMap() {
-      const coords = [this.org.longitude, this.org.latitude]
-      const element = this.$refs.miniMapContainer
+      const coords = [this.org.longitude, this.org.latitude] as [number, number]
+      const element = this.$refs.miniMapContainer as HTMLElement
       console.log(element)
       const map = new mapboxgl.Map({
         container: element,
@@ -178,7 +178,7 @@ export default {
       this.usedAdvantagesIds = usedAdvantagesIds
     },
     async loadAdvantages() {
-      for (const avantage_id of this.org.avantages) {
+      for (const avantage_id of this.org.avantages || []) {
         this.avantages.push(await getAvantage(avantage_id))
       }
     },

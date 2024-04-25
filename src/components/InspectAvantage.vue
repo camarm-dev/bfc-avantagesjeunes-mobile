@@ -30,17 +30,17 @@
     </header>
     <div class="ion-margin-auto carousel-el">
       <ion-chip color="light">
-        <Star size="9" class="icon small-icon ion-color-warning"/>
+        <Star :size="9" class="icon small-icon ion-color-warning"/>
         {{ avantage.note }} / 5 ({{ avantage.nb_note }} avis)
       </ion-chip>
       <ion-chip :class="type || avantage.type" color="secondary" v-for="rubriqueId in avantage.categories">
-        <Icon size="9" class="icon small-icon" :name="rubriques[rubriqueId].icon"/>
+        <Icon :size="9" class="icon small-icon" :name="rubriques[rubriqueId].icon"/>
         {{ rubriques[rubriqueId].nom }}
       </ion-chip>
     </div>
 
     <ion-list inset>
-      <ion-item @click="useAdvantage()" :disabled="!isUseAdvantageFunctionalityEnabled() || used" button color="secondary" class="gradient-button">
+      <ion-item @click="useAdvantage()" :disabled="!isUseAdvantageFunctionalityEnabled() || (used || dynamicUsed)" button color="secondary" class="gradient-button">
         <Ticket class="icon ion-color-primary"/>
         <ion-label class="ion-color-primary">
           <h2 class="ion-color-primary">Utiliser l'avantage</h2>
@@ -51,7 +51,7 @@
           <ion-select-option v-for="org in avantage.organismes" :value="org.id_organisme">{{ org.commune }}, {{ org.cp }}</ion-select-option>
         </ion-select>
       </ion-item>
-      <ion-item v-if="used">
+      <ion-item v-if="used || dynamicUsed">
         <ion-icon :icon="informationOutline" slot="start" color="medium"/>
         <ion-note>
           Avantage déjà utilisé.
@@ -199,11 +199,20 @@ import Icon from "@/components/Icon.vue";
 import {addFavori, removeFavori} from "@/functions/fetch/avantages";
 import PulseItem from "@/components/PulseItem.vue";
 import InspectOrganisme from "@/components/InspectOrganisme.vue";
+import { defineProps } from 'vue'
+import {Avantage} from "@/types/avantages";
+
+const { avantage, used, favori, type } = defineProps<{
+  avantage: Avantage,
+  used: boolean,
+  favori: boolean,
+  type: string
+}>()
 </script>
 
 <script lang="ts">
 import {readableDate} from "@/functions/native/dates";
-import {ref} from "vue";
+import {Ref, ref} from "vue";
 import {getPosition} from "@/functions/fetch/geolocation";
 import {createModal} from "@/functions/modals";
 import MapModal from "@/components/MapModal.vue";
@@ -212,18 +221,14 @@ import {authenticateWithBiometry, setupBiometry} from "@/functions/native/biomet
 import {displayToast} from "@/functions/toasts";
 import {loadingController} from "@ionic/vue";
 import {checkAvailability, obtainAdvantage} from "@/functions/fetch/avantages";
+import {APIResponse} from "@/functions/fetch/interfaces";
 
 export default {
-  props: [
-    'avantage',
-    'favori',
-    'type',
-    'used'
-  ],
   data() {
     return {
       isFavori: this.favori == undefined ? false: this.favori,
-      selectedOrg: this.avantage.organismes[0].id_organisme
+      selectedOrg: this.avantage.organismes[0].id_organisme,
+      dynamicUsed: this.used
     }
   },
   mounted() {
@@ -241,14 +246,15 @@ export default {
         message: 'Récupération des informations'
       })
       await loader.present()
-      if (!(await checkAvailability(this.avantage.id_avantage))[0].status) {
+      const availability = await checkAvailability(this.avantage.id_avantage) as any as APIResponse[]
+      if (!availability[0].status) {
         await loader.dismiss()
         await displayToast('Avantage indisponible', 'Cet avantage est indisponible ou a déjà été utilisé', 2000, 'danger')
       }
       await authenticateWithBiometry(() => {
         loader.dismiss()
         obtainAdvantage(this.avantage.id_avantage, this.selectedOrg).then(() => {
-          this.used = true
+          this.dynamicUsed = true
         })
         }, () => {
         displayToast('Échec d\'authentification', 'Impossible de vous authentifier avec la biométrie', 2000, 'danger')
@@ -265,7 +271,7 @@ export default {
           dialogTitle: 'Partager cet avantage'
         })
       } catch {
-        await navigator.clipboard.write(url)
+        await navigator.clipboard.writeText(url)
         alert("Lien copié dans le presse papier")
       }
     },
@@ -275,7 +281,9 @@ export default {
       }
       window.addEventListener('closeModals', () => {
         Object.keys(refs).forEach(key => {
-          if (refs[key].value) refs[key].value.dismiss()
+          // @ts-ignore
+          const object = refs[key] as Ref<any>
+          if (object.value) object.value.dismiss()
         })
       })
 
