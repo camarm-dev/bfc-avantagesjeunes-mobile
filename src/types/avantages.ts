@@ -1,6 +1,6 @@
 import {Organisme} from "@/types/organismes";
 
-export type Avantage = {
+export interface Avantage {
     id_avantage: number
     offre: string
     conditions: string
@@ -113,3 +113,16 @@ export type Category = {
 }
 
 export type Comment = any
+
+export type Transaction = {
+    id_transaction: number
+    date_transaction: string
+    type: "dématérialisé" | string
+    rid_avantage: number
+}
+
+export interface TransactionAvantage extends Avantage {
+    id_transaction: number
+    date_transaction: string
+    type_transaction: "dématérialisé" | string
+}

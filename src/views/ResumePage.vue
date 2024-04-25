@@ -56,7 +56,7 @@
       <pulse-item vibrate>
         <ion-list inset v-if="!position">
           <ion-item @click="askPermission().then(refreshPosition)" color="danger">
-            <Compass size="64" class="icon-ion-color-light"/>
+            <Compass :size="64" class="icon-ion-color-light"/>
             <ion-note class="ion-padding" color="light">
               Activez la localisation en cliquant ici. Vous pourrez voir les avantages autour de vous.
             </ion-note>
@@ -134,14 +134,14 @@
         <ion-row class="ion-justify-content-center">
           <pulse-item vibrate>
             <ion-chip id="open-info-alert" class="chip-square" color="secondary">
-              <BadgeInfo size="36" class="ion-color-primary"/>
+              <BadgeInfo :size="36" class="ion-color-primary"/>
             </ion-chip>
           </pulse-item>
           <ion-alert class="ion-color-primary" sub-header="avantagesjeunes.com" trigger="open-info-alert" header="Informations" message="Avantages Jeunes Connect est une application non officielle open source développée par un unique étudiant. Nous nous dédommageons de tous dysfonctionnement créé."/>
           <br>
           <pulse-item vibrate>
             <ion-chip id="open-question-alert" class="chip-square" color="tertiary">
-              <HelpCircle size="36" class="ion-color-tertiary"/>
+              <HelpCircle :size="36" class="ion-color-tertiary"/>
             </ion-chip>
           </pulse-item>
           <ion-alert class="ion-color-primary" sub-header="avantagesjeunes.com" trigger="open-question-alert" header="Informations" message="Si c'est votre première connexion, merci de finir l'activation de votre compte sur avantagesjeunes.com/login avant de vous connecter sur Avantages Jeunes Connect"/>
@@ -224,6 +224,9 @@ import {get} from "@/functions/fetch/tools";
 import {hasPermission, getCurrentLocation} from "@/functions/native/geolocation";
 import {createModal} from "@/functions/modals";
 import MapModal from "@/components/MapModal.vue";
+import {Badge} from "@/types/badges";
+import {Avantage, Transaction, TransactionAvantage} from "@/types/avantages";
+import {RefresherCustomEvent} from "@ionic/vue";
 
 let refs = {
   modalLogin: ref(null),
@@ -264,9 +267,10 @@ export default {
           date_vente: "",
           valid_datefin: ""
         },
-        suggestions: [] as any[],
-        transactions: [] as any[],
-        favoris: [] as [] || false,
+        suggestions: [] as Avantage[],
+        transactions: [] as Transaction[],
+        favoris: [] as Avantage[],
+        badges: [] as Badge[]
       } as any,
       usedAdvantages: [] as any[],
       favoris_ids: [],
@@ -306,9 +310,9 @@ export default {
     async openAroundMeMap() {
       await createModal(MapModal, 'modalMap', refs, { markers: { features: this.aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker?.coordinates || [6.0258598544333974, 47.23521554332734], zoom: this.getZoom() }, false, [], true)
     },
-    async refresh(event: CustomEvent) {
-      await this.refreshAccount()
-      event.target.complete()
+    async refresh(event: RefresherCustomEvent) {
+      this.refreshAccount()
+      event.target?.complete()
     },
     hasLoggedInFields() {
       return localStorage.getItem('userCards') && localStorage.getItem('currentCardToken')
@@ -342,7 +346,7 @@ export default {
 
         let usedAdvantages = []
         for (const advantage of this.user.transactions) {
-          const object = await getAvantage((advantage.rid_avantage)) as any
+          const object = await getAvantage(advantage.rid_avantage) as TransactionAvantage
           object.id_transaction = advantage.id_transaction
           object.date_transaction = advantage.date_transaction
           object.type_transaction = advantage.type
@@ -372,7 +376,7 @@ export default {
       this.aroundMeLoading = true
       this.radius = radius
       const coordinates = this.position ? await getCurrentLocation(): [6.0258598544333974, 47.23521554332734]
-      this.aroundMeAdvantages = await get(`https://api-ajc.camarm.fr/around-me?longitude=${coordinates[0]}&latitude=${coordinates[1]}&radius=${radius}`)
+      this.aroundMeAdvantages = await get(`https://api-ajc.camarm.fr/around-me?longitude=${coordinates[0]}&latitude=${coordinates[1]}&radius=${radius}`) as any
       this.aroundMeLoading = false
     },
     getZoom() {
