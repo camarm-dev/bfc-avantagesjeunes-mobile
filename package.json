@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0-rc.2",
   "type": "module",
-  "license": "MIT",
+  "license": "CECILL-2.1",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "start": "vite --host 0.0.0.0 --port 3000",

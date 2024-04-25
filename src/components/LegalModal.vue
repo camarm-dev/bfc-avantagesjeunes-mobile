@@ -14,7 +14,6 @@
       <h2>Avantages Jeunes Connect</h2>
       <p>
         Avantages Jeunes Connect (AJC) est une application alternative au site <a href="https://avantagesjeunes.com" target="_blank">avantagejeunes.com</a> non-officielle, gratuite et open source.
-
       </p>
       <h2>Mentions légales</h2>
       <p>
@@ -26,7 +25,7 @@
       </p>
       <h2>Licence</h2>
       <p>
-        Avantages Jeunes Connect est une application open source sous licence MIT<br>
+        Avantages Jeunes Connect est une application open source sous licence CECILL-2.1<br>
         <a href="https://github.com/camarm-dev/bfc-avantagesjeunes-mobile" target="_blank">Github</a>
         •
         <a href="https://github.com/camarm-dev/bfc-avantagesjeunes-mobile/blob/main/LICENSE" target="_blank">Licence</a>
