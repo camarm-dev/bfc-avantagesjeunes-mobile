@@ -52,7 +52,7 @@
         <Facebook class="icon ion-color-tertiary"/>
         <ion-label>
           <p>Facebook</p>
-          <h2>{{ org.facebook.replace('https://www.facebook.com/', '') }}</h2>
+          <h2>{{ org.facebook.replace('https://www.facebook.com/', '').replace('https://m.facebook.com/', '').replace('/', '') }}</h2>
         </ion-label>
       </ion-item>
       <ion-item v-if="org.twitter" @click="open(org.twitter)">
