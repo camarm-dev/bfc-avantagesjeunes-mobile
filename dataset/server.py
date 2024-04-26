@@ -17,16 +17,18 @@ app.add_middleware(
 )
 mongo = pymongo.MongoClient(open('.mongodb').read())
 database = mongo.Dataset.avantages_0424
+search_database = mongo.Dataset.search
 
 
 def create_index():
     try:
         database.drop_index(['coordinates_2dsphere', 'title_text_description_text_conditions_text'])
-        # database.drop_index(('properties.title', 'text'), ('properties.description', 'text'), ('properties.other_advantages.properties.title', 'text'), ('properties.other_advantages.properties.description', 'text'))
+        # database.drop_index(['coordinates_2dsphere'])
+        # search_database.drop_index(['offre_text_conditions_text_org_name_text'])
     except Exception as e:
         print(f"[Warn] Cannot delete index: {e}")
     database.create_index([('coordinates', '2dsphere')])
-    database.create_index([('title', 'text'), ('description', 'text'), ('conditions', 'text')],
+    search_database.create_index([('offre', 'text'), ('conditions', 'text'), ('org_name', 'text')],
                           default_language='french')
 
 
@@ -84,7 +86,7 @@ def perform_search_query(expression: str, secteurs: list, rubriques: list):
         query["secteurs"] = {"$in": secteurs}
     if len(rubriques) > 0:
         query["rubriques"] = {"$in": rubriques}
-    return database.find({
+    return search_database.find({
         "$text": {
             "$search": expression
         },
