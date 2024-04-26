@@ -144,7 +144,7 @@ export default {
       this.org = await getOrganisme(this.id_organisme)
     },
     loadMap() {
-      const coords = [this.org.longitude, this.org.latitude] as [number, number]
+      const coords = [this.org.longitude, this.org.latitude] as unknown as [number, number]
       const element = this.$refs.miniMapContainer as HTMLElement
       console.log(element)
       const map = new mapboxgl.Map({
