@@ -112,7 +112,19 @@ export type Category = {
     categorie_parent?: boolean
 }
 
-export type Comment = any
+export type Comment = {
+    id_comment: number
+    rid_compte: number
+    rid_avantage: number
+    commentaire: string
+    datetime: string
+    rid_comment: number
+    statut: number
+    auteur?: any
+    image_thumb_url: string
+    nb_like: number
+    likesIdCompte: boolean
+}
 
 export type Transaction = {
     id_transaction: number
