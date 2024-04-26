@@ -119,11 +119,11 @@ def start_fetch_while():
                     database.update_one({"loc": parsed_advantage['loc']}, {'$set': {'other_advantages': found_advantage['other_advantages']}})
                     continue
                 database.insert_one(parsed_advantage)
-                search_database.insert_one({
-                    "org_name": ", ".join([org["nom"] for org in avantage.get('organismes', [])]),
-                    **avantage
-                })
                 places += 1
+            search_database.insert_one({
+                "org_name": ", ".join([org["nom"] for org in avantage.get('organismes', [])]),
+                **avantage
+            })
             print(f'\033[A\033[KPage n°{page} | {parsed}/{total} avantages traités | {places} lieux référencés | {failed} échecs de localisation de lieux | {duplicated} lieux en doublons fusionnés')
 
         response = fetch(page + 1)
