@@ -141,6 +141,7 @@ if __name__ == '__main__':
     mongo = pymongo.MongoClient(open('.mongodb').read())
     if input("Réinitialiser la base [Y/n] ?").lower() == 'y':
         mongo.Dataset.drop_collection('avantages_0424')
+        mongo.Dataset.drop_collection('search')
     database = mongo.Dataset.avantages_0424
     search_database = mongo.Dataset.search
 
