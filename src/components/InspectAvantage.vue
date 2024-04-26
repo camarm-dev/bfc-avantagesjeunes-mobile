@@ -156,8 +156,34 @@
     </div>
     <ion-list inset>
       <ion-item>
-        <ion-note>Arrive bientôt !</ion-note>
+        <Star class="ion-color-secondary" slot="start"/>
+        <ion-label>
+          <p>Notes</p>
+        </ion-label>
+        <ion-label slot="end">
+          <p>{{ avantage.nb_note || 0 }}</p>
+        </ion-label>
       </ion-item>
+      <ion-item>
+        <ThumbsUp class="ion-color-like" slot="start"/>
+        <ion-label>
+          <p>Likes</p>
+        </ion-label>
+        <ion-label slot="end">
+          <p>{{ avantage.nb_like || 0 }}</p>
+        </ion-label>
+      </ion-item>
+      <ion-nav-link router-direction="forward" :component="InspectAvantageComments" :component-props="{ comments: avantage.comments }">
+        <ion-item button>
+          <ion-icon color="light" slot="start" :icon="chatbubblesOutline"/>
+          <ion-label>
+            <p>Commentaires</p>
+          </ion-label>
+          <ion-label slot="end">
+            <p>{{ avantage.nb_comment }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-nav-link>
     </ion-list>
   </ion-content>
 </template>
@@ -182,7 +208,13 @@ import {
   IonButton,
   IonNavLink
 } from '@ionic/vue';
-import {heart, heartOutline, informationOutline, shareOutline} from 'ionicons/icons'
+import {
+  chatbubblesOutline,
+  heart,
+  heartOutline,
+  informationOutline,
+  shareOutline
+} from 'ionicons/icons'
 import {
   CalendarClock,
   Sparkles,
@@ -192,7 +224,8 @@ import {
   Milestone,
   Building2,
   MousePointer,
-  Ticket
+  Ticket,
+  ThumbsUp
 } from "lucide-vue-next";
 import {secteurs, rubriques} from "@/functions/interfaces";
 import Icon from "@/components/Icon.vue";
@@ -201,6 +234,7 @@ import PulseItem from "@/components/PulseItem.vue";
 import InspectOrganisme from "@/components/InspectOrganisme.vue";
 import { defineProps } from 'vue'
 import {Avantage} from "@/types/avantages";
+import InspectAvantageComments from "@/components/InspectAvantageComments.vue";
 
 const { avantage, used, favori, type } = defineProps<{
   avantage: Avantage,
@@ -433,5 +467,9 @@ p.carousel-el {
 
 .red-heart {
   color: #d5595a;
+}
+
+.ion-color-like {
+  color: #5e5ee1 !important;
 }
 </style>
