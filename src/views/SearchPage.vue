@@ -62,15 +62,21 @@
           <ion-item class="item-content">
             <ion-label class="loader">
               <SearchCheck class="icon ion-color-success"/>
-              <p>{{ results_count }} avantages trouvés</p>
+              <p>{{ results_count }} avantages trouvés, page {{ page + 1 }}.</p>
             </ion-label>
           </ion-item>
         </ion-list>
 
         <div class="grid-results">
-          <AvantageCard :used="used.includes(avantage.id_avantage)" :small="true" :favori="isAvantageFavori(avantage.id_avantage)" :avantage="avantage" v-for="avantage in results"/>
+          <AvantageCard :key="avantage.id_avantage" :used="used.includes(avantage.id_avantage)" :small="true" :favori="isAvantageFavori(avantage.id_avantage)" :avantage="avantage" v-for="avantage in results"/>
         </div>
 
+        <ion-note v-if="endReached" class="ion-padding-start" style="display: block; margin-bottom: 2em;">
+          Tous les résultats ont été chargés...
+        </ion-note>
+        <ion-infinite-scroll v-else @ionInfinite="loadMore">
+          <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
       </ion-content>
     </ion-content>
   </ion-page>
@@ -91,7 +97,10 @@ import {
   IonSpinner,
   IonSelect,
   IonSelectOption,
-  IonList
+  IonList,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonNote
 } from '@ionic/vue';
 import {
   Settings2,
@@ -106,19 +115,22 @@ import AvantageCard from "@/components/AvantageCard.vue";
 import {getAccount} from "@/functions/fetch/account";
 import {Avantage} from "@/types/avantages";
 import {get} from "@/functions/fetch/tools";
+import {InfiniteScrollCustomEvent} from "@ionic/vue";
 
 export default {
-  data () {
+  data() {
     return {
       results: [] as Avantage[],
       results_count: 0,
       loading: false,
       query: '',
+      page: 0,
       secteurs: [],
       rubriques: [],
       favoris: [] as number[],
       used: [] as number[],
-      searchTimeout: setTimeout(() => {}, 100)
+      searchTimeout: setTimeout(() => {}, 100),
+      endReached: false
     }
   },
   mounted() {
@@ -131,6 +143,21 @@ export default {
     })
   },
   methods: {
+    loadMore(event: InfiniteScrollCustomEvent) {
+      this.page += 1
+      this.performSearchRequest().then(response => {
+        const success = response.count > 0
+        if (success) {
+          this.results_count += response.count
+          for (const result of response.results) {
+            this.results.push(result)
+          }
+        } else {
+          this.endReached = true
+        }
+        event.target.complete()
+      })
+    },
     open(url: string) {
       window.open(url)
     },
@@ -150,12 +177,8 @@ export default {
     isAvantageFavori(id_avantage: number) {
       return this.favoris.includes(id_avantage)
     },
-    async search() {
-      this.loading = true
-      console.log(this.secteurs)
-      console.log(this.rubriques)
-      let url = `${localStorage.getItem('userApiUrl')}/search?q=${this.query}`
-
+    async performSearchRequest() {
+      let url = `${localStorage.getItem('userApiUrl')}/search?q=${this.query}&page=${this.page}`
       if (this.secteurs.length > 0) {
         url += `&secteurs=${this.secteurs.join(',')}`
       }
@@ -163,7 +186,13 @@ export default {
         url += `&rubriques=${this.rubriques.join(',')}`
       }
 
-      const response = await get(url) as any
+      return await get(url) as any
+    },
+    async search() {
+      this.loading = true
+
+      this.page = 0
+      const response = await this.performSearchRequest()
 
       this.results = response.results
       this.results_count = response.count
