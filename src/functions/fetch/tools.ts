@@ -1,8 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { getToken } from "@/functions/fetch/account";
+import {getToken, logOut} from "@/functions/fetch/account";
 import { APIResponse } from "@/functions/fetch/interfaces";
 import { displayToast } from "@/functions/toasts";
+import {getCredentials} from "@/functions/credentials";
 
 
 // const successCodes = [200, 201]
@@ -66,9 +67,8 @@ async function handleResponse(request: Promise<Response>, checks = true, request
     } catch (err: any) {
         console.log(err)
         if (checks) {
-            const stringUserCreds = localStorage.getItem('userCards')
-            if (stringUserCreds) {
-                const userCards = JSON.parse(stringUserCreds)
+            const userCards = await getCredentials()
+            if (userCards.length > 0) {
                 let userCreds = {
                     numero: '',
                     password: ''
@@ -83,9 +83,7 @@ async function handleResponse(request: Promise<Response>, checks = true, request
                 return await handleResponse(newRequest,false, requestConfig)
             } else {
                 // await displayToast('Error', 'Unable to access API: forbidden. Please (re)login.', 3000, 'danger')
-                localStorage.removeItem('userCards')
-                localStorage.removeItem('currentCardId')
-                localStorage.removeItem('currentCardToken')
+                logOut()
                 // setTimeout(() => {
                 //     location.href = '/resume'
                 // }, 3000)

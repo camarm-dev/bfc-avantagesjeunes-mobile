@@ -31,28 +31,38 @@ import {
 <script lang="ts">
 
 import {changedVibration, endVibration} from "@/functions/native/tools";
+import {getCredentials} from "@/functions/credentials";
 
 export default {
-  data () {
+  data() {
     return {
-      loggedIn: localStorage.getItem('currentCardToken')
+      loggedIn: false as boolean
     }
   },
-  mounted () {
+  mounted() {
     this.updateTheme()
+    this.updateLoggedInStatus()
     window.addEventListener('closeModals', () => {
       this.updateTheme()
       endVibration()
+      this.updateLoggedInStatus()
     })
     window.addEventListener('reloaded', changedVibration)
   },
   beforeUpdate() {
-    this.loggedIn = localStorage.getItem('currentCardToken')
+    this.updateLoggedInStatus()
   },
   methods: {
     updateTheme() {
       const theme = localStorage.getItem('userAppearance')
       theme == 'dark' ? document.body.classList.add('dark') : document.body.classList.remove('dark')
+    },
+    updateLoggedInStatus() {
+      getCredentials().then(cards => {
+        if (cards.length > 0 && localStorage.getItem('currentCardToken')) {
+          this.loggedIn = true
+        }
+      })
     }
   }
 }

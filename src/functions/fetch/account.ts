@@ -1,9 +1,6 @@
 import {handleResponse, post} from "@/functions/fetch/tools";
 import {APIResponse, Card} from "@/functions/fetch/interfaces";
-
-function getConnectedCards(): Card[] {
-    return JSON.parse(localStorage.getItem('userCards') || "[]")
-}
+import {removeCredentials} from "@/functions/credentials";
 
 async function getToken(number: string, password: string): Promise<APIResponse> {
     const url = import.meta.env.VITE_API_URL + '/api/compte/login'
@@ -45,19 +42,21 @@ async function updateAccount(user: any) {
 }
 
 function logOut() {
-    localStorage.removeItem('userCards')
-    localStorage.removeItem('userAppearance')
-    localStorage.removeItem('currentCardToken')
-    localStorage.removeItem('currentCardId')
-    localStorage.removeItem('cardImageRecto')
-    localStorage.removeItem('cardImageVerso')
-    location.reload()
+    removeCredentials().then(() => {
+        localStorage.removeItem('userAppearance')
+        localStorage.removeItem('currentCardToken')
+        localStorage.removeItem('currentCardId')
+        localStorage.removeItem('frontCardImage')
+        localStorage.removeItem('backCardImage')
+        localStorage.removeItem('advantagesCache')
+        localStorage.removeItem('userApiUrl')
+        location.reload()
+    })
 }
 
 export {
     getToken,
     getAccount,
     updateAccount,
-    logOut,
-    getConnectedCards
+    logOut
 }

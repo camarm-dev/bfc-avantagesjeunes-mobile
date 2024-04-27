@@ -160,7 +160,7 @@
             </ion-label>
           </ion-item>
         </ion-list>
-        <ion-note class="ion-color-medium ion-margin-auto underline" v-if="hasLoggedInFields()">
+        <ion-note class="ion-color-medium ion-margin-auto underline" v-if="canReconnect">
           <a href="/resume" @click="reload()">Utiliser le compte précédant</a>
         </ion-note>
       </div>
@@ -227,6 +227,7 @@ import MapModal from "@/components/MapModal.vue";
 import {Badge} from "@/types/badges";
 import {Avantage, Transaction, TransactionAvantage} from "@/types/avantages";
 import {RefresherCustomEvent} from "@ionic/vue";
+import {getCredentials} from "@/functions/credentials";
 
 let refs = {
   modalLogin: ref(null),
@@ -281,7 +282,8 @@ export default {
       usedAdvantagesIds: [],
       radius: '1',
       welcome_formula: "Bonjour",
-      loading: false
+      loading: false,
+      canReconnect: false as boolean
     }
   },
   mounted() {
@@ -292,10 +294,13 @@ export default {
 
     this.refs['page'] = this.$refs.page
 
-    if (localStorage.getItem('userCards') && localStorage.getItem('currentCardToken')) {
-      this.loggedIn = true
-      this.refreshAccount()
-    }
+    this.hasLoggedInFields().then(hasLoggedInFields => {
+      this.canReconnect = hasLoggedInFields
+      if (hasLoggedInFields) {
+        this.loggedIn = true
+        this.refreshAccount()
+      }
+    })
 
     const now = new Date()
     if (now.getHours() > 12) {
@@ -314,8 +319,8 @@ export default {
       this.refreshAccount()
       event.target?.complete()
     },
-    hasLoggedInFields() {
-      return localStorage.getItem('userCards') && localStorage.getItem('currentCardToken')
+    async hasLoggedInFields() {
+      return (await getCredentials()).length > 0 && localStorage.getItem('currentCardToken')
     },
     reload() {
       location.reload()

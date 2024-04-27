@@ -30,7 +30,7 @@
 
         <ion-list inset>
           <ion-item class="ion-border">
-            <ion-checkbox color="secondary" justify="start" :checked="agree" @input="agree = !agree" label-placement="end" required>
+            <ion-checkbox color="secondary" justify="start" :checked="agree" @ionChange="changeAgreeStatus($event.detail.checked)" label-placement="end" required>
               <ion-label class="ion-text-wrap" color="light">
                 J'accepte les <a href="https://github.com/camarm-dev/bfc-avantagesjeunes-mobile/blob/main/CGU.md" target="_blank">conditions d'utilisation</a> de Avantages Jeunes Connect et j'ai pris connaissance du
                 <a href="https://github.com/camarm-dev/bfc-avantagesjeunes-mobile">code</a> et de <a href="https://github.com/camarm-dev/bfc-avantagesjeunes-mobile/blob/main/LICENSE">sa license</a>.
@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonTitle, IonInput, IonButton, IonList, IonPage } from "@ionic/vue";
+import { IonTitle, IonInput, IonButton, IonList, IonPage, IonCheckbox, IonItem, IonLabel, IonHeader, IonButtons, IonToolbar } from "@ionic/vue";
 import { XCircle } from "lucide-vue-next";
 import { maskito as vMaskito } from '@maskito/vue';
 
@@ -73,10 +73,11 @@ const cardNumberOptions = {
 
 <script lang="ts">
 import { closeModals } from "@/functions/modals";
-import {getConnectedCards, getToken} from "@/functions/fetch/account";
+import {getToken} from "@/functions/fetch/account";
 import {displayToast} from "@/functions/toasts";
 import {vibrate} from "@/functions/native/tools";
 import {getIDFromToken} from "@/functions/fetch/tools";
+import {getCredentials, setCredentials} from "@/functions/credentials";
 
 export default {
   data() {
@@ -89,20 +90,20 @@ export default {
   methods: {
     async login () {
       if (!this.agree) {
-        await displayToast('Conditions d\'utilisation', 'Veuillez accepter les conditions d\'utilisation pour ajouter une carte', 2000, 'danger')
+        await displayToast('Conditions d\'utilisation', 'Veuillez lire et accepter les conditions d\'utilisation pour ajouter une carte.', 2000, 'danger')
         return
       }
       const response = await getToken(this.numero.replaceAll('-', ''), this.password)
       const token = response.token
       if (token) {
-        const cards = getConnectedCards()
+        const cards = await getCredentials()
         const accountId = getIDFromToken(token)
         cards.push({
           numero: this.numero.replaceAll('-', ''),
           password: this.password,
           id: accountId
         })
-        localStorage.setItem('userCards', JSON.stringify(cards))
+        await setCredentials(cards)
         localStorage.setItem('currentCardToken', token)
         localStorage.setItem('currentCardId', accountId)
         await displayToast('Connecté', 'Votre carte Avantages Jeunes a bien été ajoutée !', 2000, 'primary')
@@ -111,6 +112,9 @@ export default {
           location.reload()
         }, 2000)
       }
+    },
+    changeAgreeStatus(status: boolean) {
+      this.agree = status
     },
     closeModals
   }

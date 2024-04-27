@@ -10,6 +10,7 @@ interface APIResponse {
 interface Card {
     numero: string
     password: string
+    id: string
 }
 
 export type {
