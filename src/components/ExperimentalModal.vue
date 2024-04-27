@@ -75,7 +75,7 @@
             {{ cacheLength }}
           </ion-note>
           <ion-label>
-            <p>Avantages en cache</p>
+            <p>avantages en cache</p>
           </ion-label>
         </ion-item>
         <ion-item>
