@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import axios, { AxiosError, AxiosResponse } from "axios";
 import {getToken, logOut} from "@/functions/fetch/account";
 import { APIResponse } from "@/functions/fetch/interfaces";
 import { displayToast } from "@/functions/toasts";
@@ -101,7 +99,7 @@ async function handleResponse(request: Promise<Response>, checks = true, request
             err.response.code = err.response.status
             return err.response
         }
-        return { code: 500, message: 'Unknown error occurred', data: {} }
+        return { code: 500, message: 'Unknown error occurred', data: {}, status: false }
     }
 }
 

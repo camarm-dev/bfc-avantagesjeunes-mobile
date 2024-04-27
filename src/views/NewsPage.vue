@@ -62,11 +62,12 @@ import {globeOutline, newspaperOutline} from "ionicons/icons";
 <script lang="ts">
 import {getNews} from "@/functions/fetch/news";
 import {InfiniteScrollCustomEvent} from "@ionic/vue";
+import {News} from "@/types/news";
 
 export default {
   data () {
     return {
-      news: [] as any[],
+      news: [] as News[],
       page: 1,
       loading: true,
       endReached: false
