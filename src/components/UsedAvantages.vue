@@ -24,7 +24,7 @@
         </ion-note>
       </div>
       <div class="action-item" v-for="avantage in avantages">
-        <AvantageCard :expand="true" :avantage="avantage" :type="'green'" :favori="favoris.includes(avantage.avantage_id)"/>
+        <AvantageCard :expand="true" :avantage="avantage" :type="'green'" :used="true" :favori="favoris.includes(avantage.avantage_id)"/>
         <div class="action" @click="copy(avantage.id_transaction)">
           <ClipboardIcon class="bubble-icon"/>
           <p>Copier</p>
