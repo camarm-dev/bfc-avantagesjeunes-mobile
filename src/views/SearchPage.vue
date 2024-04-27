@@ -104,7 +104,7 @@ import AvantageCard from "@/components/AvantageCard.vue";
 
 <script lang="ts">
 import {getAccount} from "@/functions/fetch/account";
-import {Avantage} from "@/functions/interfaces";
+import {Avantage} from "@/types/avantages";
 import {get} from "@/functions/fetch/tools";
 
 export default {
@@ -116,8 +116,8 @@ export default {
       query: '',
       secteurs: [],
       rubriques: [],
-      favoris: [],
-      used: [],
+      favoris: [] as number[],
+      used: [] as number[],
       searchTimeout: setTimeout(() => {}, 100)
     }
   },
@@ -147,7 +147,7 @@ export default {
       el.innerHTML = html_string
       return el.innerText
     },
-    isAvantageFavori(id_avantage: string) {
+    isAvantageFavori(id_avantage: number) {
       return this.favoris.includes(id_avantage)
     },
     async search() {

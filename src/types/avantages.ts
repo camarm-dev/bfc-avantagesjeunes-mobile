@@ -128,9 +128,20 @@ export type Comment = {
 
 export type Transaction = {
     id_transaction: number
+    rid_organisme: number
+    rid_carte: number
+    numero: string
     date_transaction: string
     type: "dématérialisé" | string
     rid_avantage: number
+    montant_avant_avantage: string
+    montant_reduc: string
+    devise: "EUR" | string
+    tx_change: string
+    datetime: string
+    avantage_exclu: false,
+    coupon_traite: false,
+    rid_groupe_avantage: number
 }
 
 export interface TransactionAvantage extends Avantage {

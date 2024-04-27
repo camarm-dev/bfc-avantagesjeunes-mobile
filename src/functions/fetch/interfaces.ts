@@ -1,9 +1,11 @@
+import {Account} from "@/types/account";
+
 interface APIResponse {
     code: number,
     message: string,
     data: any
     token?: string
-    compte?: any
+    compte?: Account
     status: boolean
 }
 

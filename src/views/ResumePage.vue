@@ -274,12 +274,12 @@ export default {
         badges: [] as Badge[]
       } as any,
       usedAdvantages: [] as any[],
-      favoris_ids: [],
+      favoris_ids: [] as number[],
       aroundMeAdvantages: {
         count: 0,
         results: []
       },
-      usedAdvantagesIds: [],
+      usedAdvantagesIds: [] as number[],
       radius: '1',
       welcome_formula: "Bonjour",
       loading: false,
@@ -319,8 +319,8 @@ export default {
       this.refreshAccount()
       event.target?.complete()
     },
-    async hasLoggedInFields() {
-      return (await getCredentials()).length > 0 && localStorage.getItem('currentCardToken')
+    async hasLoggedInFields(): Promise<boolean> {
+      return ((await getCredentials()).length > 0 && localStorage.getItem('currentCardToken')) as boolean
     },
     reload() {
       location.reload()

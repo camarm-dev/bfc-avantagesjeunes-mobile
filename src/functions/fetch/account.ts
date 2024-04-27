@@ -1,6 +1,7 @@
 import {handleResponse, post} from "@/functions/fetch/tools";
 import {APIResponse, Card} from "@/functions/fetch/interfaces";
 import {removeCredentials} from "@/functions/credentials";
+import {Account} from "@/types/account";
 
 async function getToken(number: string, password: string): Promise<APIResponse> {
     const url = import.meta.env.VITE_API_URL + '/api/compte/login'
@@ -21,13 +22,13 @@ async function getToken(number: string, password: string): Promise<APIResponse> 
     return await handleResponse(fetch(url, config), true, config)
 }
 
-async function getAccount() {
+async function getAccount(): Promise<Account> {
     const url = import.meta.env.VITE_API_URL + '/api/compte/getInfo'
     const data = {
         token: localStorage.getItem('currentCardToken'),
         id: localStorage.getItem('currentCardId')
     }
-    return (await post(url, data)).compte
+    return (await post(url, data)).compte as Account
 }
 
 

@@ -1,3 +1,5 @@
+import {Badge} from "@/types/badges";
+
 export const BADGES = {
     "20": {
         "id_badge": 20,
@@ -341,4 +343,6 @@ export const BADGES = {
         "target": 30,
         "target_type": 'likes'
     }
+} as unknown as {
+    [key: string | number]: Badge
 }
