@@ -11,23 +11,32 @@
     <div class="list-title">
       Commentaires
     </div>
-    <ion-list inset>
-      <ion-item :key="comment.id_comment" v-for="comment in comments" v-if="comments">
-        <ion-avatar>
-          <img :src="comment.image_thumb_url.replace('[w_]', 'w40').replace('[h_]', 'h40').replace('[zc_]', 'zc1')" :alt="`Photo de profil`">
+    <ion-list inset :key="comment.id_comment" v-for="comment in comments" v-if="comments">
+      <ion-item>
+        <ion-avatar slot="start">
+          <ion-nav-link :component="InspectProfile" :component-props="{ id: comment.rid_compte }" router-direction="forward">
+            <img style="border-radius: 50%" :src="comment.image_thumb_url.replace('[w]', '40').replace('[h]', '40').replace('[zc]', '1')" :alt="`Photo de profil`">
+          </ion-nav-link>
         </ion-avatar>
         <ion-label class="ion-text-wrap">
+          <p>{{ readableDate(comment.datetime) }}</p>
           <h6>
             {{ comment.commentaire }}
           </h6>
         </ion-label>
+        <Reply slot="end"/>
       </ion-item>
-      <ion-item v-else>
+    </ion-list>
+    <ion-list inset v-else>
+      <ion-item>
         <ion-note>
           Soyez le premier à commenter !
         </ion-note>
       </ion-item>
     </ion-list>
+    <ion-note style="display: block" class="ion-padding">
+      Cette section est en construction... Vous pourrez bientôt commenter et interagir depuis cette page.
+    </ion-note>
   </ion-content>
 </template>
 
@@ -42,11 +51,15 @@ import {
   IonLabel,
   IonItem,
   IonBackButton,
-  IonButtons
+  IonButtons,
+  IonNavLink
 } from '@ionic/vue';
 import {
+  Reply
 } from "lucide-vue-next";
 import { Comment } from "@/types/avantages";
+import {readableDate} from "../functions/native/dates";
+import InspectProfile from "@/components/InspectProfile.vue";
 
 const { comments } = defineProps<{
   comments: Comment[] | false

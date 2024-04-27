@@ -1,4 +1,4 @@
-import {handleResponse, post} from "@/functions/fetch/tools";
+import {get, handleResponse, post} from "@/functions/fetch/tools";
 import {APIResponse, Card} from "@/functions/fetch/interfaces";
 import {removeCredentials} from "@/functions/credentials";
 import {Account} from "@/types/account";
@@ -31,6 +31,11 @@ async function getAccount(): Promise<Account> {
     return (await post(url, data)).compte as Account
 }
 
+async function getUser(id: number): Promise<Account> {
+    const url = import.meta.env.VITE_API_URL + `/api/compte/detail/${id}`
+    return (await get(url)).compte as Account
+}
+
 
 async function updateAccount(user: any) {
     const url = import.meta.env.VITE_API_URL + '/api/compte/update'
@@ -59,5 +64,6 @@ export {
     getToken,
     getAccount,
     updateAccount,
-    logOut
+    logOut,
+    getUser
 }
