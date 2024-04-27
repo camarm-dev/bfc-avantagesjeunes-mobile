@@ -5,40 +5,42 @@
         <ion-back-button text="Retour"></ion-back-button>
       </ion-buttons>
       <ion-title>Avantage</ion-title>
-      <ion-buttons slot="end" @click="shareAdvantage()">
-        <ion-icon slot="icon-only" :icon="shareOutline"></ion-icon>
+      <ion-buttons slot="end">
+        <pulse-item vibrate>
+          <ion-button @click="isFavori ? removeFavori(avantage.id_avantage): addFavori(avantage.id_avantage); timeout(() => { isFavori = !isFavori }, 250)">
+            <ion-icon slot="icon-only" v-if="isFavori" class="red-heart" :icon="heart"></ion-icon>
+            <ion-icon slot="icon-only" v-else :icon="heartOutline"></ion-icon>
+          </ion-button>
+        </pulse-item>
+        <ion-button @click="shareAdvantage()">
+          <ion-icon slot="icon-only" :icon="shareOutline"></ion-icon>
+        </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
   <ion-content ref="content" :fullscreen="true">
     <header class="avantage">
       <div class="image-wrapper">
-        <img :src="avantage.image_url" alt="Image de l'avantage">
+        <img :src="avantage.image_url || '/no-img.png'" alt="Image de l'avantage">
       </div>
       <h2 class="welcome">{{ avantage.offre }}</h2>
       <p class="carousel-el">
         <span v-for="secteur in avantage.secteurs">{{ (secteurs[secteur] || { 'nom': 'Tout les secteurs' }).nom }}{{ avantage.secteurs.indexOf(secteur) == avantage.secteurs.length -1 ? '': '&nbsp;—&nbsp;' }}</span>
       </p>
     </header>
-    <ion-fab vertical="top" horizontal="end" class="top">
-      <ion-fab-button color="primary" class="small" title="Ajouter aux favoris">
-        <HeartOff size="20" @click="removeFavori(avantage.id_avantage); isFavori = !isFavori" v-if="isFavori" class="ion-color-secondary"/>
-        <Heart size="20" @click="addFavori(avantage.id_avantage); isFavori = !isFavori" v-else class="ion-color-secondary"/>
-      </ion-fab-button>
-    </ion-fab>
     <div class="ion-margin-auto carousel-el">
       <ion-chip color="light">
-        <Star size="9" class="icon small-icon ion-color-warning"/>
+        <Star :size="9" class="icon small-icon ion-color-warning"/>
         {{ avantage.note }} / 5 ({{ avantage.nb_note }} avis)
       </ion-chip>
       <ion-chip :class="type || avantage.type" color="secondary" v-for="rubriqueId in avantage.categories">
-        <Icon size="9" class="icon small-icon" :name="rubriques[rubriqueId].icon"/>
+        <Icon :size="9" class="icon small-icon" :name="rubriques[rubriqueId].icon"/>
         {{ rubriques[rubriqueId].nom }}
       </ion-chip>
     </div>
 
     <ion-list inset>
-      <ion-item @click="useAdvantage()" :disabled="!isUseAdvantageFunctionalityEnabled() || used" button color="secondary" class="gradient-button">
+      <ion-item @click="useAdvantage()" :disabled="!isUseAdvantageFunctionalityEnabled() || (used || dynamicUsed)" button color="secondary" class="gradient-button">
         <Ticket class="icon ion-color-primary"/>
         <ion-label class="ion-color-primary">
           <h2 class="ion-color-primary">Utiliser l'avantage</h2>
@@ -49,7 +51,7 @@
           <ion-select-option v-for="org in avantage.organismes" :value="org.id_organisme">{{ org.commune }}, {{ org.cp }}</ion-select-option>
         </ion-select>
       </ion-item>
-      <ion-item v-if="used">
+      <ion-item v-if="used || dynamicUsed">
         <ion-icon :icon="informationOutline" slot="start" color="medium"/>
         <ion-note>
           Avantage déjà utilisé.
@@ -102,13 +104,15 @@
       Avantage par
     </div>
     <ion-list inset v-for="org in avantage.organismes">
-      <ion-item>
-        <Building2 class="icon"/>
-        <ion-label class="ion-text-wrap">
-          <p>Organisation</p>
-          <h2>{{ org.nom }}</h2>
-        </ion-label>
-      </ion-item>
+      <ion-nav-link router-direction="forward" :component="InspectOrganisme" :component-props="{ id_organisme: org.slug }">
+        <ion-item button>
+          <Building2 class="icon"/>
+          <ion-label class="ion-text-wrap">
+            <p>Organisation</p>
+            <h2>{{ org.nom }}</h2>
+          </ion-label>
+        </ion-item>
+      </ion-nav-link>
       <ion-item>
         <Milestone class="icon ion-color-tertiary"/>
         <ion-label class="ion-text-wrap">
@@ -146,6 +150,41 @@
         <img style="display: block; margin: 1em auto 1em auto; border-radius: 10px" :src="avantage.image_url" alt="Image de l'avantage">
       </ion-item>
     </ion-list>
+
+    <div class="list-title">
+      Réactions
+    </div>
+    <ion-list inset>
+      <ion-item>
+        <Star class="ion-color-secondary" slot="start"/>
+        <ion-label>
+          <p>Notes</p>
+        </ion-label>
+        <ion-label slot="end">
+          <p>{{ avantage.nb_note || 0 }}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ThumbsUp class="ion-color-like" slot="start"/>
+        <ion-label>
+          <p>Likes</p>
+        </ion-label>
+        <ion-label slot="end">
+          <p>{{ avantage.nb_like || 0 }}</p>
+        </ion-label>
+      </ion-item>
+      <ion-nav-link router-direction="forward" :component="InspectAvantageComments" :component-props="{ comments: avantage.comments }">
+        <ion-item button>
+          <ion-icon color="light" slot="start" :icon="chatbubblesOutline"/>
+          <ion-label>
+            <p>Commentaires</p>
+          </ion-label>
+          <ion-label slot="end">
+            <p>{{ avantage.nb_comment }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-nav-link>
+    </ion-list>
   </ion-content>
 </template>
 
@@ -160,16 +199,22 @@ import {
   IonItem,
   IonBackButton,
   IonButtons,
-  IonFabButton,
-  IonFab,
   IonIcon,
   IonNote,
   IonList,
   IonSelect,
   IonSelectOption,
-  IonChip
+  IonChip,
+  IonButton,
+  IonNavLink
 } from '@ionic/vue';
-import {informationOutline, shareOutline} from 'ionicons/icons'
+import {
+  chatbubblesOutline,
+  heart,
+  heartOutline,
+  informationOutline,
+  shareOutline
+} from 'ionicons/icons'
 import {
   CalendarClock,
   Sparkles,
@@ -179,18 +224,29 @@ import {
   Milestone,
   Building2,
   MousePointer,
-  Heart,
-  HeartOff,
-  Ticket
+  Ticket,
+  ThumbsUp
 } from "lucide-vue-next";
 import {secteurs, rubriques} from "@/functions/interfaces";
 import Icon from "@/components/Icon.vue";
 import {addFavori, removeFavori} from "@/functions/fetch/avantages";
+import PulseItem from "@/components/PulseItem.vue";
+import InspectOrganisme from "@/components/InspectOrganisme.vue";
+import { defineProps } from 'vue'
+import {Avantage} from "@/types/avantages";
+import InspectAvantageComments from "@/components/InspectAvantageComments.vue";
+
+const { avantage, used, favori, type } = defineProps<{
+  avantage: Avantage,
+  used: boolean,
+  favori: boolean,
+  type: string
+}>()
 </script>
 
 <script lang="ts">
 import {readableDate} from "@/functions/native/dates";
-import {ref} from "vue";
+import {Ref, ref} from "vue";
 import {getPosition} from "@/functions/fetch/geolocation";
 import {createModal} from "@/functions/modals";
 import MapModal from "@/components/MapModal.vue";
@@ -199,18 +255,14 @@ import {authenticateWithBiometry, setupBiometry} from "@/functions/native/biomet
 import {displayToast} from "@/functions/toasts";
 import {loadingController} from "@ionic/vue";
 import {checkAvailability, obtainAdvantage} from "@/functions/fetch/avantages";
+import {APIResponse} from "@/functions/fetch/interfaces";
 
 export default {
-  props: [
-    'avantage',
-    'favori',
-    'type',
-    'used'
-  ],
   data() {
     return {
       isFavori: this.favori == undefined ? false: this.favori,
-      selectedOrg: this.avantage.organismes[0].id_organisme
+      selectedOrg: this.avantage.organismes[0].id_organisme,
+      dynamicUsed: this.used
     }
   },
   mounted() {
@@ -228,14 +280,15 @@ export default {
         message: 'Récupération des informations'
       })
       await loader.present()
-      if (!(await checkAvailability(this.avantage.id_avantage))[0].status) {
+      const availability = await checkAvailability(this.avantage.id_avantage) as any as APIResponse[]
+      if (!availability[0].status) {
         await loader.dismiss()
         await displayToast('Avantage indisponible', 'Cet avantage est indisponible ou a déjà été utilisé', 2000, 'danger')
       }
       await authenticateWithBiometry(() => {
         loader.dismiss()
         obtainAdvantage(this.avantage.id_avantage, this.selectedOrg).then(() => {
-          this.used = true
+          this.dynamicUsed = true
         })
         }, () => {
         displayToast('Échec d\'authentification', 'Impossible de vous authentifier avec la biométrie', 2000, 'danger')
@@ -252,7 +305,7 @@ export default {
           dialogTitle: 'Partager cet avantage'
         })
       } catch {
-        await navigator.clipboard.write(url)
+        await navigator.clipboard.writeText(url)
         alert("Lien copié dans le presse papier")
       }
     },
@@ -262,7 +315,9 @@ export default {
       }
       window.addEventListener('closeModals', () => {
         Object.keys(refs).forEach(key => {
-          if (refs[key].value) refs[key].value.dismiss()
+          // @ts-ignore
+          const object = refs[key] as Ref<any>
+          if (object.value) object.value.dismiss()
         })
       })
 
@@ -296,6 +351,9 @@ export default {
     async getAvantageCoords(address: string) {
       const coords = await getPosition(address)
       return [coords.lon, coords.lat]
+    },
+    timeout(handler: CallableFunction, timeout: number) {
+      return setTimeout(handler, timeout)
     }
   }
 }
@@ -405,5 +463,13 @@ p.carousel-el {
 
 .carousel-el ion-chip, .carousel-el span {
   min-width: max-content;
+}
+
+.red-heart {
+  color: var(--ion-color-heart);
+}
+
+.ion-color-like {
+  color: #5e5ee1 !important;
 }
 </style>

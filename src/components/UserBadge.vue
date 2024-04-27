@@ -7,7 +7,7 @@ import PulseItem from "@/components/PulseItem.vue"
 <template>
   <pulse-item vibrate @click="openDetails()">
     <ion-img v-if="badge.image_url" size="50" :src="badge.image_url"/>
-    <ion-skeleton-text class="rounded-img" v-else size="50"/>
+    <ion-skeleton-text :animated="true" class="rounded-img" v-else size="50"/>
   </pulse-item>
 </template>
 
@@ -40,5 +40,6 @@ export default {
 ion-img, .rounded-img {
   width: 50px;
   height: 50px;
+  border-radius: 50%;
 }
 </style>

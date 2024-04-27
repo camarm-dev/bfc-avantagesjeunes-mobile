@@ -39,7 +39,12 @@
         </div>
         <AvantageCard :used="usedAdvantagesIds.includes(suggested.id_avantage)" :favori="favoris_ids.includes(suggested.id_avantage)" :avantage="suggested" v-for="suggested in user.suggestions"/>
       </div>
-      <div class="list-title">Mes favoris</div>
+      <ion-nav-link :component="FavoritesAvantages" :component-props="{ used: usedAdvantagesIds, avantages: user.favoris }">
+        <div class="list-title button">
+          <div>Mes favoris</div>
+          <ion-icon :icon="chevronForwardOutline" color="medium"/>
+        </div>
+      </ion-nav-link>
       <div class="horizontal-carousel">
         <div class="card card-only" v-if="!user.favoris || user.favoris.length == 0">
           <ion-note>
@@ -51,7 +56,7 @@
       <pulse-item vibrate>
         <ion-list inset v-if="!position">
           <ion-item @click="askPermission().then(refreshPosition)" color="danger">
-            <Compass size="64" class="icon-ion-color-light"/>
+            <Compass :size="64" class="icon-ion-color-light"/>
             <ion-note class="ion-padding" color="light">
               Activez la localisation en cliquant ici. Vous pourrez voir les avantages autour de vous.
             </ion-note>
@@ -127,14 +132,18 @@
         </ion-label>
         <br>
         <ion-row class="ion-justify-content-center">
-          <ion-chip id="open-info-alert" class="chip-square" color="secondary">
-            <BadgeInfo size="36" class="ion-color-primary"/>
-          </ion-chip>
+          <pulse-item vibrate>
+            <ion-chip id="open-info-alert" class="chip-square" color="secondary">
+              <BadgeInfo :size="36" class="ion-color-primary"/>
+            </ion-chip>
+          </pulse-item>
           <ion-alert class="ion-color-primary" sub-header="avantagesjeunes.com" trigger="open-info-alert" header="Informations" message="Avantages Jeunes Connect est une application non officielle open source développée par un unique étudiant. Nous nous dédommageons de tous dysfonctionnement créé."/>
           <br>
-          <ion-chip id="open-question-alert" class="chip-square" color="tertiary">
-            <HelpCircle size="36" class="ion-color-tertiary"/>
-          </ion-chip>
+          <pulse-item vibrate>
+            <ion-chip id="open-question-alert" class="chip-square" color="tertiary">
+              <HelpCircle :size="36" class="ion-color-tertiary"/>
+            </ion-chip>
+          </pulse-item>
           <ion-alert class="ion-color-primary" sub-header="avantagesjeunes.com" trigger="open-question-alert" header="Informations" message="Si c'est votre première connexion, merci de finir l'activation de votre compte sur avantagesjeunes.com/login avant de vous connecter sur Avantages Jeunes Connect"/>
         </ion-row>
         <ion-note class="ion-text-center">
@@ -151,7 +160,7 @@
             </ion-label>
           </ion-item>
         </ion-list>
-        <ion-note class="ion-color-medium ion-margin-auto underline" v-if="hasLoggedInFields()">
+        <ion-note class="ion-color-medium ion-margin-auto underline" v-if="canReconnect">
           <a href="/resume" @click="reload()">Utiliser le compte précédant</a>
         </ion-note>
       </div>
@@ -179,7 +188,9 @@ import {
   IonAvatar,
   IonNote,
   IonRow,
-  IonAlert
+  IonAlert,
+  IonProgressBar,
+  IonIcon
 } from '@ionic/vue';
 import {
   BadgeInfo,
@@ -197,11 +208,12 @@ import {askPermission} from "@/functions/native/geolocation";
 import ExperimentalModal from "@/components/ExperimentalModal.vue";
 import AvantageCard from "@/components/AvantageCard.vue";
 import UsedAvantages from "@/components/UsedAvantages.vue";
-import {informationCircle} from "ionicons/icons";
+import {chevronForwardOutline, informationCircle} from "ionicons/icons";
 import LegalModal from "@/components/LegalModal.vue";
 import PulseItem from "@/components/PulseItem.vue";
 import {BADGES} from "@/functions/fetch/badges";
 import UserBadge from "@/components/UserBadge.vue";
+import FavoritesAvantages from "@/components/FavoritesAvantages.vue";
 </script>
 
 <script lang="ts">
@@ -212,6 +224,10 @@ import {get} from "@/functions/fetch/tools";
 import {hasPermission, getCurrentLocation} from "@/functions/native/geolocation";
 import {createModal} from "@/functions/modals";
 import MapModal from "@/components/MapModal.vue";
+import {Badge} from "@/types/badges";
+import {Avantage, Transaction, TransactionAvantage} from "@/types/avantages";
+import {RefresherCustomEvent} from "@ionic/vue";
+import {getCredentials} from "@/functions/credentials";
 
 let refs = {
   modalLogin: ref(null),
@@ -252,20 +268,22 @@ export default {
           date_vente: "",
           valid_datefin: ""
         },
-        suggestions: [] as any[],
-        transactions: [] as any[],
-        favoris: [] as [] || false,
+        suggestions: [] as Avantage[],
+        transactions: [] as Transaction[],
+        favoris: [] as Avantage[],
+        badges: [] as Badge[]
       } as any,
       usedAdvantages: [] as any[],
-      favoris_ids: [],
+      favoris_ids: [] as number[],
       aroundMeAdvantages: {
         count: 0,
         results: []
       },
-      usedAdvantagesIds: [],
+      usedAdvantagesIds: [] as number[],
       radius: '1',
       welcome_formula: "Bonjour",
-      loading: false
+      loading: false,
+      canReconnect: false as boolean
     }
   },
   mounted() {
@@ -276,10 +294,13 @@ export default {
 
     this.refs['page'] = this.$refs.page
 
-    if (localStorage.getItem('userCards') && localStorage.getItem('currentCardToken')) {
-      this.loggedIn = true
-      this.refreshAccount()
-    }
+    this.hasLoggedInFields().then(hasLoggedInFields => {
+      this.canReconnect = hasLoggedInFields
+      if (hasLoggedInFields) {
+        this.loggedIn = true
+        this.refreshAccount()
+      }
+    })
 
     const now = new Date()
     if (now.getHours() > 12) {
@@ -294,12 +315,12 @@ export default {
     async openAroundMeMap() {
       await createModal(MapModal, 'modalMap', refs, { markers: { features: this.aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker?.coordinates || [6.0258598544333974, 47.23521554332734], zoom: this.getZoom() }, false, [], true)
     },
-    async refresh(event: CustomEvent) {
-      await this.refreshAccount()
-      event.target.complete()
+    async refresh(event: RefresherCustomEvent) {
+      this.refreshAccount()
+      event.target?.complete()
     },
-    hasLoggedInFields() {
-      return localStorage.getItem('userCards') && localStorage.getItem('currentCardToken')
+    async hasLoggedInFields(): Promise<boolean> {
+      return ((await getCredentials()).length > 0 && localStorage.getItem('currentCardToken')) as boolean
     },
     reload() {
       location.reload()
@@ -330,7 +351,7 @@ export default {
 
         let usedAdvantages = []
         for (const advantage of this.user.transactions) {
-          const object = await getAvantage((advantage.rid_avantage)) as any
+          const object = await getAvantage(advantage.rid_avantage) as TransactionAvantage
           object.id_transaction = advantage.id_transaction
           object.date_transaction = advantage.date_transaction
           object.type_transaction = advantage.type
@@ -360,7 +381,7 @@ export default {
       this.aroundMeLoading = true
       this.radius = radius
       const coordinates = this.position ? await getCurrentLocation(): [6.0258598544333974, 47.23521554332734]
-      this.aroundMeAdvantages = await get(`https://api-ajc.camarm.fr/around-me?longitude=${coordinates[0]}&latitude=${coordinates[1]}&radius=${radius}`)
+      this.aroundMeAdvantages = await get(`https://api-ajc.camarm.fr/around-me?longitude=${coordinates[0]}&latitude=${coordinates[1]}&radius=${radius}`) as any
       this.aroundMeLoading = false
     },
     getZoom() {
@@ -383,19 +404,19 @@ export default {
 </script>
 <style>
 .login-button ion-label h2 {
-  color: var(--ion-color-tertiary) !important;
+  color: var(--ion-background-color) !important;
 }
 
 .login-button:hover ion-label h2 {
-  color: var(--ion-color-tertiary-tint) !important;
+  color: var(--ion-color-primary) !important;
 }
 
 .login-button ion-label p {
-  color: var(--ion-color-tertiary-tint) !important;
+  color: var(--ion-color-contrast) !important;
 }
 
 .login-button:hover ion-label p {
-  color: var(--ion-color-tertiary-contrast) !important;
+  color: var(--ion-color-contrast) !important;
 }
 
 .login-button svg, .login-button svg * {

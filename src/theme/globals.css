@@ -4,7 +4,8 @@
     --ion-tab-bar-background: var(--ion-color-primary-shade);
     --ion-tab-bar-color: var(--ion-color-secondary);
     --ion-tab-bar-color-selected: var(--ion-color-secondary-shade);
-    --ion-text-color: var(--ion-color-primary-contrast)
+    --ion-text-color: var(--ion-color-primary-contrast);
+    --ion-color-heart: #d5595a;
 }
 
 ion-nav-link {
@@ -139,6 +140,21 @@ ion-label ion-progress-bar {
 
     margin-bottom: -7px;
     margin-top: 12px;
+}
+
+.list-title.button {
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 7px 20px -12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: .1s ease-in-out;
+}
+
+.list-title.button:active {
+    background-color: var(--ion-color-primary-tint);
+    scale: 0.95;
 }
 
 .loading-content {
@@ -276,6 +292,11 @@ ion-toolbar ion-label p {
     background-color: var(--ion-color-success-shade);
 }
 
+
+.top-background.red {
+    background-color: var(--ion-color-heart);
+}
+
 .floating {
     width: 90%;
     background-color: var(--ion-color-primary-shade);
@@ -384,6 +405,10 @@ ion-chip.unique {
 
 .card.green header {
     background-color: var(--ion-color-success);
+}
+
+.card.heart header {
+    background-color: var(--ion-color-heart);
 }
 
 ion-chip.green {
@@ -513,4 +538,21 @@ ion-chip.green {
 .action-item .action p {
     color: var(--ion-color-medium);
     margin-top: .2em;
+}
+
+ion-list ion-nav-link ion-item:last-child {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    --inner-border-width: 0px 0px 0.55px 0px !important;
+}
+
+ion-list ion-nav-link:first-child:last-child ion-item:last-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    --inner-border-width: 0 0 0 0 !important;
+}
+
+ion-list ion-nav-link:not(:first-child):last-child ion-item:last-child {
+    border-radius: 0 0 10px 10px;
+    --inner-border-width: 0 0 0 0 !important;
 }

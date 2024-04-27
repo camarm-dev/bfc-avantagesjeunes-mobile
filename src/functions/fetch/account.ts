@@ -1,9 +1,7 @@
-import {handleResponse, post} from "@/functions/fetch/tools";
+import {get, handleResponse, post} from "@/functions/fetch/tools";
 import {APIResponse, Card} from "@/functions/fetch/interfaces";
-
-function getConnectedCards(): Card[] {
-    return JSON.parse(localStorage.getItem('userCards') || "[]")
-}
+import {removeCredentials} from "@/functions/credentials";
+import {Account} from "@/types/account";
 
 async function getToken(number: string, password: string): Promise<APIResponse> {
     const url = import.meta.env.VITE_API_URL + '/api/compte/login'
@@ -24,13 +22,18 @@ async function getToken(number: string, password: string): Promise<APIResponse> 
     return await handleResponse(fetch(url, config), true, config)
 }
 
-async function getAccount() {
+async function getAccount(): Promise<Account> {
     const url = import.meta.env.VITE_API_URL + '/api/compte/getInfo'
     const data = {
         token: localStorage.getItem('currentCardToken'),
         id: localStorage.getItem('currentCardId')
     }
-    return (await post(url, data)).compte
+    return (await post(url, data)).compte as Account
+}
+
+async function getUser(id: number): Promise<Account> {
+    const url = import.meta.env.VITE_API_URL + `/api/compte/detail/${id}`
+    return (await get(url)).compte as Account
 }
 
 
@@ -45,13 +48,16 @@ async function updateAccount(user: any) {
 }
 
 function logOut() {
-    localStorage.removeItem('userCards')
-    localStorage.removeItem('userAppearance')
-    localStorage.removeItem('currentCardToken')
-    localStorage.removeItem('currentCardId')
-    localStorage.removeItem('cardImageRecto')
-    localStorage.removeItem('cardImageVerso')
-    location.reload()
+    removeCredentials().then(() => {
+        localStorage.removeItem('userAppearance')
+        localStorage.removeItem('currentCardToken')
+        localStorage.removeItem('currentCardId')
+        localStorage.removeItem('frontCardImage')
+        localStorage.removeItem('backCardImage')
+        localStorage.removeItem('advantagesCache')
+        localStorage.removeItem('userApiUrl')
+        location.reload()
+    })
 }
 
 export {
@@ -59,5 +65,5 @@ export {
     getAccount,
     updateAccount,
     logOut,
-    getConnectedCards
+    getUser
 }

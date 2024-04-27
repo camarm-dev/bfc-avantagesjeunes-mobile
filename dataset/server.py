@@ -1,5 +1,5 @@
 from hashlib import md5
-from typing import List
+from typing import Union
 
 import pymongo
 import uvicorn
@@ -17,16 +17,17 @@ app.add_middleware(
 )
 mongo = pymongo.MongoClient(open('.mongodb').read())
 database = mongo.Dataset.avantages_0424
+search_database = mongo.Dataset.search
 
 
 def create_index():
     try:
-        database.drop_index(['coordinates_2dsphere', 'title_text_description_text_conditions_text'])
-        # database.drop_index(('properties.title', 'text'), ('properties.description', 'text'), ('properties.other_advantages.properties.title', 'text'), ('properties.other_advantages.properties.description', 'text'))
+        database.drop_index(['coordinates_2dsphere'])
+        search_database.drop_index(['offre_text_conditions_text_org_name_text'])
     except Exception as e:
         print(f"[Warn] Cannot delete index: {e}")
     database.create_index([('coordinates', '2dsphere')])
-    database.create_index([('title', 'text'), ('description', 'text'), ('conditions', 'text')],
+    search_database.create_index([('offre', 'text'), ('conditions', 'text'), ('org_name', 'text')],
                           default_language='french')
 
 
@@ -65,6 +66,11 @@ def to_json(advantage: dict):
     }
 
 
+def to_json_format(advantage: dict):
+    del advantage['_id']
+    return advantage
+
+
 def perform_query(longitude: float, latitude: float, radius: float = 1):
     return database.find({
         "loc": {
@@ -78,22 +84,22 @@ def perform_query(longitude: float, latitude: float, radius: float = 1):
     })
 
 
-def perform_search_query(expression: str, secteurs: list, rubriques: list):
+def perform_search_query(expression: str, secteurs: list, rubriques: list, page: int = 0):
     query = {}
     if len(secteurs) > 0:
         query["secteurs"] = {"$in": secteurs}
     if len(rubriques) > 0:
         query["rubriques"] = {"$in": rubriques}
-    return database.find({
+    return search_database.find({
         "$text": {
             "$search": expression
         },
         **query
-    })
+    }).skip(50 * page).limit(50)
 
 
 @app.get('/around-me')
-async def around_me(longitude: float, latitude: float, radius: int = 1):
+async def around_me(longitude: float, latitude: float, radius: int = 0):
     results = list(perform_query(longitude, latitude, radius))
     count = len(results)
     response = {
@@ -104,8 +110,16 @@ async def around_me(longitude: float, latitude: float, radius: int = 1):
 
 
 @app.get('/search')
-async def search(q: str, secteurs: List[str] = [], rubriques: List[str] = []):
-    results = [to_json(document) for document in perform_search_query(q, secteurs, rubriques)]
+async def search(q: str, secteurs: Union[str, None] = None, rubriques: Union[str, None] = None, page: int = 0):
+    """
+    Search advantages.
+    - :param q: Query string to search
+    - :param secteurs: comma separated ids of secteur
+    - :param rubriques: comma separated ids of rubrique
+    """
+    secteurs_ids = [int(val) for val in secteurs.split(',')] if secteurs else []
+    rubriques_ids = [int(val) for val in rubriques.split(',')] if rubriques else []
+    results = [to_json_format(document) for document in perform_search_query(q, secteurs_ids, rubriques_ids, page)]
     return {
         "results": results,
         "count": len(results)
