@@ -466,7 +466,7 @@ p.carousel-el {
 }
 
 .red-heart {
-  color: #d5595a;
+  color: var(--ion-color-heart);
 }
 
 .ion-color-like {

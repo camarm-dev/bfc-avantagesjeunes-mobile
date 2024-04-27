@@ -24,7 +24,7 @@
     </div>
     <div v-else class="grid-results">
       <pulse-item v-for="avantage in avantages" :key="avantage.id_avantage">
-        <AvantageCard :small="true" :avantage="avantage" :favori="true" :used="used.includes(avantage.id_avantage)"/>
+        <AvantageCard type="heart" :small="true" :avantage="avantage" :favori="true" :used="used.includes(avantage.id_avantage)"/>
       </pulse-item>
     </div>
   </ion-content>

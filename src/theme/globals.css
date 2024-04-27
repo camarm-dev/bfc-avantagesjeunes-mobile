@@ -4,7 +4,8 @@
     --ion-tab-bar-background: var(--ion-color-primary-shade);
     --ion-tab-bar-color: var(--ion-color-secondary);
     --ion-tab-bar-color-selected: var(--ion-color-secondary-shade);
-    --ion-text-color: var(--ion-color-primary-contrast)
+    --ion-text-color: var(--ion-color-primary-contrast);
+    --ion-color-heart: #d5595a;
 }
 
 ion-nav-link {
@@ -293,7 +294,7 @@ ion-toolbar ion-label p {
 
 
 .top-background.red {
-    background-color: #d5595a;
+    background-color: var(--ion-color-heart);
 }
 
 .floating {
@@ -404,6 +405,10 @@ ion-chip.unique {
 
 .card.green header {
     background-color: var(--ion-color-success);
+}
+
+.card.heart header {
+    background-color: var(--ion-color-heart);
 }
 
 ion-chip.green {
