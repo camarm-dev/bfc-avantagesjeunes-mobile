@@ -31,13 +31,13 @@
       Favoris
     </div>
     <div class="grid-results">
-      <AvantageCard :small="true" :used="usedAdvantagesIds.includes(avantage.id_avantage)" :favori="favoris.includes(avantage.id_avantage)" :avantage="avantage" v-for="avantage in avantages"/>
+      <AvantageCard :key="avantage.id_avantage" :small="true" :used="usedAdvantagesIds.includes(avantage.id_avantage)" :favori="favoris.includes(avantage.id_avantage)" :avantage="avantage" v-for="avantage in avantages"/>
     </div>
   </ion-content>
 </template>
 
 <script setup lang="ts">
-import '@/theme/globals.css'
+import "@/theme/globals.css"
 import {
   IonHeader,
   IonToolbar,
@@ -45,20 +45,20 @@ import {
   IonTitle,
   IonBackButton,
   IonButtons
-} from '@ionic/vue';
-import AvantageCard from "@/components/AvantageCard.vue";
+} from "@ionic/vue"
+import AvantageCard from "@/components/AvantageCard.vue"
 </script>
 
 <script lang="ts">
-import {getAvantage} from "@/functions/fetch/avantages";
-import {getAccount, getUser} from "@/functions/fetch/account";
+import {getAvantage} from "@/functions/fetch/avantages"
+import {getAccount, getUser} from "@/functions/fetch/account"
 import "mapbox-gl/dist/mapbox-gl.css"
-import {Organisme} from "@/types/organismes";
-import {Avantage} from "@/types/avantages";
-import {Account} from "@/types/account";
+import {Organisme} from "@/types/organismes"
+import {Avantage} from "@/types/avantages"
+import {Account} from "@/types/account"
 
 export default {
-  props: ['id'],
+  props: ["id"],
   data() {
     return {
       user: {} as Account,

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {IonImg, IonSkeletonText} from "@ionic/vue";
+import {IonImg, IonSkeletonText} from "@ionic/vue"
 import PulseItem from "@/components/PulseItem.vue"
 </script>
 
@@ -13,9 +13,9 @@ import PulseItem from "@/components/PulseItem.vue"
 
 <script lang="ts">
 
-import {ref} from "vue";
-import {createModal} from "@/functions/modals";
-import BadgeDetailsModal from "@/components/BadgeDetailsModal.vue";
+import {ref} from "vue"
+import {createModal} from "@/functions/modals"
+import BadgeDetailsModal from "@/components/BadgeDetailsModal.vue"
 
 const refs = {
   detailModal: ref(null)
@@ -23,13 +23,13 @@ const refs = {
 
 export default {
   props: [
-    'badge',
-    'date',
-    'user'
+    "badge",
+    "date",
+    "user"
   ],
   methods: {
     async openDetails() {
-      await createModal(BadgeDetailsModal, 'detailModal', refs, { badge: this.badge, date: this.date, user: this.user }, true, [0, 0.75], true)
+      await createModal(BadgeDetailsModal, "detailModal", refs, { badge: this.badge, date: this.date, user: this.user }, true, [0, 0.75], true)
     }
   }
 }

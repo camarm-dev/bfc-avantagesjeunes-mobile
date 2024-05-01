@@ -1,4 +1,4 @@
-import {Transaction} from "@/types/avantages";
+import {Transaction} from "@/types/avantages"
 
 export type Account = {
     id_compte: number

@@ -25,7 +25,7 @@
       </div>
       <h2 class="welcome">{{ avantage.offre }}</h2>
       <p class="carousel-el">
-        <span v-for="secteur in avantage.secteurs">{{ (secteurs[secteur] || { 'nom': 'Tout les secteurs' }).nom }}{{ avantage.secteurs.indexOf(secteur) == avantage.secteurs.length -1 ? '': '&nbsp;—&nbsp;' }}</span>
+        <span :key="secteur" v-for="secteur in avantage.secteurs">{{ (secteurs[secteur] || { 'nom': 'Tout les secteurs' }).nom }}{{ avantage.secteurs.indexOf(secteur) == avantage.secteurs.length -1 ? '': '&nbsp;—&nbsp;' }}</span>
       </p>
     </header>
     <div class="ion-margin-auto carousel-el">
@@ -33,7 +33,7 @@
         <Star :size="9" class="icon small-icon ion-color-warning"/>
         {{ avantage.note }} / 5 ({{ avantage.nb_note }} avis)
       </ion-chip>
-      <ion-chip :class="type || avantage.type" color="secondary" v-for="rubriqueId in avantage.categories">
+      <ion-chip :key="rubriqueId" :class="type || avantage.type" color="secondary" v-for="rubriqueId in avantage.categories">
         <Icon :size="9" class="icon small-icon" :name="rubriques[rubriqueId].icon"/>
         {{ rubriques[rubriqueId].nom }}
       </ion-chip>
@@ -48,7 +48,7 @@
       </ion-item>
       <ion-item v-if="avantage.organismes.length > 1">
         <ion-select :value="selectedOrg" interface="action-sheet" @ionChange="selectedOrg = $event.detail.value" placeholder="Séléctionnez un lieu">
-          <ion-select-option v-for="org in avantage.organismes" :value="org.id_organisme">{{ org.commune }}, {{ org.cp }}</ion-select-option>
+          <ion-select-option :key="org.id_organisme" v-for="org in avantage.organismes" :value="org.id_organisme">{{ org.commune }}, {{ org.cp }}</ion-select-option>
         </ion-select>
       </ion-item>
       <ion-item v-if="used || dynamicUsed">
@@ -103,7 +103,7 @@
     <div class="list-title">
       Avantage par
     </div>
-    <ion-list inset v-for="org in avantage.organismes">
+    <ion-list :key="org.id_organisme" inset v-for="org in avantage.organismes">
       <ion-nav-link router-direction="forward" :component="InspectOrganisme" :component-props="{ id_organisme: org.slug }">
         <ion-item button>
           <Building2 class="icon"/>
@@ -189,7 +189,7 @@
 </template>
 
 <script setup lang="ts">
-import '@/theme/globals.css'
+import "@/theme/globals.css"
 import {
   IonHeader,
   IonToolbar,
@@ -207,14 +207,14 @@ import {
   IonChip,
   IonButton,
   IonNavLink
-} from '@ionic/vue';
+} from "@ionic/vue"
 import {
   chatbubblesOutline,
   heart,
   heartOutline,
   informationOutline,
   shareOutline
-} from 'ionicons/icons'
+} from "ionicons/icons"
 import {
   CalendarClock,
   Sparkles,
@@ -226,16 +226,17 @@ import {
   MousePointer,
   Ticket,
   ThumbsUp
-} from "lucide-vue-next";
-import {secteurs, rubriques} from "@/functions/interfaces";
-import Icon from "@/components/Icon.vue";
-import {addFavori, removeFavori} from "@/functions/fetch/avantages";
-import PulseItem from "@/components/PulseItem.vue";
-import InspectOrganisme from "@/components/InspectOrganisme.vue";
-import { defineProps } from 'vue'
-import {Avantage} from "@/types/avantages";
-import InspectAvantageComments from "@/components/InspectAvantageComments.vue";
+} from "lucide-vue-next"
+import {secteurs, rubriques} from "@/functions/interfaces"
+import Icon from "@/components/Icon.vue"
+import {addFavori, removeFavori} from "@/functions/fetch/avantages"
+import PulseItem from "@/components/PulseItem.vue"
+import InspectOrganisme from "@/components/InspectOrganisme.vue"
+import { defineProps } from "vue"
+import {Avantage} from "@/types/avantages"
+import InspectAvantageComments from "@/components/InspectAvantageComments.vue"
 
+// eslint-disable-next-line
 const { avantage, used, favori, type } = defineProps<{
   avantage: Avantage,
   used: boolean,
@@ -245,17 +246,17 @@ const { avantage, used, favori, type } = defineProps<{
 </script>
 
 <script lang="ts">
-import {readableDate} from "@/functions/native/dates";
-import {Ref, ref} from "vue";
-import {getPosition} from "@/functions/fetch/geolocation";
-import {createModal} from "@/functions/modals";
-import MapModal from "@/components/MapModal.vue";
-import { Share } from '@capacitor/share'
-import {authenticateWithBiometry, setupBiometry} from "@/functions/native/biometry";
-import {displayToast} from "@/functions/toasts";
-import {loadingController} from "@ionic/vue";
-import {checkAvailability, obtainAdvantage} from "@/functions/fetch/avantages";
-import {APIResponse} from "@/functions/fetch/interfaces";
+import {readableDate} from "@/functions/native/dates"
+import {Ref, ref} from "vue"
+import {getPosition} from "@/functions/fetch/geolocation"
+import {createModal} from "@/functions/modals"
+import MapModal from "@/components/MapModal.vue"
+import { Share } from "@capacitor/share"
+import {authenticateWithBiometry, setupBiometry} from "@/functions/native/biometry"
+import {displayToast} from "@/functions/toasts"
+import {loadingController} from "@ionic/vue"
+import {checkAvailability, obtainAdvantage} from "@/functions/fetch/avantages"
+import {APIResponse} from "@/functions/fetch/interfaces"
 
 export default {
   data() {
@@ -273,17 +274,17 @@ export default {
       window.open(url)
     },
     isUseAdvantageFunctionalityEnabled() {
-      return (localStorage.getItem('userUseAdvantage') || 'false') == 'true'
+      return (localStorage.getItem("userUseAdvantage") || "false") == "true"
     },
     async useAdvantage() {
       const loader = await loadingController.create({
-        message: 'Récupération des informations'
+        message: "Récupération des informations"
       })
       await loader.present()
       const availability = await checkAvailability(this.avantage.id_avantage) as any as APIResponse[]
       if (!availability[0].status) {
         await loader.dismiss()
-        await displayToast('Avantage indisponible', 'Cet avantage est indisponible ou a déjà été utilisé', 2000, 'danger')
+        await displayToast("Avantage indisponible", "Cet avantage est indisponible ou a déjà été utilisé", 2000, "danger")
       }
       await authenticateWithBiometry(() => {
         loader.dismiss()
@@ -291,7 +292,7 @@ export default {
           this.dynamicUsed = true
         })
         }, () => {
-        displayToast('Échec d\'authentification', 'Impossible de vous authentifier avec la biométrie', 2000, 'danger')
+        displayToast("Échec d'authentification", "Impossible de vous authentifier avec la biométrie", 2000, "danger")
         loader.dismiss()
       })
     },
@@ -300,9 +301,9 @@ export default {
       try {
         await Share.share({
           title: `${this.avantage.offre}`,
-          text: 'Regarde cet avantage que j\'ai trouvé sur Avantages Jeunes Connect',
+          text: "Regarde cet avantage que j'ai trouvé sur Avantages Jeunes Connect",
           url: url,
-          dialogTitle: 'Partager cet avantage'
+          dialogTitle: "Partager cet avantage"
         })
       } catch {
         await navigator.clipboard.writeText(url)
@@ -313,7 +314,7 @@ export default {
       const refs = {
         modalMap: ref(null),
       }
-      window.addEventListener('closeModals', () => {
+      window.addEventListener("closeModals", () => {
         Object.keys(refs).forEach(key => {
           // @ts-ignore
           const object = refs[key] as Ref<any>
@@ -324,11 +325,11 @@ export default {
       const features = []
 
       for (const organisme of this.avantage.organismes) {
-        const coords = organisme.latitude != '' ? [Number(organisme.longitude), Number(organisme.latitude)] : await this.getAvantageCoords(address)
+        const coords = organisme.latitude != "" ? [Number(organisme.longitude), Number(organisme.latitude)] : await this.getAvantageCoords(address)
         features.push({
-          type: 'Feature',
+          type: "Feature",
           geometry: {
-            type: 'Point',
+            type: "Point",
             coordinates: coords
           },
           properties: {
@@ -340,13 +341,13 @@ export default {
       }
 
       const geojson = {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           features: features
       }
 
       const zoom = this.avantage.organismes.length === 1 ? 11: 8
 
-      await createModal(MapModal, 'modalMap', refs, { markers: geojson, center: geojson.features[0].geometry.coordinates, zoom: zoom }, false, [], true)
+      await createModal(MapModal, "modalMap", refs, { markers: geojson, center: geojson.features[0].geometry.coordinates, zoom: zoom }, false, [], true)
     },
     async getAvantageCoords(address: string) {
       const coords = await getPosition(address)

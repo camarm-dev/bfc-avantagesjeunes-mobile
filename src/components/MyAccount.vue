@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import '@/theme/globals.css'
+import "@/theme/globals.css"
 import {
   IonHeader,
   IonToolbar,
@@ -83,31 +83,30 @@ import {
   IonBackButton,
   IonButtons,
   IonAlert
-} from '@ionic/vue';
+} from "@ionic/vue"
 import {
   Phone,
   Mail,
   Cake,
   Zap,
-  Lock,
   BadgeAlert,
   LogOut
-} from "lucide-vue-next";
-import ModifyInterests from "@/components/ModifyInterests.vue";
-import {logOut} from "@/functions/fetch/account";
+} from "lucide-vue-next"
+import ModifyInterests from "@/components/ModifyInterests.vue"
+import {logOut} from "@/functions/fetch/account"
 </script>
 
 <script lang="ts">
-import { createModal } from "@/functions/modals";
-import {getAccount} from "@/functions/fetch/account";
-import {readableDate} from "@/functions/native/dates";
-import {ref} from "vue";
+import { createModal } from "@/functions/modals"
+import {getAccount} from "@/functions/fetch/account"
+import {readableDate} from "@/functions/native/dates"
+import {ref} from "vue"
 
-let refs = {
+const refs = {
   modalModifyInterests: ref(null)
 } as any
 
-window.addEventListener('closeModals', () => {
+window.addEventListener("closeModals", () => {
   Object.keys(refs).forEach(key => {
     if (refs[key].value) refs[key].value.dismiss()
   })
@@ -136,8 +135,8 @@ export default {
       } as any,
       verifyEmailButtons: [
         {
-          text: 'Ignorer',
-          role: 'cancel',
+          text: "Ignorer",
+          role: "cancel",
         },
       ],
       refs: refs

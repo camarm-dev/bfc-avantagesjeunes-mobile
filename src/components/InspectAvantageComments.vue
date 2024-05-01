@@ -11,6 +11,7 @@
     <div class="list-title">
       Commentaires
     </div>
+<!-- eslint-disable-next-line   -->
     <ion-list inset :key="comment.id_comment" v-for="comment in comments" v-if="comments">
       <ion-item>
         <ion-avatar slot="start">
@@ -41,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import '@/theme/globals.css'
+import "@/theme/globals.css"
 import {
   IonHeader,
   IonToolbar,
@@ -53,13 +54,13 @@ import {
   IonBackButton,
   IonButtons,
   IonNavLink
-} from '@ionic/vue';
+} from "@ionic/vue"
 import {
   Reply
-} from "lucide-vue-next";
-import { Comment } from "@/types/avantages";
-import {readableDate} from "../functions/native/dates";
-import InspectProfile from "@/components/InspectProfile.vue";
+} from "lucide-vue-next"
+import { Comment } from "@/types/avantages"
+import {readableDate} from "../functions/native/dates"
+import InspectProfile from "@/components/InspectProfile.vue"
 
 const { comments } = defineProps<{
   comments: Comment[] | false

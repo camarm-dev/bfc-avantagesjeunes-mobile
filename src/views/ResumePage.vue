@@ -37,7 +37,7 @@
             Aucun avantage suggéré
           </ion-note>
         </div>
-        <AvantageCard :used="usedAdvantagesIds.includes(suggested.id_avantage)" :favori="favoris_ids.includes(suggested.id_avantage)" :avantage="suggested" v-for="suggested in user.suggestions"/>
+        <AvantageCard :key="suggested.id_avantage" :used="usedAdvantagesIds.includes(suggested.id_avantage)" :favori="favoris_ids.includes(suggested.id_avantage)" :avantage="suggested" v-for="suggested in user.suggestions"/>
       </div>
       <ion-nav-link :component="FavoritesAvantages" :component-props="{ used: usedAdvantagesIds, avantages: user.favoris }">
         <div class="list-title button">
@@ -51,7 +51,7 @@
             Vous n'avez pas d'avantages favoris...
           </ion-note>
         </div>
-        <AvantageCard :used="usedAdvantagesIds.includes(favori.id_avantage)" :favori="true" :avantage="favori" v-for="favori in user.favoris"/>
+        <AvantageCard :key="favori.id_avantage" :used="usedAdvantagesIds.includes(favori.id_avantage)" :favori="true" :avantage="favori" v-for="favori in user.favoris"/>
       </div>
       <pulse-item vibrate>
         <ion-list inset v-if="!position">
@@ -169,7 +169,7 @@
 </template>
 
 <script setup lang="ts">
-import '@/theme/globals.css'
+import "@/theme/globals.css"
 import {
   IonPage,
   IonHeader,
@@ -191,7 +191,7 @@ import {
   IonAlert,
   IonProgressBar,
   IonIcon
-} from '@ionic/vue';
+} from "@ionic/vue"
 import {
   BadgeInfo,
   HelpCircle,
@@ -199,44 +199,44 @@ import {
   MapIcon,
   ChevronRight,
   Compass
-} from "lucide-vue-next";
-import LoginModal from "@/components/LoginModal.vue";
-import AvantagesJeunesIcon from "@/components/AvantagesJeunesIcon.vue";
-import MyAccount from "@/components/MyAccount.vue";
-import MyCard from "@/components/MyCard.vue";
-import {askPermission} from "@/functions/native/geolocation";
-import ExperimentalModal from "@/components/ExperimentalModal.vue";
-import AvantageCard from "@/components/AvantageCard.vue";
-import UsedAvantages from "@/components/UsedAvantages.vue";
-import {chevronForwardOutline, informationCircle} from "ionicons/icons";
-import LegalModal from "@/components/LegalModal.vue";
-import PulseItem from "@/components/PulseItem.vue";
-import {BADGES} from "@/functions/fetch/badges";
-import UserBadge from "@/components/UserBadge.vue";
-import FavoritesAvantages from "@/components/FavoritesAvantages.vue";
+} from "lucide-vue-next"
+import LoginModal from "@/components/LoginModal.vue"
+import AvantagesJeunesIcon from "@/components/AvantagesJeunesIcon.vue"
+import MyAccount from "@/components/MyAccount.vue"
+import MyCard from "@/components/MyCard.vue"
+import {askPermission} from "@/functions/native/geolocation"
+import ExperimentalModal from "@/components/ExperimentalModal.vue"
+import AvantageCard from "@/components/AvantageCard.vue"
+import UsedAvantages from "@/components/UsedAvantages.vue"
+import {chevronForwardOutline, informationCircle} from "ionicons/icons"
+import LegalModal from "@/components/LegalModal.vue"
+import PulseItem from "@/components/PulseItem.vue"
+import {BADGES} from "@/functions/fetch/badges"
+import UserBadge from "@/components/UserBadge.vue"
+import FavoritesAvantages from "@/components/FavoritesAvantages.vue"
 </script>
 
 <script lang="ts">
-import { ref } from "vue";
-import {getAccount} from "@/functions/fetch/account";
-import {getAvantage} from "@/functions/fetch/avantages";
-import {get} from "@/functions/fetch/tools";
-import {hasPermission, getCurrentLocation} from "@/functions/native/geolocation";
-import {createModal} from "@/functions/modals";
-import MapModal from "@/components/MapModal.vue";
-import {Badge} from "@/types/badges";
-import {Avantage, Transaction, TransactionAvantage} from "@/types/avantages";
-import {RefresherCustomEvent} from "@ionic/vue";
-import {getCredentials} from "@/functions/credentials";
+import { ref } from "vue"
+import {getAccount} from "@/functions/fetch/account"
+import {getAvantage} from "@/functions/fetch/avantages"
+import {get} from "@/functions/fetch/tools"
+import {hasPermission, getCurrentLocation} from "@/functions/native/geolocation"
+import {createModal} from "@/functions/modals"
+import MapModal from "@/components/MapModal.vue"
+import {Badge} from "@/types/badges"
+import {Avantage, Transaction, TransactionAvantage} from "@/types/avantages"
+import {RefresherCustomEvent} from "@ionic/vue"
+import {getCredentials} from "@/functions/credentials"
 
-let refs = {
+const refs = {
   modalLogin: ref(null),
   modalMap: ref(null),
   modalInfos: ref(null),
   modalExperimental: ref(null)
 } as any
 
-window.addEventListener('closeModals', () => {
+window.addEventListener("closeModals", () => {
   Object.keys(refs).forEach(key => {
     if (refs[key].value) refs[key].value.dismiss()
   })
@@ -280,19 +280,19 @@ export default {
         results: []
       },
       usedAdvantagesIds: [] as number[],
-      radius: '1',
+      radius: "1",
       welcome_formula: "Bonjour",
       loading: false,
       canReconnect: false as boolean
     }
   },
   mounted() {
-    localStorage.setItem('userApiUrl', 'https://api-ajc.camarm.fr')
-    window.addEventListener('reload', () => {
+    localStorage.setItem("userApiUrl", "https://api-ajc.camarm.fr")
+    window.addEventListener("reload", () => {
       this.refreshAccount()
     })
 
-    this.refs['page'] = this.$refs.page
+    this.refs["page"] = this.$refs.page
 
     this.hasLoggedInFields().then(hasLoggedInFields => {
       this.canReconnect = hasLoggedInFields
@@ -313,14 +313,14 @@ export default {
   },
   methods: {
     async openAroundMeMap() {
-      await createModal(MapModal, 'modalMap', refs, { markers: { features: this.aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker?.coordinates || [6.0258598544333974, 47.23521554332734], zoom: this.getZoom() }, false, [], true)
+      await createModal(MapModal, "modalMap", refs, { markers: { features: this.aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker?.coordinates || [6.0258598544333974, 47.23521554332734], zoom: this.getZoom() }, false, [], true)
     },
     async refresh(event: RefresherCustomEvent) {
       this.refreshAccount()
       event.target?.complete()
     },
     async hasLoggedInFields(): Promise<boolean> {
-      return ((await getCredentials()).length > 0 && localStorage.getItem('currentCardToken')) as boolean
+      return ((await getCredentials()).length > 0 && localStorage.getItem("currentCardToken")) as boolean
     },
     reload() {
       location.reload()
@@ -335,7 +335,7 @@ export default {
       this.position = await hasPermission()
       this.user_marker = {
         coordinates: this.position ? await getCurrentLocation(): [6.0258598544333974, 47.23521554332734],
-        image: this.user.image_url || '/avatar.png',
+        image: this.user.image_url || "/avatar.png",
         name: `${this.user.carte.prenom} ${this.user.carte.nom}`
       }
     },
@@ -343,13 +343,13 @@ export default {
       this.loading = true
       getAccount().then(async user => {
         this.user = user
-        let suggestionAvantages = []
+        const suggestionAvantages = []
         for (const suggestion of this.user.suggestions) {
           suggestionAvantages.push(await getAvantage((suggestion.id_avantage)))
         }
         this.user.suggestions = suggestionAvantages
 
-        let usedAdvantages = []
+        const usedAdvantages = []
         for (const advantage of this.user.transactions) {
           const object = await getAvantage(advantage.rid_avantage) as TransactionAvantage
           object.id_transaction = advantage.id_transaction
@@ -363,21 +363,21 @@ export default {
         if (!this.user.favoris) this.user.favoris = []
         this.favoris_ids = this.user.favoris
 
-        let avantagesFavoris = []
+        const avantagesFavoris = []
         for (const favori of this.user.favoris) {
           avantagesFavoris.push(await getAvantage((favori)))
         }
         this.user.favoris = avantagesFavoris
-        await this.refreshPosition().catch((e) => {
+        await this.refreshPosition().catch(() => {
           this.position = false
         })
         await this.getAroundMeAdvantages()
         this.loading = false
-      }).catch(err => {
+      }).catch(() => {
         this.loggedIn = false
       })
     },
-    async getAroundMeAdvantages(radius: string = '1') {
+    async getAroundMeAdvantages(radius = "1") {
       this.aroundMeLoading = true
       this.radius = radius
       const coordinates = this.position ? await getCurrentLocation(): [6.0258598544333974, 47.23521554332734]
@@ -386,13 +386,13 @@ export default {
     },
     getZoom() {
       switch (this.radius) {
-        case '1':
+        case "1":
           return 14
-        case '5':
+        case "5":
           return 11
-        case '10':
+        case "10":
           return 9
-        case '50':
+        case "50":
           return 7
         default:
           return 11

@@ -34,17 +34,17 @@
 </template>
 
 <script setup lang="ts">
-import {IonPage, IonContent, IonItem, IonLabel, IonList, IonProgressBar, IonNote} from '@ionic/vue'
-import {CalendarClock} from "lucide-vue-next";
-import {readableDate} from "@/functions/native/dates";
+import {IonPage, IonContent, IonItem, IonLabel, IonList, IonProgressBar, IonNote} from "@ionic/vue"
+import {CalendarClock} from "lucide-vue-next"
+import {readableDate} from "@/functions/native/dates"
 </script>
 
 <script lang="ts">
 export default {
   props: [
-      'badge',
-      'date',
-      'user'
+      "badge",
+      "date",
+      "user"
   ],
   data() {
     return {

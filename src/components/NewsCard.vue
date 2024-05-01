@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import {IonNavLink, IonSkeletonText} from "@ionic/vue";
-import ReadNews from "@/components/ReadNews.vue";
+import {IonNavLink, IonSkeletonText} from "@ionic/vue"
+import ReadNews from "@/components/ReadNews.vue"
 import PulseItem from "@/components/PulseItem.vue"
 </script>
 
@@ -29,10 +29,10 @@ import PulseItem from "@/components/PulseItem.vue"
 
 <script lang="ts">
 export default {
-  props: ['article', 'loading'],
+  props: ["article", "loading"],
   methods: {
     getInnerContent(html_string: string) {
-      const el = document.createElement('div')
+      const el = document.createElement("div")
       el.innerHTML = html_string
       return el.innerText
     }

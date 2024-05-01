@@ -1,4 +1,4 @@
-import {Account} from "@/types/account";
+import {Account} from "@/types/account"
 
 interface APIResponse {
     code: number,

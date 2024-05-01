@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import InspectAvantage from "@/components/InspectAvantage.vue";
-import {IonNavLink, IonSkeletonText} from "@ionic/vue";
+import InspectAvantage from "@/components/InspectAvantage.vue"
+import {IonNavLink, IonSkeletonText} from "@ionic/vue"
 import PulseItem from "@/components/PulseItem.vue"
 </script>
 
@@ -29,10 +29,10 @@ import PulseItem from "@/components/PulseItem.vue"
 
 <script lang="ts">
 export default {
-  props: ['avantage', 'favori', 'type', 'small', 'expand', 'used'],
+  props: ["avantage", "favori", "type", "small", "expand", "used"],
   methods: {
     getInnerContent(html_string: string) {
-      const el = document.createElement('div')
+      const el = document.createElement("div")
       el.innerHTML = html_string
       return el.innerText
     }

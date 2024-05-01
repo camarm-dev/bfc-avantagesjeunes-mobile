@@ -49,8 +49,8 @@
 </template>
 
 <script lang="ts">
-import {readableDate} from "@/functions/native/dates";
-import '@/theme/globals.css'
+import {readableDate} from "@/functions/native/dates"
+import "@/theme/globals.css"
 import {
   IonHeader,
   IonToolbar,
@@ -59,20 +59,18 @@ import {
   IonLabel,
   IonItem,
   IonButtons,
-  IonPage,
-  IonIcon,
   IonList,
   IonBackButton
-} from '@ionic/vue';
+} from "@ionic/vue"
 import {
   CalendarClock,
   Ticket,
   ArrowLeftRight
-} from "lucide-vue-next";
+} from "lucide-vue-next"
 import {chevronBackOutline} from "ionicons/icons"
 export default {
   props: [
-    'avantage'
+    "avantage"
   ],
   components: {
     IonHeader,
@@ -82,8 +80,6 @@ export default {
     IonLabel,
     IonItem,
     IonButtons,
-    IonPage,
-    IonIcon,
     IonList,
     IonBackButton,
     CalendarClock,

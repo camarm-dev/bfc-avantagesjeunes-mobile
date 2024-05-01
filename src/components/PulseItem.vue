@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import {vibrate} from "@/functions/native/tools";
+import {vibrate} from "@/functions/native/tools"
 
 export default {
   props: {
@@ -24,19 +24,19 @@ export default {
     }
   },
   mounted() {
-    this.$refs.item.addEventListener('touchstart', this.downEffect)
-    this.$refs.item.addEventListener('touchend', this.upEffect)
+    this.$refs.item.addEventListener("touchstart", this.downEffect)
+    this.$refs.item.addEventListener("touchend", this.upEffect)
   },
   methods: {
     reset() {
       const item = this.$refs.item
-      item.classList.remove('up')
-      item.classList.remove('down')
+      item.classList.remove("up")
+      item.classList.remove("down")
     },
     downEffect() {
       const item = this.$refs.item
       this.reset()
-      item.classList.add('down')
+      item.classList.add("down")
       this.animated = true
       setTimeout(() => { this.animated = false; if (this.vibrate) vibrate() }, 250)
     },
@@ -46,7 +46,7 @@ export default {
         setTimeout(this.upEffect, 50)
         return
       }
-      item.classList.add('up')
+      item.classList.add("up")
       setTimeout(this.reset, 500)
     }
   }

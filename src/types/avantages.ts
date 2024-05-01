@@ -1,4 +1,4 @@
-import {Organisme} from "@/types/organismes";
+import {Organisme} from "@/types/organismes"
 
 export interface Avantage {
     id_avantage: number

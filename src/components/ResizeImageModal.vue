@@ -47,19 +47,19 @@
 </template>
 
 <script setup lang="ts">
-import {IonPage, IonHeader, IonContent, IonToolbar, IonTitle, IonIcon, IonNote, IonList, IonButtons, IonButton} from '@ionic/vue'
-import {checkmarkOutline, closeOutline} from "ionicons/icons";
+import {IonPage, IonHeader, IonContent, IonToolbar, IonTitle, IonIcon, IonNote, IonList, IonButtons, IonButton} from "@ionic/vue"
+import {checkmarkOutline, closeOutline} from "ionicons/icons"
 import {
   RotateCcw,
   RotateCw
-} from 'lucide-vue-next'
+} from "lucide-vue-next"
 import { Cropper }  from "vue-advanced-cropper/dist/index.esm-browser"
-import 'vue-advanced-cropper/dist/style.css';
+import "vue-advanced-cropper/dist/style.css"
 </script>
 
 <script lang="ts">
 export default {
-  props: ['base64Image', 'event'],
+  props: ["base64Image", "event"],
   methods: {
     rotateLeft() {
       this.$refs.cropper.rotate(-90)
@@ -74,7 +74,7 @@ export default {
       this.abort()
     },
     abort() {
-      window.dispatchEvent(new Event('closeResizingModal'))
+      window.dispatchEvent(new Event("closeResizingModal"))
     }
   }
 }

@@ -26,5 +26,7 @@ module.exports = {
       "maxEOF": 1
     }],
     "semi": ["error", "never"],
+    "vue/multi-word-component-names": "off",
+    "vue/no-v-text-v-html-on-component": "off"
   }
 }

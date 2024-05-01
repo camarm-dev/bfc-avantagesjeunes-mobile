@@ -16,9 +16,9 @@
 </template>
 
 <script setup lang="ts">
-import {IonPage, IonHeader, IonContent, IonToolbar, IonTitle} from '@ionic/vue'
-import { ChevronDown } from 'lucide-vue-next'
-import {closeModals} from "@/functions/modals";
+import {IonPage, IonHeader, IonContent, IonToolbar, IonTitle} from "@ionic/vue"
+import { ChevronDown } from "lucide-vue-next"
+import {closeModals} from "@/functions/modals"
 </script>
 
 <script lang="ts">
@@ -27,7 +27,7 @@ import "mapbox-gl/dist/mapbox-gl.css"
 mapboxgl.accessToken = "pk.eyJ1IjoiY2FtYXJtLWRldiIsImEiOiJja3B6czl2bGowa2g2Mm5ycmdqMThhOHEzIn0.H-PjLIG_jQqZqvz3gPvjeQ"
 
 export default {
-  props: ['markers', 'center', 'zoom', 'user'],
+  props: ["markers", "center", "zoom", "user"],
   data() {
     return {
       map: {} as mapboxgl.Map,
@@ -45,12 +45,12 @@ export default {
         minZoom: 4,
       })
 
-      map.on('load', () => {
+      map.on("load", () => {
         if (this.markers) {
           for (const feature of this.markers.features) {
-            const el = document.createElement('div');
-            el.className = 'marker';
-            const moreAdvantages = feature.properties.otherAdvantages.length > 0 ? `${feature.properties.otherAdvantages.length} autres avantages disponibles ici`: ''
+            const el = document.createElement("div")
+            el.className = "marker"
+            const moreAdvantages = feature.properties.otherAdvantages.length > 0 ? `${feature.properties.otherAdvantages.length} autres avantages disponibles ici`: ""
             const popup = new mapboxgl.Popup({ offset: 25 })
                 .setHTML(
                     `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>${moreAdvantages}`
@@ -59,13 +59,13 @@ export default {
             new mapboxgl.Marker(el)
                 .setLngLat(feature.geometry.coordinates)
                 .setPopup(popup)
-                .addTo(map);
+                .addTo(map)
           }
         }
 
         if (this.user) {
-          const el = document.createElement('img');
-          el.className = 'user';
+          const el = document.createElement("img")
+          el.className = "user"
           el.src = this.user.image
 
           const popup = new mapboxgl.Popup({ offset: 25 })
@@ -76,7 +76,7 @@ export default {
           new mapboxgl.Marker(el)
               .setLngLat(this.user.coordinates)
               .setPopup(popup)
-              .addTo(map);
+              .addTo(map)
         }
       })
 
