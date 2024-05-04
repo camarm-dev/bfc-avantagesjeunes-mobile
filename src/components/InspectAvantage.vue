@@ -471,6 +471,6 @@ p.carousel-el {
 }
 
 .ion-color-like {
-  color: #5e5ee1 !important;
+  color: var(--ion-color-like) !important;
 }
 </style>
