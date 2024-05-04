@@ -6,6 +6,7 @@
     --ion-tab-bar-color-selected: var(--ion-color-secondary-shade);
     --ion-text-color: var(--ion-color-primary-contrast);
     --ion-color-heart: #d5595a;
+    --ion-color-like: #3a3af0;
 }
 
 ion-nav-link {
@@ -409,6 +410,10 @@ ion-chip.unique {
 
 .card.heart header {
     background-color: var(--ion-color-heart);
+}
+
+.card.like header {
+    background-color: var(--ion-color-like);
 }
 
 ion-chip.green {
