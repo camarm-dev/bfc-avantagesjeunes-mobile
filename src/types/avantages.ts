@@ -139,8 +139,8 @@ export type Transaction = {
     devise: "EUR" | string
     tx_change: string
     datetime: string
-    avantage_exclu: false,
-    coupon_traite: false,
+    avantage_exclu: false
+    coupon_traite: false
     rid_groupe_avantage: number
 }
 
