@@ -8,7 +8,7 @@ import PulseItem from "@/components/PulseItem.vue"
 <template>
   <pulse-item>
     <ion-nav-link :component-props="{ avantage: avantage, favori: favori || avantage.espaceperso_coeur, type: type, used: used }" router-direction="forward" :component="InspectAvantage">
-      <div :class="`card focusable ${type || avantage.type} ${small ? 'small': ''} ${expand ? 'expanded': ''}`">
+      <div :class="`card focusable ${type || avantage.type} ${small ? 'small': ''} ${expand ? 'expanded': ''} ${cropped ? 'cropped': ''}`">
         <header>
           <img v-if="avantage.image_url" alt="Image de l'avantage" :src="avantage.image_url"/>
           <ion-skeleton-text class="image" v-else :animated="true"></ion-skeleton-text>
@@ -29,7 +29,7 @@ import PulseItem from "@/components/PulseItem.vue"
 
 <script lang="ts">
 export default {
-  props: ["avantage", "favori", "type", "small", "expand", "used"],
+  props: ["avantage", "favori", "type", "small", "expand", "used", "cropped"],
   methods: {
     getInnerContent(html_string: string) {
       const el = document.createElement("div")
