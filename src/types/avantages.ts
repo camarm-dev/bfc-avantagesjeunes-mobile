@@ -114,6 +114,7 @@ export type Category = {
 
 export type Comment = {
     id_comment: number
+    id_avantage: number
     rid_compte: number
     rid_avantage: number
     commentaire: string
