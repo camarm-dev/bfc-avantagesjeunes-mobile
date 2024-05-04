@@ -71,7 +71,7 @@ async function checkAvailability(id_avantage: string | number) {
     return await post(url, data)
 }
 
-async function addTransactionAdvantage(id_avantage: string | number, id_organisme: string | number, id_carte: string) {
+async function addTransactionAdvantage(id_avantage: string | number, id_organisme: string | number, id_carte: string | number) {
     const url = import.meta.env.VITE_API_URL + "/api/carte/addTransaction"
     const data = {
         array_id: [id_carte],
@@ -82,7 +82,7 @@ async function addTransactionAdvantage(id_avantage: string | number, id_organism
     return await post(url, data)
 }
 
-async function getAdvantageCode(id_avantage: string | number, id_organisme: string | number, id_carte: string | number, mode_paiement: string) {
+async function getAdvantageCode(id_avantage: string | number, id_organisme: string | number, id_carte: string | number, mode_paiement: string | number) {
     const url = import.meta.env.VITE_API_URL + "/api/avantage/obtenirCode"
     const data = {
         cartes: [id_carte],
