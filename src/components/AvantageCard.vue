@@ -7,7 +7,7 @@ import PulseItem from "@/components/PulseItem.vue"
 
 <template>
   <pulse-item>
-    <ion-nav-link :component-props="{ avantage: avantage, favori: favori || false, type: type, used: used }" router-direction="forward" :component="InspectAvantage">
+    <ion-nav-link :component-props="{ avantage: avantage, favori: favori || avantage.espaceperso_coeur, type: type, used: used }" router-direction="forward" :component="InspectAvantage">
       <div :class="`card focusable ${type || avantage.type} ${small ? 'small': ''} ${expand ? 'expanded': ''}`">
         <header>
           <img v-if="avantage.image_url" alt="Image de l'avantage" :src="avantage.image_url"/>
