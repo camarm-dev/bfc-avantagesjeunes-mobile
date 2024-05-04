@@ -14,6 +14,7 @@
       </div>
       <h2 class="welcome" v-if="user.utiliser_pseudo && user.pseudo">{{ user.pseudo }}</h2>
       <h2 class="welcome" v-if="user.prenom">{{ user.prenom }} {{ user.nom }}</h2>
+      <h3 class="welcome" v-if="user.carte">{{ getAge(user.carte.date_naiss) }} ans</h3>
       <p>{{ user.descriptif }}</p>
       <p v-if="user.carte">{{ user.carte.ville }}, {{ user.carte.cp }}</p>
     </header>
@@ -27,11 +28,27 @@
         </ion-note>
       </ion-item>
     </ion-list>
+    <div class="list-title" v-if="user.badges">Badges</div>
+    <div class="horizontal-carousel" v-if="user.badges">
+      <UserBadge :badge="BADGES[badge.id_badge]" :date="badge.datetime" :key="badge.id_badge" :user="user" v-for="badge in user.badges"/>
+    </div>
+    <div class="list-title" v-if="user.centres_interet">Centres d'intérêts</div>
+    <div class="ion-margin-auto mt-1 carousel-el" v-if="user.centres_interet">
+      <ion-chip :key="interest.icon" color="secondary" v-for="interest in interests">
+        <Icon :size="9" class="icon small-icon" :name="interest.icon"/>
+        {{ interest.nom }}
+      </ion-chip>
+    </div>
     <div class="list-title">
       Favoris
     </div>
-    <div class="grid-results">
-      <AvantageCard :key="avantage.id_avantage" :small="true" :used="usedAdvantagesIds.includes(avantage.id_avantage)" :favori="favoris.includes(avantage.id_avantage)" :avantage="avantage" v-for="avantage in avantages"/>
+    <div class="horizontal-carousel">
+      <div class="card card-only" v-if="!user.favoris || avantages.length == 0">
+        <ion-note>
+          Pas d'avantage en favori...
+        </ion-note>
+      </div>
+      <AvantageCard :key="favori.id_avantage" :used="usedAdvantagesIds.includes(favori.id_avantage)" :favori="true" :avantage="favori" v-for="favori in avantages"/>
     </div>
   </ion-content>
 </template>
@@ -44,9 +61,16 @@ import {
   IonContent,
   IonTitle,
   IonBackButton,
-  IonButtons
+  IonButtons,
+  IonNote,
+  IonChip,
+  IonItem,
+  IonList
 } from "@ionic/vue"
 import AvantageCard from "@/components/AvantageCard.vue"
+import {BADGES} from "@/functions/fetch/badges";
+import UserBadge from "@/components/UserBadge.vue";
+import Icon from "@/components/Icon.vue";
 </script>
 
 <script lang="ts">
@@ -56,6 +80,7 @@ import "mapbox-gl/dist/mapbox-gl.css"
 import {Organisme} from "@/types/organismes"
 import {Avantage} from "@/types/avantages"
 import {Account} from "@/types/account"
+import {categories} from "@/functions/interfaces";
 
 export default {
   props: ["id"],
@@ -64,6 +89,7 @@ export default {
       user: {} as Account,
       org: {} as Organisme,
       avantages: [] as Avantage[],
+      interests: [] as { nom: string, icon: string }[],
       usedAdvantagesIds: [] as number[],
       favoris: [] as number[]
     }
@@ -80,6 +106,9 @@ export default {
     },
     async loadUser() {
       this.user = await getUser(this.id)
+      for (const interest of this.user.centres_interet) {
+        this.interests.push(categories[interest])
+      }
     },
     async loadUsed() {
       const account = await getAccount()
@@ -92,11 +121,28 @@ export default {
       for (const avantage_id of this.user.favoris || []) {
         this.avantages.push(await getAvantage(avantage_id))
       }
+    },
+    getAge(dateString: string) {
+      const birth = new Date(dateString)
+      const now = new Date()
+
+      let years = (now.getFullYear() - birth.getFullYear());
+
+      if (now.getMonth() < birth.getMonth() || now.getMonth() == birth.getMonth() && now.getDate() < birth.getDate()) {
+        years--;
+      }
+      return years
     }
   }
 }
 </script>
 <style>
+.mt-1 {
+  margin-top: .5em !important;
+  padding-bottom: .2em !important;
+  padding-top: .2em !important;
+}
+
 .profile {
   display: flex;
   flex-direction: column;
