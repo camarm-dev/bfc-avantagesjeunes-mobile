@@ -18,16 +18,6 @@
       <p>{{ user.descriptif }}</p>
       <p v-if="user.carte">{{ user.carte.ville }}, {{ user.carte.cp }}</p>
     </header>
-    <div class="list-title">
-      Détails
-    </div>
-    <ion-list inset>
-      <ion-item>
-        <ion-note>
-          Rien ici encore !
-        </ion-note>
-      </ion-item>
-    </ion-list>
     <div class="list-title" v-if="user.badges">Badges</div>
     <div class="horizontal-carousel" v-if="user.badges">
       <UserBadge :badge="BADGES[badge.id_badge]" :date="badge.datetime" :key="badge.id_badge" :user="user" v-for="badge in user.badges"/>
@@ -45,11 +35,39 @@
     <div class="horizontal-carousel">
       <div class="card card-only" v-if="!user.favoris || avantages.length == 0">
         <ion-note>
-          Pas d'avantage en favori...
+          Pas d'avantages en favori...
         </ion-note>
       </div>
-      <AvantageCard :key="favori.id_avantage" :used="usedAdvantagesIds.includes(favori.id_avantage)" :favori="true" :avantage="favori" v-for="favori in avantages"/>
+      <AvantageCard :key="favori.id_avantage" :used="usedAdvantagesIds.includes(favori.id_avantage)" :avantage="favori" v-for="favori in avantages"/>
     </div>
+    <div class="list-title">
+      Avantages likés
+    </div>
+    <div class="horizontal-carousel">
+      <div class="card card-only" v-if="!user.likes || likes.length == 0">
+        <ion-note>
+          Pas d'avantages likés...
+        </ion-note>
+      </div>
+      <AvantageCard :key="like.id_avantage" type="like" :used="usedAdvantagesIds.includes(like.id_avantage)" :avantage="like" v-for="like in likes"/>
+    </div>
+    <div class="list-title">
+      Commentaires
+    </div>
+    <div class="horizontal-carousel">
+      <div class="card card-only" v-if="!user.comments || commented.length == 0">
+        <ion-note>
+          Pas d'avantages commentés...
+        </ion-note>
+      </div>
+      <div :key="avantage.id_avantage" v-for="avantage in commented">
+        <AvantageCard :cropped="true" :used="usedAdvantagesIds.includes(avantage.id_avantage)" :avantage="avantage"/>
+        <div class="bottom-box">
+          {{ userComments[avantage.id_avantage] }}
+        </div>
+      </div>
+    </div>
+    <br>
   </ion-content>
 </template>
 
@@ -89,8 +107,12 @@ export default {
       user: {} as Account,
       org: {} as Organisme,
       avantages: [] as Avantage[],
+      likes: [] as Avantage[],
+      commented: [] as Avantage[],
+      userComments: {} as { [key: number]: string },
       interests: [] as { nom: string, icon: string }[],
       usedAdvantagesIds: [] as number[],
+      ownFavoritesIds: [] as number[],
       favoris: [] as number[]
     }
   },
@@ -115,11 +137,21 @@ export default {
       for (const transaction of account.transactions) {
         this.usedAdvantagesIds.push(transaction.rid_avantage)
       }
+      for (const id of account.favoris) {
+        this.ownFavoritesIds.push(id)
+      }
     },
     async loadAdvantages() {
       this.favoris = this.user.favoris
       for (const avantage_id of this.user.favoris || []) {
         this.avantages.push(await getAvantage(avantage_id))
+      }
+      for (const avantage_id of this.user.likes || []) {
+        this.likes.push(await getAvantage(avantage_id))
+      }
+      for (const comment of this.user.comments || []) {
+        this.commented.push(await getAvantage(comment.id_avantage))
+        this.userComments[comment.id_avantage] = comment.commentaire
       }
     },
     getAge(dateString: string) {
