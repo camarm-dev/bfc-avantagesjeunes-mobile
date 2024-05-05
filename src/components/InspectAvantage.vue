@@ -155,13 +155,14 @@
       Réactions
     </div>
     <ion-list inset>
-      <ion-item>
-        <ThumbsUp class="ion-color-like" slot="start"/>
+      <ion-item @click="toggleLike()">
+        <ThumbsUp v-if="isLiked" class="ion-color-like filled" slot="start"/>
+        <ThumbsUp v-else class="ion-color-like" slot="start"/>
         <ion-label>
-          <h4>J'aime</h4>
+          <h4>Likes</h4>
         </ion-label>
         <ion-label slot="end">
-          <p>{{ dynamicAvantage.nb_like || 0 }}</p>
+          <p>{{ isLiked ? 'Vous aimez  -  ': '' }}{{ dynamicAvantage.nb_like || 0 }}</p>
         </ion-label>
       </ion-item>
       <ion-item button :detail-icon="chevronExpand" @click="openNoteModal">
