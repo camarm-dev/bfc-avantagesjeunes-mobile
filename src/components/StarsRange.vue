@@ -29,6 +29,7 @@ export default {
   methods: {
     setNote(note: number) {
       this.dynamicNote = note
+      this.$emit('noteChange', note)
     }
   }
 }
@@ -37,6 +38,13 @@ export default {
 <style scoped>
 .star-range {
   width: max-content;
+  display: flex;
+  align-items: center;
+}
+
+.star-range p {
+  width: max-content;
+  margin: .17em 0 0 .3em;
 }
 
 .star {
