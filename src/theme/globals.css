@@ -7,6 +7,7 @@
     --ion-text-color: var(--ion-color-primary-contrast);
     --ion-color-heart: #d5595a;
     --ion-color-like: #3a3af0;
+    --ion-color-star: #b99c33;
 }
 
 ion-nav-link {
