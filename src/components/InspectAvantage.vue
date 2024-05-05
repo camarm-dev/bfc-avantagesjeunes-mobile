@@ -156,46 +156,34 @@
     </div>
     <ion-list inset>
       <ion-item>
-        <Star class="ion-color-secondary" slot="start"/>
-        <ion-label>
-          <p>Notes</p>
-        </ion-label>
-        <ion-label slot="end">
-          <p>{{ dynamicAvantage.nb_note || 0 }}</p>
-        </ion-label>
-      </ion-item>
-      <ion-item>
         <ThumbsUp class="ion-color-like" slot="start"/>
         <ion-label>
-          <p>Likes</p>
+          <h4>J'aime</h4>
         </ion-label>
         <ion-label slot="end">
           <p>{{ dynamicAvantage.nb_like || 0 }}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item button :detail-icon="chevronExpand" @click="openNoteModal">
+        <Star class="ion-color-secondary" slot="start"/>
+        <ion-label>
+          <h4>Notes</h4>
+        </ion-label>
+        <ion-label slot="end">
+          <p>{{ dynamicAvantage.nb_note || 0 }}</p>
         </ion-label>
       </ion-item>
       <ion-nav-link router-direction="forward" :component="InspectAvantageComments" :component-props="{ comments: dynamicAvantage.comments }">
         <ion-item button @click="forceReload()">
           <ion-icon color="light" slot="start" :icon="chatbubblesOutline"/>
           <ion-label>
-            <p>Commentaires</p>
+            <h4>Commentaires</h4>
           </ion-label>
           <ion-label slot="end">
             <p>{{ avantage.nb_comment }}</p>
           </ion-label>
         </ion-item>
       </ion-nav-link>
-    </ion-list>
-    <div class="list-title">
-      Actions
-    </div>
-    <ion-list inset>
-      <ion-item button @click="openNoteModal()">
-        <Star class="ion-color-secondary" slot="start"/>
-        <ion-label>
-          <p>Noter l'avantage</p>
-          <h3>Mettre une note</h3>
-        </ion-label>
-      </ion-item>
     </ion-list>
   </ion-content>
 </template>
@@ -222,6 +210,7 @@ import {
 } from "@ionic/vue"
 import {
   chatbubblesOutline,
+  chevronExpand,
   heart,
   heartOutline,
   informationOutline,
@@ -267,17 +256,20 @@ import { Share } from "@capacitor/share"
 import {authenticateWithBiometry, setupBiometry} from "@/functions/native/biometry"
 import {displayToast} from "@/functions/toasts"
 import {loadingController} from "@ionic/vue"
-import {checkAvailability, getAvantage, obtainAdvantage} from "@/functions/fetch/avantages"
+import {addLike, checkAvailability, getAvantage, obtainAdvantage, removeLike} from "@/functions/fetch/avantages"
 import {APIResponse} from "@/functions/fetch/interfaces"
 import AddNoteModal from "@/components/AddNoteModal.vue";
 
 export default {
   data() {
+    const liked = JSON.parse(localStorage.getItem('userLikes') || '[]') as number[]
     return {
       isFavori: this.favori == undefined ? false: this.favori,
+      isLiked: liked.includes(this.avantage.id_avantage),
       selectedOrg: this.avantage.organismes[0].id_organisme,
       dynamicUsed: this.used,
-      dynamicAvantage: this.avantage
+      dynamicAvantage: this.avantage,
+      dynamicLiked: liked as number[]
     }
   },
   mounted() {
@@ -292,6 +284,19 @@ export default {
     },
     isUseAdvantageFunctionalityEnabled() {
       return (localStorage.getItem("userUseAdvantage") || "false") == "true"
+    },
+    async toggleLike() {
+      const id_avantage = this.avantage.id_avantage
+      if (this.isLiked) {
+        this.dynamicLiked.splice(this.dynamicLiked.indexOf(id_avantage), 1)
+        this.isLiked = false
+        await removeLike(id_avantage)
+      } else {
+        this.dynamicLiked.push(id_avantage)
+        this.isLiked = true
+        await addLike(id_avantage)
+      }
+      localStorage.setItem('userLikes', JSON.stringify(this.dynamicLiked))
     },
     async useAdvantage() {
       const loader = await loadingController.create({
@@ -503,5 +508,9 @@ p.carousel-el {
 
 .ion-color-like {
   color: var(--ion-color-like) !important;
+}
+
+.ion-color-like.filled {
+  fill: var(--ion-color-like) !important;
 }
 </style>
