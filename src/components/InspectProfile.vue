@@ -67,6 +67,22 @@
         </div>
       </div>
     </div>
+    <div class="list-title">
+      Notes
+    </div>
+    <div class="horizontal-carousel">
+      <div class="card card-only" v-if="!user.notes || noted.length == 0">
+        <ion-note>
+          Pas d'avantages notés...
+        </ion-note>
+      </div>
+      <div :key="avantage.id_avantage" v-for="avantage in noted">
+        <AvantageCard :cropped="true" :used="usedAdvantagesIds.includes(avantage.id_avantage)" :avantage="avantage"/>
+        <div class="bottom-box ion-display-flex ion-justify-content-center">
+          <StarsRange :note="userNotes[avantage.id_avantage]"/>
+        </div>
+      </div>
+    </div>
     <br>
   </ion-content>
 </template>
@@ -81,14 +97,13 @@ import {
   IonBackButton,
   IonButtons,
   IonNote,
-  IonChip,
-  IonItem,
-  IonList
+  IonChip
 } from "@ionic/vue"
 import AvantageCard from "@/components/AvantageCard.vue"
 import {BADGES} from "@/functions/fetch/badges";
 import UserBadge from "@/components/UserBadge.vue";
 import Icon from "@/components/Icon.vue";
+import StarsRange from "@/components/StarsRange.vue";
 </script>
 
 <script lang="ts">
@@ -109,7 +124,9 @@ export default {
       avantages: [] as Avantage[],
       likes: [] as Avantage[],
       commented: [] as Avantage[],
+      noted: [] as Avantage[],
       userComments: {} as { [key: number]: string },
+      userNotes: {} as { [key: number]: number },
       interests: [] as { nom: string, icon: string }[],
       usedAdvantagesIds: [] as number[],
       ownFavoritesIds: [] as number[],
@@ -128,7 +145,7 @@ export default {
     },
     async loadUser() {
       this.user = await getUser(this.id)
-      for (const interest of this.user.centres_interet) {
+      for (const interest of this.user.centres_interet || []) {
         this.interests.push(categories[interest])
       }
     },
@@ -152,6 +169,10 @@ export default {
       for (const comment of this.user.comments || []) {
         this.commented.push(await getAvantage(comment.id_avantage))
         this.userComments[comment.id_avantage] = comment.commentaire
+      }
+      for (const note of this.user.notes || []) {
+        this.noted.push(await getAvantage(note.id_avantage))
+        this.userNotes[note.id_avantage] = note.note
       }
     },
     getAge(dateString: string) {
