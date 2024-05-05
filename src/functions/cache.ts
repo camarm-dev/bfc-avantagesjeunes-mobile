@@ -18,7 +18,7 @@ export async function cacheAdvantage(avantage: Avantage) {
         return false
     }
     const cache = getCache()
-    const request = cache.add(avantage)
+    const request = cache.put(avantage)
     return await new Promise((resolve, reject) => {
         request.onsuccess = resolve
         request.onerror = reject
