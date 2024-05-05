@@ -99,17 +99,16 @@
 </template>
 
 <script setup lang="ts">
-import { IonTitle, IonButton, IonList, IonPage, IonToggle, IonLabel, IonItem, IonSpinner, IonContent, IonHeader, IonToolbar, IonButtons } from "@ionic/vue"
+import { IonTitle, IonButton, IonList, IonPage, IonToggle, IonLabel, IonItem, IonSpinner, IonContent, IonHeader, IonToolbar, IonButtons, IonNote } from "@ionic/vue"
 import { XCircle, BadgeCheck, BadgeX, Trash } from "lucide-vue-next"
 </script>
 
 <script lang="ts">
 import { closeModals } from "@/functions/modals"
-import {getCacheStats} from "@/functions/fetch/avantages"
+import {deleteCache, getCacheStats} from "@/functions/cache"
 
 export default {
   data() {
-    const { length, size }  = getCacheStats()
     return {
       apiUrl: "https://api-ajc.camarm.fr" as any,
       validApi: false,
@@ -119,8 +118,8 @@ export default {
         version: "Aucune",
         dataset: "Aucun"
       },
-      cacheSize: size,
-      cacheLength: length
+      cacheSize: 0,
+      cacheLength: 0
     }
   },
   mounted() {
@@ -128,16 +127,20 @@ export default {
     localStorage.setItem("userApiUrl", this.apiUrl)
     this.useAdvantage = (localStorage.getItem("userUseAdvantage") || "false") == "true"
     this.checkApi()
+    getCacheStats().then(value => {
+      this.cacheSize = value.size
+      this.cacheLength = value.length
+    })
   },
   methods: {
     roundNumber(value: number) {
       return Math.round(value)
     },
-    clearCache() {
-      localStorage.removeItem("advantagesCache")
-      const { length, size }  = getCacheStats()
-      this.cacheSize = size
-      this.cacheLength = length
+    async clearCache() {
+      await deleteCache()
+      const value = await getCacheStats()
+      this.cacheSize = value.size
+      this.cacheLength = value.length
     },
     changeUseAdvantageFunctionality(value: boolean) {
       this.useAdvantage = value

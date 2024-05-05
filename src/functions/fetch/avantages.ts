@@ -4,43 +4,17 @@ import {displayToast} from "@/functions/toasts"
 import moment from "moment"
 import {Organisme} from "@/types/organismes"
 import {Avantage} from "@/types/avantages"
+import {cacheAdvantage, getCachedAdvantage} from "@/functions/cache";
 
-
-interface advantagesCache {
-    [key: string | number]: Avantage
-}
-
-export function getCacheStats() {
-    const cache = getAvantagesCache()
-    return { length: Object.keys(cache).length, size: (new Blob([JSON.stringify(cache)])).size }
-}
-
-function getAvantagesCache(): advantagesCache {
-    return JSON.parse(localStorage.getItem("advantagesCache") || "{}")
-}
-
-function isCached(id: string | number) {
-    return Object.hasOwn(getAvantagesCache(), id)
-}
-
-function getCachedAdvantage(id: string | number) {
-    const cache = getAvantagesCache() as any
-    return cache[id]
-}
-
-function cacheAdvantage(id: string | number, document: object) {
-    const cache = getAvantagesCache() as any
-    cache[id] = document
-    localStorage.setItem("advantagesCache", JSON.stringify(cache))
-}
 
 async function getAvantage(id: string | number): Promise<Avantage> {
-    if (isCached(id)) {
-        return getCachedAdvantage(id)
+    const avantage = await getCachedAdvantage(id)
+    if (avantage) {
+        return avantage
     }
     const url = import.meta.env.VITE_API_URL + "/api/avantage/detail/" + id
     const document = await get(url) as any as Avantage
-    cacheAdvantage(id, document)
+    await cacheAdvantage(document)
     return document
 }
 
