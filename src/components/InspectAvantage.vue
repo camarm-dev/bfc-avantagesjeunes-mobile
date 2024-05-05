@@ -7,7 +7,7 @@
       <ion-title>Avantage</ion-title>
       <ion-buttons slot="end">
         <pulse-item vibrate>
-          <ion-button @click="isFavori ? removeFavori(avantage.id_avantage): addFavori(avantage.id_avantage); timeout(() => { isFavori = !isFavori }, 250)">
+          <ion-button @click="isFavori ? removeFavori(dynamicAvantage.id_avantage): addFavori(dynamicAvantage.id_avantage); timeout(() => { isFavori = !isFavori }, 250)">
             <ion-icon slot="icon-only" v-if="isFavori" class="red-heart" :icon="heart"></ion-icon>
             <ion-icon slot="icon-only" v-else :icon="heartOutline"></ion-icon>
           </ion-button>
@@ -21,19 +21,19 @@
   <ion-content ref="content" :fullscreen="true">
     <header class="avantage">
       <div class="image-wrapper">
-        <img :src="avantage.image_url || '/no-img.png'" alt="Image de l'avantage">
+        <img :src="dynamicAvantage.image_url || '/no-img.png'" alt="Image de l'avantage">
       </div>
-      <h2 class="welcome">{{ avantage.offre }}</h2>
+      <h2 class="welcome">{{ dynamicAvantage.offre }}</h2>
       <p class="carousel-el">
-        <span :key="secteur" v-for="secteur in avantage.secteurs">{{ (secteurs[secteur] || { 'nom': 'Tout les secteurs' }).nom }}{{ avantage.secteurs.indexOf(secteur) == avantage.secteurs.length -1 ? '': '&nbsp;—&nbsp;' }}</span>
+        <span :key="secteur" v-for="secteur in dynamicAvantage.secteurs">{{ (secteurs[secteur] || { 'nom': 'Tout les secteurs' }).nom }}{{ dynamicAvantage.secteurs.indexOf(secteur) == dynamicAvantage.secteurs.length -1 ? '': '&nbsp;—&nbsp;' }}</span>
       </p>
     </header>
     <div class="ion-margin-auto carousel-el">
       <ion-chip color="light">
         <Star :size="9" class="icon small-icon ion-color-warning"/>
-        {{ avantage.note }} / 5 ({{ avantage.nb_note }} avis)
+        {{ dynamicAvantage.note }} / 5 ({{ dynamicAvantage.nb_note }} avis)
       </ion-chip>
-      <ion-chip :key="rubriqueId" :class="type || avantage.type" color="secondary" v-for="rubriqueId in avantage.categories">
+      <ion-chip :key="rubriqueId" :class="type || dynamicAvantage.type" color="secondary" v-for="rubriqueId in dynamicAvantage.categories">
         <Icon :size="9" class="icon small-icon" :name="rubriques[rubriqueId].icon"/>
         {{ rubriques[rubriqueId].nom }}
       </ion-chip>
@@ -46,9 +46,9 @@
           <h2 class="ion-color-primary">Utiliser l'avantage</h2>
         </ion-label>
       </ion-item>
-      <ion-item v-if="avantage.organismes.length > 1">
+      <ion-item v-if="dynamicAvantage.organismes.length > 1">
         <ion-select :value="selectedOrg" interface="action-sheet" @ionChange="selectedOrg = $event.detail.value" placeholder="Séléctionnez un lieu">
-          <ion-select-option :key="org.id_organisme" v-for="org in avantage.organismes" :value="org.id_organisme">{{ org.commune }}, {{ org.cp }}</ion-select-option>
+          <ion-select-option :key="org.id_organisme" v-for="org in dynamicAvantage.organismes" :value="org.id_organisme">{{ org.commune }}, {{ org.cp }}</ion-select-option>
         </ion-select>
       </ion-item>
       <ion-item v-if="used || dynamicUsed">
@@ -62,8 +62,8 @@
     <div class="list-title">
       Informations de l'avantage
     </div>
-    <ion-list v-if="avantage.conditions != ''" inset>
-      <ion-item class="description" v-html="avantage.conditions"/>
+    <ion-list v-if="dynamicAvantage.conditions != ''" inset>
+      <ion-item class="description" v-html="dynamicAvantage.conditions"/>
     </ion-list>
 
     <ion-list inset>
@@ -71,14 +71,14 @@
         <CalendarClock class="icon ion-color-success"/>
         <ion-label class="ion-text-wrap">
           <p>Du</p>
-          <h2>{{ readableDate(avantage.datedebut) }}</h2>
+          <h2>{{ readableDate(dynamicAvantage.datedebut) }}</h2>
         </ion-label>
       </ion-item>
       <ion-item>
         <CalendarX class="icon ion-color-danger"/>
         <ion-label class="ion-text-wrap">
           <p>Au</p>
-          <h2>{{ readableDate(avantage.datefin) }}</h2>
+          <h2>{{ readableDate(dynamicAvantage.datefin) }}</h2>
         </ion-label>
       </ion-item>
     </ion-list>
@@ -88,14 +88,14 @@
         <Sparkles class="icon ion-color-warning"/>
         <ion-label>
           <p>Type d'avantage</p>
-          <h2 class="ion-text-capitalize">{{ avantage.type }}</h2>
+          <h2 class="ion-text-capitalize">{{ dynamicAvantage.type }}</h2>
         </ion-label>
       </ion-item>
       <ion-item>
         <SquareAsterisk class="icon ion-color-tertiary"/>
         <ion-label>
           <p>Saison de validité</p>
-          <h2 class="ion-text-capitalize">{{ avantage.saison }}</h2>
+          <h2 class="ion-text-capitalize">{{ dynamicAvantage.saison }}</h2>
         </ion-label>
       </ion-item>
     </ion-list>
@@ -103,7 +103,7 @@
     <div class="list-title">
       Avantage par
     </div>
-    <ion-list :key="org.id_organisme" inset v-for="org in avantage.organismes">
+    <ion-list :key="org.id_organisme" inset v-for="org in dynamicAvantage.organismes">
       <ion-nav-link router-direction="forward" :component="InspectOrganisme" :component-props="{ id_organisme: org.slug }">
         <ion-item button>
           <Building2 class="icon"/>
@@ -147,7 +147,7 @@
     </div>
     <ion-list inset>
       <ion-item style="height: max-content" class="description">
-        <img style="display: block; margin: 1em auto 1em auto; border-radius: 10px" :src="avantage.image_url" alt="Image de l'avantage">
+        <img style="display: block; margin: 1em auto 1em auto; border-radius: 10px" :src="dynamicAvantage.image_url" alt="Image de l'avantage">
       </ion-item>
     </ion-list>
 
@@ -161,7 +161,7 @@
           <p>Notes</p>
         </ion-label>
         <ion-label slot="end">
-          <p>{{ avantage.nb_note || 0 }}</p>
+          <p>{{ dynamicAvantage.nb_note || 0 }}</p>
         </ion-label>
       </ion-item>
       <ion-item>
@@ -170,10 +170,10 @@
           <p>Likes</p>
         </ion-label>
         <ion-label slot="end">
-          <p>{{ avantage.nb_like || 0 }}</p>
+          <p>{{ dynamicAvantage.nb_like || 0 }}</p>
         </ion-label>
       </ion-item>
-      <ion-nav-link router-direction="forward" :component="InspectAvantageComments" :component-props="{ comments: avantage.comments }">
+      <ion-nav-link router-direction="forward" :component="InspectAvantageComments" :component-props="{ comments: dynamicAvantage.comments }">
         <ion-item button @click="forceReload()">
           <ion-icon color="light" slot="start" :icon="chatbubblesOutline"/>
           <ion-label>
@@ -276,7 +276,8 @@ export default {
     return {
       isFavori: this.favori == undefined ? false: this.favori,
       selectedOrg: this.avantage.organismes[0].id_organisme,
-      dynamicUsed: this.used
+      dynamicUsed: this.used,
+      dynamicAvantage: this.avantage
     }
   },
   mounted() {
@@ -287,7 +288,7 @@ export default {
       window.open(url)
     },
     async forceReload() {
-      this.avantage = await getAvantage(this.avantage.id_avantage, true)
+      this.dynamicAvantage = await getAvantage(this.avantage.id_avantage, true)
     },
     isUseAdvantageFunctionalityEnabled() {
       return (localStorage.getItem("userUseAdvantage") || "false") == "true"
