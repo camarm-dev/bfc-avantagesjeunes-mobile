@@ -27,6 +27,15 @@ async function addFavori(id_avantage: string | number) {
     return await post(url, data)
 }
 
+async function addLike(id_avantage: string | number) {
+    const url = import.meta.env.VITE_API_URL + "/api/social/addAvantageLike"
+    const data = {
+        id: localStorage.getItem("currentCardId"),
+        id_avantage: id_avantage
+    }
+    return await post(url, data)
+}
+
 async function addNote(id_avantage: string | number, note: number) {
     const url = import.meta.env.VITE_API_URL + "/api/social/addAvantageNote"
     const data = {
@@ -102,6 +111,7 @@ async function getOrganisme(id_organisme: string | number): Promise<Organisme> {
 export {
     getAvantage,
     addFavori,
+    addLike,
     addNote,
     removeFavori,
     obtainAdvantage,
