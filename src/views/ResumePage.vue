@@ -213,7 +213,7 @@ import PulseItem from "@/components/PulseItem.vue"
 import {BADGES} from "@/functions/fetch/badges"
 import UserBadge from "@/components/UserBadge.vue"
 import FavoritesAvantages from "@/components/FavoritesAvantages.vue"
-import InspectProfile from "@/components/InspectProfile.vue";
+import InspectProfile from "@/components/InspectProfile.vue"
 </script>
 
 <script lang="ts">

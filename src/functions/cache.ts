@@ -1,15 +1,15 @@
-import {Avantage} from "@/types/avantages";
-import {getCacheDb} from "@/functions/cacheDatabase";
+import {Avantage} from "@/types/avantages"
+import {getCacheDb} from "@/functions/cacheDatabase"
 
 let database = await getCacheDb()
 
 function getCache() {
-    const transaction = database.transaction('avantages', 'readwrite')
-    return transaction.objectStore('avantages')
+    const transaction = database.transaction("avantages", "readwrite")
+    return transaction.objectStore("avantages")
 }
 
 export async function deleteCache() {
-    indexedDB.deleteDatabase('advantagesCache')
+    indexedDB.deleteDatabase("advantagesCache")
     database = await getCacheDb()
 }
 

@@ -115,12 +115,12 @@ import {
   IonIcon, IonNavLink
 } from "@ionic/vue"
 import AvantageCard from "@/components/AvantageCard.vue"
-import {BADGES} from "@/functions/fetch/badges";
-import UserBadge from "@/components/UserBadge.vue";
-import Icon from "@/components/Icon.vue";
-import StarsRange from "@/components/StarsRange.vue";
-import {settingsOutline} from "ionicons/icons";
-import MyAccount from "@/components/MyAccount.vue";
+import {BADGES} from "@/functions/fetch/badges"
+import UserBadge from "@/components/UserBadge.vue"
+import Icon from "@/components/Icon.vue"
+import StarsRange from "@/components/StarsRange.vue"
+import {settingsOutline} from "ionicons/icons"
+import MyAccount from "@/components/MyAccount.vue"
 </script>
 
 <script lang="ts">
@@ -130,7 +130,7 @@ import "mapbox-gl/dist/mapbox-gl.css"
 import {Organisme} from "@/types/organismes"
 import {Avantage} from "@/types/avantages"
 import {Account} from "@/types/account"
-import {categories} from "@/functions/interfaces";
+import {categories} from "@/functions/interfaces"
 
 export default {
   props: ["id", "editable"],
@@ -198,10 +198,10 @@ export default {
       const birth = new Date(dateString)
       const now = new Date()
 
-      let years = (now.getFullYear() - birth.getFullYear());
+      let years = (now.getFullYear() - birth.getFullYear())
 
       if (now.getMonth() < birth.getMonth() || now.getMonth() == birth.getMonth() && now.getDate() < birth.getDate()) {
-        years--;
+        years--
       }
       return years
     }

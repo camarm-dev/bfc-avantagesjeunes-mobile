@@ -4,10 +4,10 @@ import {displayToast} from "@/functions/toasts"
 import moment from "moment"
 import {Organisme} from "@/types/organismes"
 import {Avantage} from "@/types/avantages"
-import {cacheAdvantage, getCachedAdvantage} from "@/functions/cache";
+import {cacheAdvantage, getCachedAdvantage} from "@/functions/cache"
 
 
-async function getAvantage(id: string | number, force: boolean = false): Promise<Avantage> {
+async function getAvantage(id: string | number, force = false): Promise<Avantage> {
     const avantage = await getCachedAdvantage(id)
     if (avantage && !force) {
         return avantage
