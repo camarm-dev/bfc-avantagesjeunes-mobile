@@ -7,9 +7,9 @@ import {Avantage} from "@/types/avantages"
 import {cacheAdvantage, getCachedAdvantage} from "@/functions/cache";
 
 
-async function getAvantage(id: string | number): Promise<Avantage> {
+async function getAvantage(id: string | number, force: boolean = false): Promise<Avantage> {
     const avantage = await getCachedAdvantage(id)
-    if (avantage) {
+    if (avantage && !force) {
         return avantage
     }
     const url = import.meta.env.VITE_API_URL + "/api/avantage/detail/" + id
