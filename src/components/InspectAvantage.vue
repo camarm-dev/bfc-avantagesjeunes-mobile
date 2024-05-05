@@ -174,7 +174,7 @@
         </ion-label>
       </ion-item>
       <ion-nav-link router-direction="forward" :component="InspectAvantageComments" :component-props="{ comments: avantage.comments }">
-        <ion-item button>
+        <ion-item button @click="forceReload()">
           <ion-icon color="light" slot="start" :icon="chatbubblesOutline"/>
           <ion-label>
             <p>Commentaires</p>
@@ -184,6 +184,18 @@
           </ion-label>
         </ion-item>
       </ion-nav-link>
+    </ion-list>
+    <div class="list-title">
+      Actions
+    </div>
+    <ion-list inset>
+      <ion-item button @click="openNoteModal()">
+        <Star class="ion-color-secondary" slot="start"/>
+        <ion-label>
+          <p>Noter l'avantage</p>
+          <h3>Mettre une note</h3>
+        </ion-label>
+      </ion-item>
     </ion-list>
   </ion-content>
 </template>
@@ -255,8 +267,9 @@ import { Share } from "@capacitor/share"
 import {authenticateWithBiometry, setupBiometry} from "@/functions/native/biometry"
 import {displayToast} from "@/functions/toasts"
 import {loadingController} from "@ionic/vue"
-import {checkAvailability, obtainAdvantage} from "@/functions/fetch/avantages"
+import {checkAvailability, getAvantage, obtainAdvantage} from "@/functions/fetch/avantages"
 import {APIResponse} from "@/functions/fetch/interfaces"
+import AddNoteModal from "@/components/AddNoteModal.vue";
 
 export default {
   data() {
@@ -272,6 +285,9 @@ export default {
   methods: {
     open(url: string) {
       window.open(url)
+    },
+    async forceReload() {
+      this.avantage = await getAvantage(this.avantage.id_avantage, true)
     },
     isUseAdvantageFunctionalityEnabled() {
       return (localStorage.getItem("userUseAdvantage") || "false") == "true"
@@ -355,6 +371,20 @@ export default {
     },
     timeout(handler: CallableFunction, timeout: number) {
       return setTimeout(handler, timeout)
+    },
+    async openNoteModal() {
+      const refs = {
+        modalNote: ref(null),
+      }
+      window.addEventListener("closeNoteModal", () => {
+        Object.keys(refs).forEach(key => {
+          // @ts-ignore
+          const object = refs[key] as Ref<any>
+          if (object.value) object.value.dismiss()
+          this.forceReload()
+        })
+      })
+      await createModal(AddNoteModal, "modalNote", refs, { id_avantage: this.avantage.id_avantage }, true, [0, 0.2], true)
     }
   }
 }
