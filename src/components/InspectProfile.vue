@@ -34,7 +34,8 @@
     </div>
     <div class="horizontal-carousel">
       <div class="card card-only" v-if="!user.favoris || avantages.length == 0">
-        <ion-note>
+        <ion-spinner name="dots" v-if="loading"/>
+        <ion-note v-else>
           Pas d'avantages en favori...
         </ion-note>
       </div>
@@ -45,7 +46,8 @@
     </div>
     <div class="horizontal-carousel">
       <div class="card card-only" v-if="!user.likes || likes.length == 0">
-        <ion-note>
+        <ion-spinner name="dots" v-if="loading"/>
+        <ion-note v-else>
           Pas d'avantages likés...
         </ion-note>
       </div>
@@ -56,7 +58,8 @@
     </div>
     <div class="horizontal-carousel">
       <div class="card card-only" v-if="!user.comments || commented.length == 0">
-        <ion-note>
+        <ion-spinner name="dots" v-if="loading"/>
+        <ion-note v-else>
           Pas d'avantages commentés...
         </ion-note>
       </div>
@@ -72,7 +75,8 @@
     </div>
     <div class="horizontal-carousel">
       <div class="card card-only" v-if="!user.notes || noted.length == 0">
-        <ion-note>
+        <ion-spinner name="dots" v-if="loading"/>
+        <ion-note v-else>
           Pas d'avantages notés...
         </ion-note>
       </div>
@@ -97,7 +101,8 @@ import {
   IonBackButton,
   IonButtons,
   IonNote,
-  IonChip
+  IonChip,
+  IonSpinner
 } from "@ionic/vue"
 import AvantageCard from "@/components/AvantageCard.vue"
 import {BADGES} from "@/functions/fetch/badges";
@@ -119,6 +124,7 @@ export default {
   props: ["id"],
   data() {
     return {
+      loading: true,
       user: {} as Account,
       org: {} as Organisme,
       avantages: [] as Avantage[],
@@ -174,6 +180,7 @@ export default {
         this.noted.push(await getAvantage(note.id_avantage))
         this.userNotes[note.id_avantage] = note.note
       }
+      this.loading = false
     },
     getAge(dateString: string) {
       const birth = new Date(dateString)
