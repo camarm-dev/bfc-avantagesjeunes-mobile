@@ -6,7 +6,7 @@
           <img src="/icon-foreground.png" alt="Logo AJC">
         </ion-avatar>
         <div slot="end" class="focusable">
-          <ion-nav-link router-direction="forward" :component="MyAccount">
+          <ion-nav-link router-direction="forward" :component="InspectProfile" :component-props="{ editable: true, id: user.id_compte }">
             <img class="profile-picture small" :src="user.image_url || '/avatar.png'" alt="Votre photo">
           </ion-nav-link>
         </div>
@@ -202,7 +202,6 @@ import {
 } from "lucide-vue-next"
 import LoginModal from "@/components/LoginModal.vue"
 import AvantagesJeunesIcon from "@/components/AvantagesJeunesIcon.vue"
-import MyAccount from "@/components/MyAccount.vue"
 import MyCard from "@/components/MyCard.vue"
 import {askPermission} from "@/functions/native/geolocation"
 import ExperimentalModal from "@/components/ExperimentalModal.vue"
@@ -214,6 +213,7 @@ import PulseItem from "@/components/PulseItem.vue"
 import {BADGES} from "@/functions/fetch/badges"
 import UserBadge from "@/components/UserBadge.vue"
 import FavoritesAvantages from "@/components/FavoritesAvantages.vue"
+import InspectProfile from "@/components/InspectProfile.vue";
 </script>
 
 <script lang="ts">

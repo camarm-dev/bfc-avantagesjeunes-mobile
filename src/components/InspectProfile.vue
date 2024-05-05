@@ -4,7 +4,15 @@
       <ion-buttons slot="start">
         <ion-back-button text="Retour"></ion-back-button>
       </ion-buttons>
-      <ion-title>Utilisateur</ion-title>
+      <ion-title v-if="editable">Mon profil</ion-title>
+      <ion-title v-else>Utilisateur</ion-title>
+      <ion-buttons slot="end" v-if="editable">
+        <ion-nav-link router-direction="forward" :component="MyAccount">
+          <ion-button>
+            <ion-icon slot="icon-only" :icon="settingsOutline"/>
+          </ion-button>
+        </ion-nav-link>
+      </ion-buttons>
     </ion-toolbar>
   </ion-header>
   <ion-content :fullscreen="true">
@@ -102,13 +110,17 @@ import {
   IonButtons,
   IonNote,
   IonChip,
-  IonSpinner
+  IonSpinner,
+  IonButton,
+  IonIcon, IonNavLink
 } from "@ionic/vue"
 import AvantageCard from "@/components/AvantageCard.vue"
 import {BADGES} from "@/functions/fetch/badges";
 import UserBadge from "@/components/UserBadge.vue";
 import Icon from "@/components/Icon.vue";
 import StarsRange from "@/components/StarsRange.vue";
+import {settingsOutline} from "ionicons/icons";
+import MyAccount from "@/components/MyAccount.vue";
 </script>
 
 <script lang="ts">
@@ -121,7 +133,7 @@ import {Account} from "@/types/account"
 import {categories} from "@/functions/interfaces";
 
 export default {
-  props: ["id"],
+  props: ["id", "editable"],
   data() {
     return {
       loading: true,
@@ -214,6 +226,8 @@ export default {
 .profile p {
   font-weight: 400 !important;
   opacity: 0.5;
+  max-width: 80%;
+  text-align: center;
   color: var(--ion-text-color) !important;
 }
 
