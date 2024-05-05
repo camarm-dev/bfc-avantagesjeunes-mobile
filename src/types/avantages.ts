@@ -127,6 +127,12 @@ export type Comment = {
     likesIdCompte: boolean
 }
 
+export type Note = {
+    id_avantage: number
+    note: number
+    datetime: string
+}
+
 export type Transaction = {
     id_transaction: number
     rid_organisme: number
