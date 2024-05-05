@@ -36,6 +36,15 @@ async function addLike(id_avantage: string | number) {
     return await post(url, data)
 }
 
+async function removeLike(id_avantage: string | number) {
+    const url = import.meta.env.VITE_API_URL + "/api/social/deleteAvantageLike"
+    const data = {
+        id: localStorage.getItem("currentCardId"),
+        id_avantage: id_avantage
+    }
+    return await post(url, data)
+}
+
 async function addNote(id_avantage: string | number, note: number) {
     const url = import.meta.env.VITE_API_URL + "/api/social/addAvantageNote"
     const data = {
@@ -112,6 +121,7 @@ export {
     getAvantage,
     addFavori,
     addLike,
+    removeLike,
     addNote,
     removeFavori,
     obtainAdvantage,
