@@ -30,10 +30,13 @@
           <ion-button color="light" @click="answerTo = comment">
             <Reply slot="icon-only"/>
           </ion-button>
-          <ion-button @click="likeComment(comment.id_comment)" color="light">
+          <ion-button color="light" @click="removeLike(comment.id_comment)" v-if="comment.likesIdCompte ? comment.likesIdCompte.includes(userId): false">
+            <ThumbsUp class="filled-like" slot="icon-only"/>
+          </ion-button>
+          <ion-button @click="likeComment(comment.id_comment)" color="light" v-else>
             <ThumbsUp slot="icon-only"/>
           </ion-button>
-          <ion-button  @click="deleteComment(comment.id_comment)" color="danger" v-if="comment.auteur">
+          <ion-button @click="deleteComment(comment.id_comment)" color="danger" v-if="comment.rid_compte == userId">
             <Trash slot="icon-only"/>
           </ion-button>
         </ion-buttons>
@@ -51,19 +54,22 @@
         <ion-label class="ion-text-wrap">
           <h3>Répondre à</h3>
         </ion-label>
-        <ion-item>
+        <ion-item lines="none">
           <ion-avatar slot="start" class="small">
             <img style="border-radius: 50%;" :src="answerTo.image_thumb_url.replace('[w]', '40').replace('[h]', '40').replace('[zc]', '1')" :alt="`Photo de profil`">
           </ion-avatar>
-          <ion-label>
+          <ion-label class="mw-1">
             <p>{{ answerTo.commentaire }}</p>
           </ion-label>
         </ion-item>
+        <X @click="answerTo = null"/>
       </ion-item>
       <ion-item lines="none">
-        <ion-textarea @ionChange="commentContent = $event.detail.value" placeholder="Entrez votre commentaire..."/>
+        <ion-textarea :auto-grow="true" :disabled="loading" :value="commentContent" @input="commentContent = $event.target.value as string" placeholder="Entrez votre commentaire...">
+
+        </ion-textarea>
       </ion-item>
-      <ion-item @click="sendComment()" button :diabled="loading" :detail-icon="sendOutline">
+      <ion-item @click="sendComment()" button :disabled="loading || commentContent.length === 0" :detail-icon="sendOutline">
         Envoyer
       </ion-item>
     </ion-list>
@@ -77,19 +83,23 @@ import {
   IonToolbar,
   IonContent,
   IonTitle,
-  IonList,
   IonLabel,
   IonItem,
+  IonList,
   IonBackButton,
   IonButtons,
   IonNavLink,
   IonProgressBar,
-  IonAvatar
+  IonAvatar,
+  IonNote,
+  IonButton,
+  IonTextarea
 } from "@ionic/vue"
 import {
   Reply,
   ThumbsUp,
-  Trash
+  Trash,
+  X
 } from "lucide-vue-next"
 import { Comment } from "@/types/avantages"
 import {readableDate} from "@/functions/native/dates"
@@ -104,16 +114,20 @@ const { comments, id_avantage } = defineProps<{
 
 </script>
 <script lang="ts">
-import {addComment, addCommentLike, getAvantage, removeComment} from "@/functions/fetch/avantages"
+import {addComment, addCommentLike, getAvantage, removeComment, removeCommentLike} from "@/functions/fetch/avantages"
 
 export default {
   data() {
     return {
-      commentContent: "",
+      commentContent: "" as string,
       answerTo: null as Comment | null,
       dynamicComments: this.comments || [] as Comment[],
-      loading: false
+      loading: false,
+      userId: Number(localStorage.getItem('currentCardId'))
     }
+  },
+  mounted() {
+    this.reload()
   },
   methods: {
     async reload() {
@@ -125,6 +139,7 @@ export default {
       await addComment(this.id_avantage, this.commentContent, this.answerTo?.id_comment)
       await this.reload()
       this.commentContent = ""
+      this.answerTo = null
     },
     async deleteComment(id: string | number) {
       this.loading = true
@@ -135,6 +150,11 @@ export default {
       this.loading = true
       await addCommentLike(this.id_avantage, id)
       await this.reload()
+    },
+    async removeLike(id: string | number) {
+      this.loading = true
+      await removeCommentLike(this.id_avantage, id)
+      await this.reload()
     }
   }
 }
@@ -143,5 +163,19 @@ export default {
 ion-avatar.small {
   width: 25px;
   height: 25px;
+  margin-right: 6px;
+}
+
+.mw-1 {
+  max-width: 7.5em;
+}
+
+.filled-like {
+  fill: currentColor;
+}
+
+.filled-like path:first-child {
+  fill: transparent;
+  stroke: transparent;
 }
 </style>
