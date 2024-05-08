@@ -23,7 +23,7 @@
       <h2 class="welcome" v-if="user.utiliser_pseudo && user.pseudo">{{ user.pseudo }}</h2>
       <h2 class="welcome" v-if="user.prenom">{{ user.prenom }} {{ user.nom }}</h2>
       <h3 class="welcome" v-if="user.carte">{{ getAge(user.carte.date_naiss) }} ans</h3>
-      <p>{{ user.descriptif }}</p>
+      <p class="ion-padding-vertical">{{ user.descriptif }}</p>
       <p v-if="user.carte">{{ user.carte.ville }}, {{ user.carte.cp }}</p>
     </header>
     <div class="list-title" v-if="user.badges">Badges</div>
