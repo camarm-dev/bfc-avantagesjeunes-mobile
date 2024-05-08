@@ -30,7 +30,7 @@
           <ion-button color="light" @click="answerTo = comment">
             <Reply slot="icon-only"/>
           </ion-button>
-          <ion-button color="light">
+          <ion-button @click="likeComment(comment.id_comment)" color="light">
             <ThumbsUp slot="icon-only"/>
           </ion-button>
           <ion-button  @click="deleteComment(comment.id_comment)" color="danger" v-if="comment.auteur">
@@ -130,7 +130,7 @@ export default {
       await removeComment(this.id_avantage, id)
       await this.reload()
     },
-    async likeComment(id: string) {
+    async likeComment(id: string | number) {
       this.loading = true
       await addCommentLike(this.id_avantage, id)
       await this.reload()
