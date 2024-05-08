@@ -174,7 +174,7 @@
           <p>{{ dynamicAvantage.nb_note || 0 }}</p>
         </ion-label>
       </ion-item>
-      <ion-nav-link router-direction="forward" :component="InspectAvantageComments" :component-props="{ comments: dynamicAvantage.comments }">
+      <ion-nav-link router-direction="forward" :component="InspectAvantageComments" :component-props="{ comments: dynamicAvantage.comments, id_avantage: this.avantage.id_avantage }">
         <ion-item button @click="forceReload()">
           <ion-icon color="light" slot="start" :icon="chatbubblesOutline"/>
           <ion-label>
