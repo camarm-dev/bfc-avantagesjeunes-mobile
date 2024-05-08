@@ -37,12 +37,22 @@ async function getUser(id: number): Promise<Account> {
 }
 
 
-async function updateAccount(user: any) {
+async function updateAccount(user: Account) {
     const url = import.meta.env.VITE_API_URL + "/api/compte/update"
     const data = {
         token: localStorage.getItem("currentCardToken"),
         id: localStorage.getItem("currentCardId"),
         data: user
+    }
+    return await post(url, data)
+}
+
+async function updatePhoto(image: string) {
+    const url = import.meta.env.VITE_API_URL + "/api/compte/updatePhoto"
+    const data = {
+        token: localStorage.getItem("currentCardToken"),
+        id: localStorage.getItem("currentCardId"),
+        logo: image
     }
     return await post(url, data)
 }
@@ -65,5 +75,6 @@ export {
     getAccount,
     updateAccount,
     logOut,
-    getUser
+    getUser,
+    updatePhoto
 }
