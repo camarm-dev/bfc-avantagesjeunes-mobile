@@ -372,6 +372,15 @@ ion-toolbar ion-label p {
     border-bottom-right-radius: 12px;
     background-color: var(--ion-color-primary-shade);
     padding: .5em 1.2em;
+    max-width: 15em;
+    max-height: 3em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.card.small .bottom-box {
+    max-width: 10em;
 }
 
 .card.full {
