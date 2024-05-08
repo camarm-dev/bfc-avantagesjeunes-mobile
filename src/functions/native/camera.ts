@@ -28,6 +28,16 @@ async function takePhoto(text: string) {
     })
 }
 
+async function getPhoto() {
+    const image = await Camera.getPhoto({
+        resultType: CameraResultType.Base64,
+        source: CameraSource.Prompt,
+        quality: 100,
+        allowEditing: true
+    })
+    return image.base64String as string
+}
+
 async function saveCardImage(savingId: string, text: string, callback: CallableFunction) {
     const photo = await takePhoto(text)
     const base64Image = "data:image/jpeg;base64," + photo.base64String as string
@@ -42,5 +52,6 @@ async function saveCardImage(savingId: string, text: string, callback: CallableF
 }
 
 export {
-    saveCardImage
+    saveCardImage,
+    getPhoto
 }
