@@ -27,11 +27,14 @@
           </h6>
         </ion-label>
         <ion-buttons slot="end">
-          <ion-button @click="answerTo = comment">
+          <ion-button color="light" @click="answerTo = comment">
             <Reply slot="icon-only"/>
           </ion-button>
-          <ion-button>
+          <ion-button color="light">
             <ThumbsUp slot="icon-only"/>
+          </ion-button>
+          <ion-button  @click="deleteComment(comment.id_comment)" color="danger" v-if="comment.auteur">
+            <Trash slot="icon-only"/>
           </ion-button>
         </ion-buttons>
       </ion-item>
@@ -60,7 +63,7 @@
       <ion-item lines="none">
         <ion-textarea @ionChange="commentContent = $event.detail.value" placeholder="Entrez votre commentaire..."/>
       </ion-item>
-      <ion-item button :diabled="loading" :detail-icon="sendOutline">
+      <ion-item @click="sendComment()" button :diabled="loading" :detail-icon="sendOutline">
         Envoyer
       </ion-item>
     </ion-list>
@@ -85,7 +88,8 @@ import {
 } from "@ionic/vue"
 import {
   Reply,
-  ThumbsUp
+  ThumbsUp,
+  Trash
 } from "lucide-vue-next"
 import { Comment } from "@/types/avantages"
 import {readableDate} from "@/functions/native/dates"
