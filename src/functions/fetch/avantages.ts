@@ -18,6 +18,37 @@ async function getAvantage(id: string | number, force = false): Promise<Avantage
     return document
 }
 
+async function addComment(id_avantage: string | number, content: string, parent?: string | number) {
+    const url = import.meta.env.VITE_API_URL + "/api/social/addAvantageComment"
+    const data = {
+        id: localStorage.getItem("currentCardId"),
+        id_avantage: id_avantage,
+        text: content,
+        parent: parent
+    }
+    return await post(url, data)
+}
+
+async function removeComment(id_avantage: string | number, comment_id: string | number) {
+    const url = import.meta.env.VITE_API_URL + "/api/social/deleteAvantageComment"
+    const data = {
+        id: localStorage.getItem("currentCardId"),
+        id_avantage: id_avantage,
+        id_comment: comment_id
+    }
+    return await post(url, data)
+}
+
+async function addCommentLike(id_avantage: string | number, comment_id: string | number) {
+    const url = import.meta.env.VITE_API_URL + "/api/social/addCommentLike"
+    const data = {
+        id: localStorage.getItem("currentCardId"),
+        id_avantage: id_avantage,
+        id_comment: comment_id
+    }
+    return await post(url, data)
+}
+
 async function addFavori(id_avantage: string | number) {
     const url = import.meta.env.VITE_API_URL + "/api/social/addAvantageFavori"
     const data = {
@@ -123,6 +154,9 @@ export {
     addLike,
     removeLike,
     addNote,
+    addComment,
+    removeComment,
+    addCommentLike,
     removeFavori,
     obtainAdvantage,
     checkAvailability,
