@@ -124,7 +124,7 @@ export type Comment = {
     auteur?: any
     image_thumb_url: string
     nb_like: number
-    likesIdCompte: boolean
+    likesIdCompte: boolean | number[]
 }
 
 export type Note = {
