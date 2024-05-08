@@ -123,7 +123,7 @@ export default {
       answerTo: null as Comment | null,
       dynamicComments: this.comments || [] as Comment[],
       loading: false,
-      userId: Number(localStorage.getItem('currentCardId'))
+      userId: Number(localStorage.getItem("currentCardId"))
     }
   },
   mounted() {

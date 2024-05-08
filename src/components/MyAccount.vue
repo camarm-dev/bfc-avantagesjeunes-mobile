@@ -84,8 +84,7 @@ import {
   IonItem,
   IonBackButton,
   IonButtons,
-  IonAlert,
-  IonPage
+  IonAlert
 } from "@ionic/vue"
 import {
   Phone,
@@ -98,7 +97,7 @@ import {
 } from "lucide-vue-next"
 import ModifyInterests from "@/components/ModifyInterests.vue"
 import {logOut} from "@/functions/fetch/account"
-import ModifyProfile from "@/components/ModifyProfile.vue";
+import ModifyProfile from "@/components/ModifyProfile.vue"
 </script>
 
 <script lang="ts">

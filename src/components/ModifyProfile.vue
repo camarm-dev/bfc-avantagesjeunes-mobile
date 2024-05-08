@@ -86,15 +86,15 @@ import {
 } from "@ionic/vue"
 import {
   Pen
-} from "lucide-vue-next";
+} from "lucide-vue-next"
 </script>
 
 <script lang="ts">
 import {getAccount, updateAccount, updatePhoto} from "@/functions/fetch/account"
-import {Account} from "@/types/account";
-import {closeModals} from "@/functions/modals";
-import {getPhoto} from "@/functions/native/camera";
-import {loadingController} from "@ionic/vue";
+import {Account} from "@/types/account"
+import {closeModals} from "@/functions/modals"
+import {getPhoto} from "@/functions/native/camera"
+import {loadingController} from "@ionic/vue"
 
 export default {
   data () {
@@ -121,7 +121,7 @@ export default {
       newUser.utiliser_pseudo = this.user.utiliser_pseudo
       newUser.descriptif = this.user.descriptif
       const loader = await loadingController.create({
-        message: 'Enregistrement...'
+        message: "Enregistrement..."
       })
       await loader.present()
       await updateAccount(newUser)
@@ -131,7 +131,7 @@ export default {
     async changePhoto() {
       const image = await getPhoto()
       const loader = await loadingController.create({
-        message: 'Envoi de la nouvelle photo...'
+        message: "Envoi de la nouvelle photo..."
       })
       await loader.present()
       await updatePhoto(image)
