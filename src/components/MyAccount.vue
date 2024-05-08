@@ -1,6 +1,5 @@
 <template>
-  <ion-page ref="page">
-    <ion-header>
+    <ion-header ref="page">
       <ion-toolbar>
         <ion-buttons slot="start">
           <ion-back-button text="Retour"></ion-back-button>
@@ -71,7 +70,6 @@
         </ion-item>
       </ion-list>
     </ion-content>
-  </ion-page>
 </template>
 
 <script setup lang="ts">
