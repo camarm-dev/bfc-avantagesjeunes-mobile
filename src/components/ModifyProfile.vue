@@ -22,7 +22,7 @@
           <ion-input @input="user.carte.prenom = $event.target.value; user.prenom = $event.target.value" label-placement="stacked" placeholder="Jean" :value="user.carte.prenom" label="Prénom"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-checkbox :value="user.afficher_prenom" @ionChange="user.afficher_prenom = $event.detail.checked" color="secondary">
+          <ion-checkbox :checked="user.afficher_prenom" @ionChange="user.afficher_prenom = $event.detail.checked" color="secondary">
             <ion-label class="ion-text-wrap" color="medium">
               <p>Afficher le prénom sur mon profil ?</p>
             </ion-label>
@@ -32,7 +32,7 @@
           <ion-input @input="user.carte.nom = $event.target.value; user.nom = $event.target.value" label-placement="stacked" placeholder="Bonaparte" :value="user.carte.nom" label="Nom"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-checkbox :value="user.afficher_nom" @ionChange="user.afficher_nom = $event.detail.checked" color="secondary">
+          <ion-checkbox :checked="user.afficher_nom" @ionChange="user.afficher_nom = $event.detail.checked" color="secondary">
             <ion-label class="ion-text-wrap" color="medium">
               <p>Afficher le nom sur mon profil ?</p>
             </ion-label>
@@ -42,7 +42,7 @@
           <ion-input @input="user.pseudo = $event.target.value" label-placement="stacked" placeholder="j.bona" :value="user.pseudo" label="Pseudo"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-checkbox :value="user.utiliser_pseudo" @ionChange="user.utiliser_pseudo = $event.detail.checked" color="secondary">
+          <ion-checkbox :checked="user.utiliser_pseudo" @ionChange="user.utiliser_pseudo = $event.detail.checked" color="secondary">
             <ion-label class="ion-text-wrap" color="medium">
               <p>Utiliser le pseudo plutôt que le nom ?</p>
             </ion-label>
@@ -52,7 +52,7 @@
           <ion-textarea @input="user.descriptif = $event.target.value" auto-grow label-placement="stacked" placeholder="J'adore la carte avantages jeunes !" :value="user.descriptif" label="Descriptif"></ion-textarea>
         </ion-item>
         <ion-item>
-          <ion-checkbox :value="user.afficher_ville" @ionChange="user.afficher_ville = $event.detail.checked" color="secondary">
+          <ion-checkbox :checked="user.afficher_ville" @ionChange="user.afficher_ville = $event.detail.checked" color="secondary">
             <ion-label class="ion-text-wrap" color="medium">
               Afficher l'emplacement ?
             </ion-label>
