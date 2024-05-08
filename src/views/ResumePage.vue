@@ -343,7 +343,7 @@ export default {
       this.loading = true
       getAccount().then(async user => {
         this.user = user
-        localStorage.setItem('userLikes', JSON.stringify(user.likes || []))
+        localStorage.setItem("userLikes", JSON.stringify(user.likes || []))
         const suggestionAvantages = []
         for (const suggestion of this.user.suggestions) {
           suggestionAvantages.push(await getAvantage((suggestion.id_avantage)))

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import StarsRange from "@/components/StarsRange.vue";
+import StarsRange from "@/components/StarsRange.vue"
 import {
   IonNote,
   IonButton,
   IonIcon
-} from '@ionic/vue'
-import {chevronForwardOutline} from "ionicons/icons";
+} from "@ionic/vue"
+import {chevronForwardOutline} from "ionicons/icons"
 </script>
 <template>
   <div class="container">
@@ -22,7 +22,7 @@ import {chevronForwardOutline} from "ionicons/icons";
 </template>
 
 <script lang="ts">
-import {addNote} from "@/functions/fetch/avantages";
+import {addNote} from "@/functions/fetch/avantages"
 
 export default {
   props: [
@@ -42,7 +42,7 @@ export default {
       this.closeModal()
     },
     closeModal() {
-      window.dispatchEvent(new Event('closeNoteModal'))
+      window.dispatchEvent(new Event("closeNoteModal"))
     }
   }
 }

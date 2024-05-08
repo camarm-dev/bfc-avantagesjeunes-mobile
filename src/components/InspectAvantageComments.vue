@@ -94,8 +94,9 @@ import {
 import { Comment } from "@/types/avantages"
 import {readableDate} from "@/functions/native/dates"
 import InspectProfile from "@/components/InspectProfile.vue"
-import {sendOutline} from "ionicons/icons";
+import {sendOutline} from "ionicons/icons"
 
+// eslint-disable-next-line
 const { comments, id_avantage } = defineProps<{
   comments: Comment[] | false,
   id_avantage: number
@@ -103,12 +104,12 @@ const { comments, id_avantage } = defineProps<{
 
 </script>
 <script lang="ts">
-import {addComment, addCommentLike, getAvantage, removeComment} from "@/functions/fetch/avantages";
+import {addComment, addCommentLike, getAvantage, removeComment} from "@/functions/fetch/avantages"
 
 export default {
   data() {
     return {
-      commentContent: '',
+      commentContent: "",
       answerTo: null as Comment | null,
       dynamicComments: this.comments || [] as Comment[],
       loading: false
@@ -123,7 +124,7 @@ export default {
       this.loading = true
       await addComment(this.id_avantage, this.commentContent, this.answerTo?.id_comment)
       await this.reload()
-      this.commentContent = ''
+      this.commentContent = ""
     },
     async deleteComment(id: string | number) {
       this.loading = true

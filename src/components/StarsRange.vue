@@ -29,7 +29,7 @@ export default {
   methods: {
     setNote(note: number) {
       this.dynamicNote = note
-      this.$emit('noteChange', note)
+      this.$emit("noteChange", note)
     }
   }
 }

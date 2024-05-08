@@ -259,11 +259,11 @@ import {displayToast} from "@/functions/toasts"
 import {loadingController} from "@ionic/vue"
 import {addLike, checkAvailability, getAvantage, obtainAdvantage, removeLike} from "@/functions/fetch/avantages"
 import {APIResponse} from "@/functions/fetch/interfaces"
-import AddNoteModal from "@/components/AddNoteModal.vue";
+import AddNoteModal from "@/components/AddNoteModal.vue"
 
 export default {
   data() {
-    const liked = JSON.parse(localStorage.getItem('userLikes') || '[]') as number[]
+    const liked = JSON.parse(localStorage.getItem("userLikes") || "[]") as number[]
     return {
       isFavori: this.favori == undefined ? false: this.favori,
       isLiked: liked.includes(this.avantage.id_avantage),
@@ -297,7 +297,7 @@ export default {
         this.isLiked = true
         await addLike(id_avantage)
       }
-      localStorage.setItem('userLikes', JSON.stringify(this.dynamicLiked))
+      localStorage.setItem("userLikes", JSON.stringify(this.dynamicLiked))
     },
     async useAdvantage() {
       const loader = await loadingController.create({
