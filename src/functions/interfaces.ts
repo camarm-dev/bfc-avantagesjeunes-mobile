@@ -411,6 +411,7 @@ const secteurs = {
     [key: number | string]: { nom: string }
 }
 
+// eslint-disable-next-line
 const editions = {
     "1": ["1", "2", "3", "4", "5", "6", "7", "82"],
     "7": ["67"],

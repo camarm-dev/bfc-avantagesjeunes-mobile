@@ -35,9 +35,9 @@
 </template>
 
 <script setup lang="ts">
-import { IonTitle, IonInput, IonButton, IonList, IonPage, IonToggle } from "@ionic/vue";
-import { XCircle, BadgeCheck, BadgeX } from "lucide-vue-next";
-import {closeModals} from "@/functions/modals";
+import { IonTitle, IonButton, IonPage } from "@ionic/vue"
+import { XCircle} from "lucide-vue-next"
+import {closeModals} from "@/functions/modals"
 </script>
 
 <style scoped>

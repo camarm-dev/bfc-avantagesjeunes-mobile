@@ -30,7 +30,7 @@
   </ion-content>
 </template>
 <script setup lang="ts">
-import '@/theme/globals.css'
+import "@/theme/globals.css"
 import {
   IonHeader,
   IonToolbar,
@@ -39,13 +39,13 @@ import {
   IonBackButton,
   IonButtons,
   IonNote
-} from '@ionic/vue';
-import AvantageCard from "@/components/AvantageCard.vue";
-import PulseItem from "@/components/PulseItem.vue";
+} from "@ionic/vue"
+import AvantageCard from "@/components/AvantageCard.vue"
+import PulseItem from "@/components/PulseItem.vue"
 </script>
 
 <script lang="ts">
 export default {
-  props: ['avantages', 'used'],
+  props: ["avantages", "used"],
 }
 </script>

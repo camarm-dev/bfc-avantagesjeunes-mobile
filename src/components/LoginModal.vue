@@ -48,36 +48,36 @@
 </template>
 
 <script setup lang="ts">
-import { IonTitle, IonInput, IonButton, IonList, IonPage, IonCheckbox, IonItem, IonLabel, IonHeader, IonButtons, IonToolbar } from "@ionic/vue";
-import { XCircle } from "lucide-vue-next";
-import { maskito as vMaskito } from '@maskito/vue';
+import { IonTitle, IonInput, IonButton, IonList, IonPage, IonCheckbox, IonItem, IonLabel, IonHeader, IonButtons, IonToolbar } from "@ionic/vue"
+import { XCircle } from "lucide-vue-next"
+import { maskito as vMaskito } from "@maskito/vue"
 
 const cardNumberOptions = {
   mask: [
     ...Array(2).fill(/\d/),
-  '-',
+  "-",
   ...Array(2).fill(/\d/),
-  '-',
+  "-",
   ...Array(2).fill(/\d/)
   ],
   elementPredicate: (el: HTMLIonInputElement) => {
     return new Promise((resolve) => {
   requestAnimationFrame(async () => {
-    const input = await el.getInputElement();
-    resolve(input);
-  });
-});
+    const input = await el.getInputElement()
+    resolve(input)
+  })
+})
 },
 }
 </script>
 
 <script lang="ts">
-import { closeModals } from "@/functions/modals";
-import {getToken} from "@/functions/fetch/account";
-import {displayToast} from "@/functions/toasts";
-import {vibrate} from "@/functions/native/tools";
-import {getIDFromToken} from "@/functions/fetch/tools";
-import {getCredentials, setCredentials} from "@/functions/credentials";
+import { closeModals } from "@/functions/modals"
+import {getToken} from "@/functions/fetch/account"
+import {displayToast} from "@/functions/toasts"
+import {vibrate} from "@/functions/native/tools"
+import {getIDFromToken} from "@/functions/fetch/tools"
+import {getCredentials, setCredentials} from "@/functions/credentials"
 
 export default {
   data() {
@@ -90,23 +90,23 @@ export default {
   methods: {
     async login () {
       if (!this.agree) {
-        await displayToast('Conditions d\'utilisation', 'Veuillez lire et accepter les conditions d\'utilisation pour ajouter une carte.', 2000, 'danger')
+        await displayToast("Conditions d'utilisation", "Veuillez lire et accepter les conditions d'utilisation pour ajouter une carte.", 2000, "danger")
         return
       }
-      const response = await getToken(this.numero.replaceAll('-', ''), this.password)
+      const response = await getToken(this.numero.replaceAll("-", ""), this.password)
       const token = response.token
       if (token) {
         const cards = await getCredentials()
         const accountId = getIDFromToken(token)
         cards.push({
-          numero: this.numero.replaceAll('-', ''),
+          numero: this.numero.replaceAll("-", ""),
           password: this.password,
           id: accountId
         })
         await setCredentials(cards)
-        localStorage.setItem('currentCardToken', token)
-        localStorage.setItem('currentCardId', accountId)
-        await displayToast('Connecté', 'Votre carte Avantages Jeunes a bien été ajoutée !', 2000, 'primary')
+        localStorage.setItem("currentCardToken", token)
+        localStorage.setItem("currentCardId", accountId)
+        await displayToast("Connecté", "Votre carte Avantages Jeunes a bien été ajoutée !", 2000, "primary")
         setTimeout(() => {
           vibrate()
           location.reload()

@@ -1,5 +1,5 @@
 <script setup>
-import {computed} from 'vue';
+import {computed} from "vue"
 import {
   Clapperboard,
   Camera,
@@ -50,7 +50,7 @@ import {
   Phone,
   CreditCard,
   Vegan
-} from 'lucide-vue-next'
+} from "lucide-vue-next"
 
 const icons = {
   Clapperboard,
@@ -118,7 +118,7 @@ const props = defineProps({
   defaultClass: String
 })
 
-const icon = computed(() => icons[props.name]);
+const icon = computed(() => icons[props.name])
 </script>
 
 <template>

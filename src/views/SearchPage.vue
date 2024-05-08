@@ -18,7 +18,7 @@
                     <p>Rubriques</p>
                   </ion-label>
                   <ion-select @ionChange="rubriques = $event.detail.value" :multiple="true" interface="action-sheet" :interface-options="{ color: 'primary' }" placeholder="Toutes" value="all">
-                    <ion-select-option v-for="rubrique in Object.keys(listeRubriques)" :value="rubrique">{{ listeRubriques[rubrique].nom }}</ion-select-option>
+                    <ion-select-option :key="rubrique" v-for="rubrique in Object.keys(listeRubriques)" :value="rubrique">{{ listeRubriques[rubrique].nom }}</ion-select-option>
                   </ion-select>
                 </ion-item>
                 <ion-item>
@@ -26,7 +26,7 @@
                     <p>Secteurs</p>
                   </ion-label>
                   <ion-select @ionChange="secteurs = $event.detail.value" :multiple="true" interface="action-sheet" placeholder="Tous" value="all">
-                    <ion-select-option v-for="secteur in Object.keys(listeSecteurs)" :value="secteur">{{ listeSecteurs[secteur].nom }}</ion-select-option>
+                    <ion-select-option :key="secteur" v-for="secteur in Object.keys(listeSecteurs)" :value="secteur">{{ listeSecteurs[secteur].nom }}</ion-select-option>
                   </ion-select>
                 </ion-item>
                 <ion-item button @click="search()">
@@ -83,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import '@/theme/globals.css'
+import "@/theme/globals.css"
 import {
   IonPage,
   IonHeader,
@@ -101,21 +101,21 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonNote
-} from '@ionic/vue';
+} from "@ionic/vue"
 import {
   Settings2,
   Scan,
   SearchCheck
-} from "lucide-vue-next";
-import { secteurs as listeSecteurs, rubriques as listeRubriques } from "@/functions/interfaces";
-import AvantageCard from "@/components/AvantageCard.vue";
+} from "lucide-vue-next"
+import { secteurs as listeSecteurs, rubriques as listeRubriques } from "@/functions/interfaces"
+import AvantageCard from "@/components/AvantageCard.vue"
 </script>
 
 <script lang="ts">
-import {getAccount} from "@/functions/fetch/account";
-import {Avantage} from "@/types/avantages";
-import {get} from "@/functions/fetch/tools";
-import {InfiniteScrollCustomEvent} from "@ionic/vue";
+import {getAccount} from "@/functions/fetch/account"
+import {Avantage} from "@/types/avantages"
+import {get} from "@/functions/fetch/tools"
+import {InfiniteScrollCustomEvent} from "@ionic/vue"
 
 export default {
   data() {
@@ -123,12 +123,13 @@ export default {
       results: [] as Avantage[],
       results_count: 0,
       loading: false,
-      query: '',
+      query: "",
       page: 0,
       secteurs: [],
       rubriques: [],
       favoris: [] as number[],
       used: [] as number[],
+      // eslint-disable-next-line
       searchTimeout: setTimeout(() => {}, 100),
       endReached: false
     }
@@ -170,7 +171,7 @@ export default {
       this.$router.push(href)
     },
     getInnerContent(html_string: string) {
-      const el = document.createElement('div')
+      const el = document.createElement("div")
       el.innerHTML = html_string
       return el.innerText
     },
@@ -178,12 +179,12 @@ export default {
       return this.favoris.includes(id_avantage)
     },
     async performSearchRequest() {
-      let url = `${localStorage.getItem('userApiUrl')}/search?q=${this.query}&page=${this.page}`
+      let url = `${localStorage.getItem("userApiUrl")}/search?q=${this.query}&page=${this.page}`
       if (this.secteurs.length > 0) {
-        url += `&secteurs=${this.secteurs.join(',')}`
+        url += `&secteurs=${this.secteurs.join(",")}`
       }
       if (this.rubriques.length > 0) {
-        url += `&rubriques=${this.rubriques.join(',')}`
+        url += `&rubriques=${this.rubriques.join(",")}`
       }
 
       return await get(url) as any

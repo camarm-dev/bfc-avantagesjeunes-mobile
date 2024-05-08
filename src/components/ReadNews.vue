@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import '@/theme/globals.css'
+import "@/theme/globals.css"
 import {
   IonHeader,
   IonToolbar,
@@ -38,17 +38,17 @@ import {
   IonBackButton,
   IonButtons,
   IonIcon
-} from '@ionic/vue';
-import {shareOutline} from 'ionicons/icons'
+} from "@ionic/vue"
+import {shareOutline} from "ionicons/icons"
 </script>
 
 <script lang="ts">
-import {readableDate} from "@/functions/native/dates";
-import { Share } from '@capacitor/share'
+import {readableDate} from "@/functions/native/dates"
+import { Share } from "@capacitor/share"
 
 export default {
   props: [
-    'article'
+    "article"
   ],
   data() {
     return {
@@ -66,9 +66,9 @@ export default {
       try {
         await Share.share({
           title: `${this.article.titre}`,
-          text: 'J\'ai lu cet article sur Avantages Jeunes Connect !',
+          text: "J'ai lu cet article sur Avantages Jeunes Connect !",
           url: url,
-          dialogTitle: 'Partager cet article'
+          dialogTitle: "Partager cet article"
         })
       } catch {
         await navigator.clipboard.write(url)

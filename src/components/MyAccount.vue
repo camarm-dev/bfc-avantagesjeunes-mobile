@@ -1,77 +1,79 @@
 <template>
-  <ion-header>
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-back-button text="Retour"></ion-back-button>
-      </ion-buttons>
-      <ion-title>Mon profil</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content :fullscreen="true">
-    <header class="profile">
-      <div>
-        <img class="profile-picture" :src="user.image_url || '/avatar.png'" alt="Votre photo">
+    <ion-header ref="page">
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-back-button text="Retour"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Mon profil</ion-title>
+        <ion-buttons slot="end">
+          <ion-button @click="createModal(ModifyProfile, 'modalEdit', refs)">
+            <Edit slot="icon-only"/>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content :fullscreen="true">
+      <header class="profile">
+        <div>
+          <img class="profile-picture" :src="user.image_url || '/avatar.png'" alt="Votre photo">
+        </div>
+        <h2 class="welcome">{{ user.carte.prenom }} {{ user.carte.nom }}</h2>
+        <p>{{ user.carte.cp }}, {{ user.carte.ville }}</p>
+      </header>
+      <div class="list-title">
+        Mes informations
       </div>
-      <h2 class="welcome">{{ user.carte.prenom }} {{ user.carte.nom }}</h2>
-      <p>{{ user.carte.cp }}, {{ user.carte.ville }}</p>
-    </header>
-    <div class="list-title">
-      Mes informations
-    </div>
-<!--  Faire vérifier l'email si elle ne l'est pas  -->
-<!--  https://backoffice.avantagesjeunes.com/api/carte/updateEmail ou updateTel  -->
-<!--  email_old & email_new  -->
-    <ion-list inset>
-      <ion-item>
-        <Phone class="icon ion-color-success" v-if="user.carte.tel_accepte"/>
-        <Phone class="icon ion-color-danger" v-else/>
-        <ion-label>
-          <p>Téléphone</p>
-          <h2>{{ user.carte.tel || "Non renseigné" }}</h2>
-        </ion-label>
-      </ion-item>
-      <ion-item>
-        <Mail class="icon ion-color-success" v-if="user.carte.email_accepte"/>
-        <Mail class="icon ion-color-danger" v-else/>
-        <ion-label>
-          <p>Email</p>
-          <h2>{{ user.carte.email|| "Non renseigné" }}</h2>
-        </ion-label>
-        <BadgeAlert id="verify-email-alert" v-if="!user.carte.email_accepte" slot="end" class="focusable ion-color-danger"/>
-        <ion-alert :buttons="verifyEmailButtons" class="ion-color-primary" :sub-header="user.carte.email || 'Non renseigné'" trigger="verify-email-alert" header="Email non vérifiée" message="Votre addresse email n'a pas été vérifiée."/>
-      </ion-item>
-      <ion-item>
-        <Cake class="icon ion-color-secondary"/>
-        <ion-label>
-          <p>Né le</p>
-          <h2>{{ user.carte.date_naiss }}</h2>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-    <div class="list-title">
-      Actions
-    </div>
-    <ion-list inset>
-      <ion-item button @click="logOut()">
-        <LogOut class="icon ion-color-danger"/>
-        <ion-label>
-          <p>Déconnecter ce compte de cet appareil</p>
-          <h2>Se déconnecter</h2>
-        </ion-label>
-      </ion-item>
-      <ion-item button @click="createModal(ModifyInterests, 'modalModifyInterests', refs, { user }, true, [0, 0.75, 0.9])">
-        <Zap class="icon"/>
-        <ion-label>
-          <p>Personnalisez vos suggestions</p>
-          <h2>Mes centres d'intérêts</h2>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-  </ion-content>
+      <ion-list inset>
+        <ion-item>
+          <Phone class="icon ion-color-success" v-if="user.carte.tel_accepte"/>
+          <Phone class="icon ion-color-danger" v-else/>
+          <ion-label>
+            <p>Téléphone</p>
+            <h2>{{ user.carte.tel || "Non renseigné" }}</h2>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <Mail class="icon ion-color-success" v-if="user.carte.email_accepte"/>
+          <Mail class="icon ion-color-danger" v-else/>
+          <ion-label>
+            <p>Email</p>
+            <h2>{{ user.carte.email|| "Non renseigné" }}</h2>
+          </ion-label>
+          <BadgeAlert id="verify-email-alert" v-if="!user.carte.email_accepte" slot="end" class="focusable ion-color-danger"/>
+          <ion-alert :buttons="verifyEmailButtons" class="ion-color-primary" :sub-header="user.carte.email || 'Non renseigné'" trigger="verify-email-alert" header="Email non vérifiée" message="Votre addresse email n'a pas été vérifiée."/>
+        </ion-item>
+        <ion-item>
+          <Cake class="icon ion-color-secondary"/>
+          <ion-label>
+            <p>Né le</p>
+            <h2>{{ user.carte.date_naiss }}</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <div class="list-title">
+        Actions
+      </div>
+      <ion-list inset>
+        <ion-item button @click="logOut()">
+          <LogOut class="icon ion-color-danger"/>
+          <ion-label>
+            <p>Déconnecter ce compte de cet appareil</p>
+            <h2>Se déconnecter</h2>
+          </ion-label>
+        </ion-item>
+        <ion-item button @click="createModal(ModifyInterests, 'modalModifyInterests', refs, { user }, true, [0, 0.75, 0.9])">
+          <Zap class="icon"/>
+          <ion-label>
+            <p>Personnalisez vos suggestions</p>
+            <h2>Mes centres d'intérêts</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
 </template>
 
 <script setup lang="ts">
-import '@/theme/globals.css'
+import "@/theme/globals.css"
 import {
   IonHeader,
   IonToolbar,
@@ -83,31 +85,33 @@ import {
   IonBackButton,
   IonButtons,
   IonAlert
-} from '@ionic/vue';
+} from "@ionic/vue"
 import {
   Phone,
   Mail,
   Cake,
   Zap,
-  Lock,
   BadgeAlert,
-  LogOut
-} from "lucide-vue-next";
-import ModifyInterests from "@/components/ModifyInterests.vue";
-import {logOut} from "@/functions/fetch/account";
+  LogOut,
+  Edit
+} from "lucide-vue-next"
+import ModifyInterests from "@/components/ModifyInterests.vue"
+import {logOut} from "@/functions/fetch/account"
+import ModifyProfile from "@/components/ModifyProfile.vue"
 </script>
 
 <script lang="ts">
-import { createModal } from "@/functions/modals";
-import {getAccount} from "@/functions/fetch/account";
-import {readableDate} from "@/functions/native/dates";
-import {ref} from "vue";
+import { createModal } from "@/functions/modals"
+import {getAccount} from "@/functions/fetch/account"
+import {readableDate} from "@/functions/native/dates"
+import {ref} from "vue"
 
-let refs = {
-  modalModifyInterests: ref(null)
+const refs = {
+  modalModifyInterests: ref(null),
+  modalEdit: ref(null)
 } as any
 
-window.addEventListener('closeModals', () => {
+window.addEventListener("closeModals", () => {
   Object.keys(refs).forEach(key => {
     if (refs[key].value) refs[key].value.dismiss()
   })
@@ -136,8 +140,8 @@ export default {
       } as any,
       verifyEmailButtons: [
         {
-          text: 'Ignorer',
-          role: 'cancel',
+          text: "Ignorer",
+          role: "cancel",
         },
       ],
       refs: refs
@@ -145,6 +149,7 @@ export default {
   },
   mounted() {
     this.refreshAccount()
+    this.refs["page"] = this.$refs.page
   },
   methods: {
     open(url: string) {

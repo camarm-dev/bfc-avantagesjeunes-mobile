@@ -1,8 +1,8 @@
-import { Geolocation } from '@capacitor/geolocation';
+import { Geolocation } from "@capacitor/geolocation"
 
 async function hasPermission() {
     const response = await Geolocation.checkPermissions()
-    return response.location === 'granted'
+    return response.location === "granted"
 }
 
 async function askPermission() {

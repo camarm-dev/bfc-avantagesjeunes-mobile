@@ -1,4 +1,4 @@
-import {Haptics, ImpactStyle} from '@capacitor/haptics';
+import {Haptics, ImpactStyle} from "@capacitor/haptics"
 
 
 async function vibrate() {
@@ -10,7 +10,7 @@ async function endVibration() {
 }
 
 async function changedVibration() {
-    await Haptics.impact({ style: ImpactStyle.Light });
+    await Haptics.impact({ style: ImpactStyle.Light })
 }
 
 export {

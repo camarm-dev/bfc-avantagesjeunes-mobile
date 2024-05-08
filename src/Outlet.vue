@@ -5,6 +5,6 @@
 </template>
 
 <script setup lang="ts">
-import { IonApp, IonNav } from '@ionic/vue';
-import TabsPage from "@/views/TabsPage.vue";
+import { IonApp, IonNav } from "@ionic/vue"
+import TabsPage from "@/views/TabsPage.vue"
 </script>

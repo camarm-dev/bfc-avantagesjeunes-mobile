@@ -99,50 +99,52 @@
 </template>
 
 <script setup lang="ts">
-import { IonTitle, IonButton, IonList, IonPage, IonToggle, IonLabel, IonItem, IonSpinner, IonContent, IonHeader, IonToolbar, IonButtons } from "@ionic/vue";
-import { XCircle, BadgeCheck, BadgeX, Trash } from "lucide-vue-next";
+import { IonTitle, IonButton, IonList, IonPage, IonToggle, IonLabel, IonItem, IonSpinner, IonContent, IonHeader, IonToolbar, IonButtons, IonNote } from "@ionic/vue"
+import { XCircle, BadgeCheck, BadgeX, Trash } from "lucide-vue-next"
 </script>
 
 <script lang="ts">
-import { closeModals } from "@/functions/modals";
-import {displayToast} from "@/functions/toasts";
-import {getCacheStats} from "@/functions/fetch/avantages";
+import { closeModals } from "@/functions/modals"
+import {deleteCache, getCacheStats} from "@/functions/cache"
 
 export default {
   data() {
-    const { length, size }  = getCacheStats()
     return {
-      apiUrl: 'https://api-ajc.camarm.fr' as any,
+      apiUrl: "https://api-ajc.camarm.fr" as any,
       validApi: false,
       testedApi: true,
       useAdvantage: false,
       api: {
-        version: 'Aucune',
-        dataset: 'Aucun'
+        version: "Aucune",
+        dataset: "Aucun"
       },
-      cacheSize: size,
-      cacheLength: length
+      cacheSize: 0,
+      cacheLength: 0
     }
   },
   mounted() {
-    this.apiUrl = localStorage.getItem('userApiUrl') || 'https://api-ajc.camarm.fr'
-    localStorage.setItem('userApiUrl', this.apiUrl)
-    this.useAdvantage = (localStorage.getItem('userUseAdvantage') || 'false') == 'true'
+    this.apiUrl = localStorage.getItem("userApiUrl") || "https://api-ajc.camarm.fr"
+    localStorage.setItem("userApiUrl", this.apiUrl)
+    this.useAdvantage = (localStorage.getItem("userUseAdvantage") || "false") == "true"
     this.checkApi()
+    getCacheStats().then(value => {
+      this.cacheSize = value.size
+      this.cacheLength = value.length
+    })
   },
   methods: {
     roundNumber(value: number) {
       return Math.round(value)
     },
-    clearCache() {
-      localStorage.removeItem('advantagesCache')
-      const { length, size }  = getCacheStats()
-      this.cacheSize = size
-      this.cacheLength = length
+    async clearCache() {
+      await deleteCache()
+      const value = await getCacheStats()
+      this.cacheSize = value.size
+      this.cacheLength = value.length
     },
     changeUseAdvantageFunctionality(value: boolean) {
       this.useAdvantage = value
-      localStorage.setItem('userUseAdvantage', JSON.stringify(this.useAdvantage))
+      localStorage.setItem("userUseAdvantage", JSON.stringify(this.useAdvantage))
     },
     async checkApi() {
       this.testedApi = false
@@ -150,7 +152,7 @@ export default {
         await fetch(this.apiUrl).then(resp => resp.json()).then(resp => {
           this.api = resp
           this.validApi = true
-        }).catch(e => {
+        }).catch(() => {
           this.validApi = false
         })
       } catch {

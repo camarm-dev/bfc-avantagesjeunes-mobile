@@ -23,10 +23,10 @@
 </template>
 
 <script setup lang="ts">
-import {IonPage, IonContent, IonRange, IonItem, IonLabel} from '@ionic/vue'
-import { EffectFlip, Pagination } from 'swiper/modules'
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import { Sun, SunDim } from "lucide-vue-next";
+import {IonPage, IonContent, IonRange, IonItem, IonLabel} from "@ionic/vue"
+import { EffectFlip, Pagination } from "swiper/modules"
+import { Swiper, SwiperSlide } from "swiper/vue"
+import { Sun, SunDim } from "lucide-vue-next"
 
 const modules = [
   EffectFlip,
@@ -35,10 +35,10 @@ const modules = [
 </script>
 
 <script lang="ts">
-import { ScreenBrightness } from '@capacitor-community/screen-brightness';
+import { ScreenBrightness } from "@capacitor-community/screen-brightness"
 
 export default {
-  props: ['front', 'back'],
+  props: ["front", "back"],
   data() {
     return {
       brightness: 0.5

@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import '@/theme/globals.css'
+import "@/theme/globals.css"
 import {
   IonHeader,
   IonToolbar,
@@ -103,7 +103,7 @@ import {
   IonIcon,
   IonChip,
   IonButton
-} from '@ionic/vue';
+} from "@ionic/vue"
 import {
   Fingerprint,
   ShieldCheck,
@@ -114,36 +114,29 @@ import {
   BadgeX,
   Focus,
   Trash2
-} from "lucide-vue-next";
-import { EffectFlip, Pagination } from 'swiper/modules'
-import {scanOutline} from "ionicons/icons";
+} from "lucide-vue-next"
+import {scanOutline} from "ionicons/icons"
 import PulseItem from "@/components/PulseItem.vue"
-
-const modules = [
-    EffectFlip,
-    Pagination
-]
 </script>
 
 <script lang="ts">
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import { createModal } from "@/functions/modals";
-import {getAccount} from "@/functions/fetch/account";
-import {readableDate} from "@/functions/native/dates";
-import 'swiper/css';
-import 'swiper/css/effect-flip';
-import 'swiper/css/pagination';
-import '@ionic/vue/css/ionic-swiper.css';
-import FullscreenCardModal from "@/components/FullscreenCardModal.vue";
-import {ref} from "vue";
-import ScanCardModal from "@/components/ScanCardModal.vue";
+import { createModal } from "@/functions/modals"
+import {getAccount} from "@/functions/fetch/account"
+import {readableDate} from "@/functions/native/dates"
+import "swiper/css"
+import "swiper/css/effect-flip"
+import "swiper/css/pagination"
+import "@ionic/vue/css/ionic-swiper.css"
+import FullscreenCardModal from "@/components/FullscreenCardModal.vue"
+import {ref} from "vue"
+import ScanCardModal from "@/components/ScanCardModal.vue"
 
-let refs = {
+const refs = {
   modalFullscreen: ref(null),
   modalScanCard: ref(null)
 } as any
 
-window.addEventListener('closeModals', () => {
+window.addEventListener("closeModals", () => {
   Object.keys(refs).forEach(key => {
     if (refs[key].value) refs[key].value.dismiss()
   })
@@ -153,8 +146,8 @@ window.addEventListener('closeModals', () => {
 export default {
   data () {
     return {
-      frontCardImage: localStorage.getItem('frontCardImage') || "/carte.png",
-      backCardImage: localStorage.getItem('backCardImage') || "/carte-dos.png",
+      frontCardImage: localStorage.getItem("frontCardImage") || "/carte.png",
+      backCardImage: localStorage.getItem("backCardImage") || "/carte-dos.png",
       user: {
         image_url: "",
         carte: {
@@ -187,19 +180,18 @@ export default {
       })
     },
     async scanCard() {
-      await createModal(ScanCardModal, 'modalScanCard', refs, {}, true, [0, 0.9], true)
+      await createModal(ScanCardModal, "modalScanCard", refs, {}, true, [0, 0.9], true)
     },
     async openCardFullscreen() {
-      await createModal(FullscreenCardModal, 'modalFullscreen', refs, { front: this.frontCardImage, back: this.backCardImage }, true, [0, 0.9], true)
+      await createModal(FullscreenCardModal, "modalFullscreen", refs, { front: this.frontCardImage, back: this.backCardImage }, true, [0, 0.9], true)
     },
     removeCardScans() {
-      localStorage.removeItem('frontCardImage')
-      localStorage.removeItem('backCardImage')
+      localStorage.removeItem("frontCardImage")
+      localStorage.removeItem("backCardImage")
       this.frontCardImage = "/carte.png"
       this.backCardImage = "/carte-dos.png"
     }
-  },
-  components: { Swiper, SwiperSlide }
+  }
 }
 </script>
 <style>

@@ -23,8 +23,8 @@
           Vous n'avez pas encore utilisé d'avantages...
         </ion-note>
       </div>
-      <div class="action-item" v-for="avantage in avantages">
-        <AvantageCard :expand="true" :avantage="avantage" :type="'green'" :favori="favoris.includes(avantage.avantage_id)"/>
+      <div :key="avantage.id_avantage" class="action-item" v-for="avantage in avantages">
+        <AvantageCard :expand="true" :avantage="avantage" :type="'green'" :used="true" :favori="favoris.includes(avantage.avantage_id)"/>
         <div class="action" @click="copy(avantage.id_transaction)">
           <ClipboardIcon class="bubble-icon"/>
           <p>Copier</p>
@@ -40,7 +40,7 @@
   </ion-content>
 </template>
 <script setup lang="ts">
-import '@/theme/globals.css'
+import "@/theme/globals.css"
 import {
   IonHeader,
   IonToolbar,
@@ -50,28 +50,28 @@ import {
   IonButtons,
   IonNavLink,
   IonNote
-} from '@ionic/vue';
-import { ClipboardIcon, Newspaper } from "lucide-vue-next";
-import AvantageCard from "@/components/AvantageCard.vue";
-import InspectUsedAvantage from "@/components/InspectUsedAvantage.vue";
+} from "@ionic/vue"
+import { ClipboardIcon, Newspaper } from "lucide-vue-next"
+import AvantageCard from "@/components/AvantageCard.vue"
+import InspectUsedAvantage from "@/components/InspectUsedAvantage.vue"
 </script>
 
 <script lang="ts">
-import {displayToast} from "@/functions/toasts";
-import { Clipboard } from '@capacitor/clipboard';
+import {displayToast} from "@/functions/toasts"
+import { Clipboard } from "@capacitor/clipboard"
 
 export default {
-  props: ['total', 'avantages', 'favoris'],
+  props: ["total", "avantages", "favoris"],
   methods: {
     async copy(text: string) {
       try {
         await Clipboard.write({
           string: text.toString(),
-          label: 'Avantage: identifiant de transaction'
+          label: "Avantage: identifiant de transaction"
         })
-        await displayToast('', 'Identifiant de transaction copié !', 3000, 'success')
+        await displayToast("", "Identifiant de transaction copié !", 3000, "success")
       } catch (e) {
-        await displayToast('', `Copie impossible ! ${e} ${text}`, 3000, 'danger')
+        await displayToast("", `Copie impossible ! ${e} ${text}`, 3000, "danger")
       }
     }
   }

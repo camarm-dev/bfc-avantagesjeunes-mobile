@@ -1,4 +1,4 @@
-import {Transaction} from "@/types/avantages";
+import {Transaction, Comment, Note} from "@/types/avantages"
 
 export type Account = {
     id_compte: number
@@ -31,9 +31,9 @@ export type Account = {
     image_url?: string
     image_thumb_url?: string
     carte: UserCard
-    likes: false | any,
-    notes: false | any,
-    comments: false | Comment[],
+    likes: false | number[]
+    notes: false | Note[]
+    comments: false | Comment[]
     favoris: number[]
     centres_interet: number[]
     categories_notif: false | any

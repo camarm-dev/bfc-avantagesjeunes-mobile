@@ -80,13 +80,13 @@
       Avantages
     </div>
     <div class="grid-results">
-      <AvantageCard :small="true" :used="usedAdvantagesIds.includes(avantage.id_avantage)" :favori="favoris.includes(avantage.id_avantage)" :avantage="avantage" v-for="avantage in avantages"/>
+      <AvantageCard :key="avantage.id_avantage" :small="true" :used="usedAdvantagesIds.includes(avantage.id_avantage)" :favori="favoris.includes(avantage.id_avantage)" :avantage="avantage" v-for="avantage in avantages"/>
     </div>
   </ion-content>
 </template>
 
 <script setup lang="ts">
-import '@/theme/globals.css'
+import "@/theme/globals.css"
 import {
   IonHeader,
   IonToolbar,
@@ -97,30 +97,30 @@ import {
   IonItem,
   IonBackButton,
   IonButtons
-} from '@ionic/vue';
+} from "@ionic/vue"
 import {
   MousePointer,
   Facebook,
   Twitter,
   Youtube,
   Phone, Milestone
-} from "lucide-vue-next";
-import AvantageCard from "@/components/AvantageCard.vue";
+} from "lucide-vue-next"
+import AvantageCard from "@/components/AvantageCard.vue"
 </script>
 
 <script lang="ts">
-import {getAvantage, getOrganisme} from "@/functions/fetch/avantages";
-import {getAccount} from "@/functions/fetch/account";
+import {getAvantage, getOrganisme} from "@/functions/fetch/avantages"
+import {getAccount} from "@/functions/fetch/account"
 import mapboxgl from "mapbox-gl"
 import "mapbox-gl/dist/mapbox-gl.css"
-import {Clipboard} from "@capacitor/clipboard";
-import {displayToast} from "@/functions/toasts";
-import {Organisme} from "@/types/organismes";
-import {Avantage} from "@/types/avantages";
+import {Clipboard} from "@capacitor/clipboard"
+import {displayToast} from "@/functions/toasts"
+import {Organisme} from "@/types/organismes"
+import {Avantage} from "@/types/avantages"
 mapboxgl.accessToken = "pk.eyJ1IjoiY2FtYXJtLWRldiIsImEiOiJja3B6czl2bGowa2g2Mm5ycmdqMThhOHEzIn0.H-PjLIG_jQqZqvz3gPvjeQ"
 
 export default {
-  props: ['id_organisme'],
+  props: ["id_organisme"],
   data() {
     return {
       org: {} as Organisme,
@@ -154,9 +154,9 @@ export default {
         zoom: 10,
         minZoom: 4,
       })
-      map.on('load', () => {
-        const el = document.createElement('div');
-        el.className = 'marker';
+      map.on("load", () => {
+        const el = document.createElement("div")
+        el.className = "marker"
         const popup = new mapboxgl.Popup({ offset: 25 })
             .setHTML(
                 `<h3>${this.org.nom}</h3><p>${this.org.adresse}</p>`
@@ -165,7 +165,7 @@ export default {
         new mapboxgl.Marker(el)
             .setLngLat(coords)
             .setPopup(popup)
-            .addTo(map);
+            .addTo(map)
       })
     },
     async loadUser() {
@@ -187,9 +187,9 @@ export default {
         await Clipboard.write({
           string: text.toString()
         })
-        await displayToast('', 'Copié dans le presse papier !', 3000, 'success')
+        await displayToast("", "Copié dans le presse papier !", 3000, "success")
       } catch (e) {
-        await displayToast('', `Copie impossible ! ${e} ${text}`, 3000, 'danger')
+        await displayToast("", `Copie impossible ! ${e} ${text}`, 3000, "danger")
       }
     }
   }

@@ -6,6 +6,8 @@
     --ion-tab-bar-color-selected: var(--ion-color-secondary-shade);
     --ion-text-color: var(--ion-color-primary-contrast);
     --ion-color-heart: #d5595a;
+    --ion-color-like: #3a3af0;
+    --ion-color-star: #b99c33;
 }
 
 ion-nav-link {
@@ -346,6 +348,41 @@ ion-toolbar ion-label p {
     text-align: center;
 }
 
+.card.cropped {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    height: 8em;
+}
+
+.card.cropped header {
+    height: 40%;
+}
+
+.card.cropped .content {
+    padding-bottom: 0;
+}
+
+.card.cropped .content p {
+    max-height: 1em;
+}
+
+.bottom-box {
+    border-top: .55px solid var(--ion-toolbar-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.2))));
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    background-color: var(--ion-color-primary-shade);
+    padding: .5em 1.2em;
+    max-width: 15em;
+    max-height: 3em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.card.small .bottom-box {
+    max-width: 10em;
+}
+
 .card.full {
     width: 100%;
 }
@@ -409,6 +446,10 @@ ion-chip.unique {
 
 .card.heart header {
     background-color: var(--ion-color-heart);
+}
+
+.card.like header {
+    background-color: var(--ion-color-like);
 }
 
 ion-chip.green {

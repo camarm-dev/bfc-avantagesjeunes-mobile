@@ -1,32 +1,32 @@
-import {getToken, logOut} from "@/functions/fetch/account";
-import { APIResponse } from "@/functions/fetch/interfaces";
-import { displayToast } from "@/functions/toasts";
-import {getCredentials} from "@/functions/credentials";
+import {getToken, logOut} from "@/functions/fetch/account"
+import { APIResponse } from "@/functions/fetch/interfaces"
+import { displayToast } from "@/functions/toasts"
+import {getCredentials} from "@/functions/credentials"
 
 
 // const successCodes = [200, 201]
 
 function getIDFromToken(token: string) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
+    const base64Url = token.split(".")[1]
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/")
+    const jsonPayload = decodeURIComponent(atob(base64).split("").map(function(c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)
+    }).join(""))
 
-    return JSON.parse(jsonPayload)['id_compte'];
+    return JSON.parse(jsonPayload)["id_compte"]
 }
 
-async function post(url: string, data: any, cors: boolean = true) {
-    if (data) data['token'] = localStorage.getItem('currentCardToken')
+async function post(url: string, data: any, cors = true) {
+    if (data) data["token"] = localStorage.getItem("currentCardToken")
 
-    let config = {
-        method: 'POST',
+    const config = {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded,application/json',
-            'KOREDGE-API-KEY': 'cNkLdXwQc7G8fRe0FGGCOOZcrkJHbY3B',
-            'Sec-Fetch-Site': 'same-site'
+            "Content-Type": "application/x-www-form-urlencoded,application/json",
+            "KOREDGE-API-KEY": "cNkLdXwQc7G8fRe0FGGCOOZcrkJHbY3B",
+            "Sec-Fetch-Site": "same-site"
         },
-        mode: cors ? 'cors': 'no-cors',
+        mode: cors ? "cors": "no-cors",
         url: url
     } as any
 
@@ -38,10 +38,10 @@ async function post(url: string, data: any, cors: boolean = true) {
 
 async function get(url: string) {
     const config = {
-        method: 'GET',
+        method: "GET",
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded,application/json',
-            'KOREDGE-API-KEY': 'cNkLdXwQc7G8fRe0FGGCOOZcrkJHbY3B'
+            "Content-Type": "application/x-www-form-urlencoded,application/json",
+            "KOREDGE-API-KEY": "cNkLdXwQc7G8fRe0FGGCOOZcrkJHbY3B"
         },
         url: url
     } as any
@@ -50,7 +50,7 @@ async function get(url: string) {
 
 
 async function handleResponse(request: Promise<Response>, checks = true, requestConfig: Request): Promise<APIResponse> {
-    let requestClone = {
+    const requestClone = {
         method: requestConfig.method,
         headers: requestConfig.headers,
         body: requestConfig.body,
@@ -68,15 +68,15 @@ async function handleResponse(request: Promise<Response>, checks = true, request
             const userCards = await getCredentials()
             if (userCards.length > 0) {
                 let userCreds = {
-                    numero: '',
-                    password: ''
+                    numero: "",
+                    password: ""
                 }
                 for (const card of userCards) {
-                    if (card.id == localStorage.getItem('currentCardId')) {
+                    if (card.id == localStorage.getItem("currentCardId")) {
                         userCreds = card
                     }
                 }
-                localStorage.setItem('currentCardToken', (await getToken(userCreds.numero, userCreds.password)).token || '')
+                localStorage.setItem("currentCardToken", (await getToken(userCreds.numero, userCreds.password)).token || "")
                 const newRequest = fetch(requestConfig.url, requestClone)
                 return await handleResponse(newRequest,false, requestConfig)
             } else {
@@ -87,7 +87,7 @@ async function handleResponse(request: Promise<Response>, checks = true, request
                 // }, 3000)
             }
         } else {
-            if (err.response) await displayToast(`Error ${err.response.data.status}`, err.response.data.message, 2000, 'danger')
+            if (err.response) await displayToast(`Error ${err.response.data.status}`, err.response.data.message, 2000, "danger")
             else {
                 // await displayToast('Error', 'Unable to access API: forbidden. Please (re)login.', 3000, 'danger')
                 // setTimeout(() => {
@@ -99,7 +99,7 @@ async function handleResponse(request: Promise<Response>, checks = true, request
             err.response.code = err.response.status
             return err.response
         }
-        return { code: 500, message: 'Unknown error occurred', data: {}, status: false }
+        return { code: 500, message: "Unknown error occurred", data: {}, status: false }
     }
 }
 

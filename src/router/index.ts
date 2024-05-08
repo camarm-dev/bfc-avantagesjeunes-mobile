@@ -1,27 +1,27 @@
-import { createRouter, createWebHistory } from '@ionic/vue-router';
-import { RouteRecordRaw } from 'vue-router';
-import Outlet from "@/Outlet.vue";
+import { createRouter, createWebHistory } from "@ionic/vue-router"
+import { RouteRecordRaw } from "vue-router"
+import Outlet from "@/Outlet.vue"
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: "/",
     component: Outlet,
     children: [
       {
-        path: '',
-        redirect: '/resume'
+        path: "",
+        redirect: "/resume"
       },
       {
-        path: 'resume',
-        component: () => import('@/views/ResumePage.vue')
+        path: "resume",
+        component: () => import("@/views/ResumePage.vue")
       },
       {
-        path: 'search',
-        component: () => import('@/views/SearchPage.vue')
+        path: "search",
+        component: () => import("@/views/SearchPage.vue")
       },
       {
-        path: 'news',
-        component: () => import('@/views/NewsPage.vue')
+        path: "news",
+        component: () => import("@/views/NewsPage.vue")
       }
     ]
   }

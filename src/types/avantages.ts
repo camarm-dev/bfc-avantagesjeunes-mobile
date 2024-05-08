@@ -1,4 +1,4 @@
-import {Organisme} from "@/types/organismes";
+import {Organisme} from "@/types/organismes"
 
 export interface Avantage {
     id_avantage: number
@@ -114,6 +114,7 @@ export type Category = {
 
 export type Comment = {
     id_comment: number
+    id_avantage: number
     rid_compte: number
     rid_avantage: number
     commentaire: string
@@ -123,7 +124,13 @@ export type Comment = {
     auteur?: any
     image_thumb_url: string
     nb_like: number
-    likesIdCompte: boolean
+    likesIdCompte: boolean | number[]
+}
+
+export type Note = {
+    id_avantage: number
+    note: number
+    datetime: string
 }
 
 export type Transaction = {
@@ -139,8 +146,8 @@ export type Transaction = {
     devise: "EUR" | string
     tx_change: string
     datetime: string
-    avantage_exclu: false,
-    coupon_traite: false,
+    avantage_exclu: false
+    coupon_traite: false
     rid_groupe_avantage: number
 }
 

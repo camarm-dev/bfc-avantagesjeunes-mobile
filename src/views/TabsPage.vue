@@ -20,18 +20,18 @@
 </template>
 
 <script setup lang="ts">
-import { IonTabBar, IonTabButton, IonTabs, IonPage, IonRouterOutlet } from '@ionic/vue';
+import { IonTabBar, IonTabButton, IonTabs, IonPage, IonRouterOutlet } from "@ionic/vue"
 import {
   Search as SearchIcon,
   CreditCard as ResumeIcon,
   Newspaper as NewsIcon
-} from "lucide-vue-next";
+} from "lucide-vue-next"
 </script>
 
 <script lang="ts">
 
-import {changedVibration, endVibration} from "@/functions/native/tools";
-import {getCredentials} from "@/functions/credentials";
+import {changedVibration, endVibration} from "@/functions/native/tools"
+import {getCredentials} from "@/functions/credentials"
 
 export default {
   data() {
@@ -42,24 +42,24 @@ export default {
   mounted() {
     this.updateTheme()
     this.updateLoggedInStatus()
-    window.addEventListener('closeModals', () => {
+    window.addEventListener("closeModals", () => {
       this.updateTheme()
       endVibration()
       this.updateLoggedInStatus()
     })
-    window.addEventListener('reloaded', changedVibration)
+    window.addEventListener("reloaded", changedVibration)
   },
   beforeUpdate() {
     this.updateLoggedInStatus()
   },
   methods: {
     updateTheme() {
-      const theme = localStorage.getItem('userAppearance')
-      theme == 'dark' ? document.body.classList.add('dark') : document.body.classList.remove('dark')
+      const theme = localStorage.getItem("userAppearance")
+      theme == "dark" ? document.body.classList.add("dark") : document.body.classList.remove("dark")
     },
     updateLoggedInStatus() {
       getCredentials().then(cards => {
-        if (cards.length > 0 && localStorage.getItem('currentCardToken')) {
+        if (cards.length > 0 && localStorage.getItem("currentCardToken")) {
           this.loggedIn = true
         }
       })

@@ -1,65 +1,112 @@
-import {get, post} from "@/functions/fetch/tools";
-import {getAccount} from "@/functions/fetch/account";
-import {displayToast} from "@/functions/toasts";
-import moment from 'moment'
-import {Organisme} from "@/types/organismes";
-import {Avantage} from "@/types/avantages";
+import {get, post} from "@/functions/fetch/tools"
+import {getAccount} from "@/functions/fetch/account"
+import {displayToast} from "@/functions/toasts"
+import moment from "moment"
+import {Organisme} from "@/types/organismes"
+import {Avantage} from "@/types/avantages"
+import {cacheAdvantage, getCachedAdvantage} from "@/functions/cache"
 
 
-export function getCacheStats() {
-    const cache = getAvantagesCache()
-    return { length: Object.keys(cache).length, size: (new Blob([JSON.stringify(cache)])).size }
-}
-
-function getAvantagesCache(): {} {
-    return JSON.parse(localStorage.getItem('advantagesCache') || '{}')
-}
-
-function isCached(id: string | number) {
-    return getAvantagesCache().hasOwnProperty(id)
-}
-
-function getCachedAdvantage(id: string | number) {
-    const cache = getAvantagesCache() as any
-    return cache[id]
-}
-
-function cacheAdvantage(id: string | number, document: object) {
-    let cache = getAvantagesCache() as any
-    cache[id] = document
-    localStorage.setItem('advantagesCache', JSON.stringify(cache))
-}
-
-async function getAvantage(id: string | number): Promise<Avantage> {
-    if (isCached(id)) {
-        return getCachedAdvantage(id)
+async function getAvantage(id: string | number, force = false): Promise<Avantage> {
+    const avantage = await getCachedAdvantage(id)
+    if (avantage && !force) {
+        return avantage
     }
-    const url = import.meta.env.VITE_API_URL + '/api/avantage/detail/' + id
+    const url = import.meta.env.VITE_API_URL + "/api/avantage/detail/" + id
     const document = await get(url) as any as Avantage
-    cacheAdvantage(id, document)
+    await cacheAdvantage(document)
     return document
 }
 
-async function addFavori(id_avantage: string | number) {
-    const url = import.meta.env.VITE_API_URL + '/api/social/addAvantageFavori'
+async function addComment(id_avantage: string | number, content: string, parent?: string | number) {
+    const url = import.meta.env.VITE_API_URL + "/api/social/addAvantageComment"
     const data = {
-        id: localStorage.getItem('currentCardId'),
+        id: localStorage.getItem("currentCardId"),
+        id_avantage: id_avantage,
+        text: content,
+        parent: parent
+    }
+    return await post(url, data)
+}
+
+async function removeComment(id_avantage: string | number, comment_id: string | number) {
+    const url = import.meta.env.VITE_API_URL + "/api/social/deleteAvantageComment"
+    const data = {
+        id: localStorage.getItem("currentCardId"),
+        id_avantage: id_avantage,
+        id_comment: comment_id
+    }
+    return await post(url, data)
+}
+
+async function addCommentLike(id_avantage: string | number, comment_id: string | number) {
+    const url = import.meta.env.VITE_API_URL + "/api/social/addCommentLike"
+    const data = {
+        id: localStorage.getItem("currentCardId"),
+        id_avantage: id_avantage,
+        id_comment: comment_id
+    }
+    return await post(url, data)
+}
+
+async function removeCommentLike(id_avantage: string | number, comment_id: string | number) {
+    const url = import.meta.env.VITE_API_URL + "/api/social/deleteCommentLike"
+    const data = {
+        id: localStorage.getItem("currentCardId"),
+        id_avantage: id_avantage,
+        id_comment: comment_id
+    }
+    return await post(url, data)
+}
+
+async function addFavori(id_avantage: string | number) {
+    const url = import.meta.env.VITE_API_URL + "/api/social/addAvantageFavori"
+    const data = {
+        id: localStorage.getItem("currentCardId"),
         id_avantage: id_avantage
     }
     return await post(url, data)
 }
 
-async function removeFavori(id_avantage: string | number) {
-    const url = import.meta.env.VITE_API_URL + '/api/social/deleteAvantageFavori'
+async function addLike(id_avantage: string | number) {
+    const url = import.meta.env.VITE_API_URL + "/api/social/addAvantageLike"
     const data = {
-        id: localStorage.getItem('currentCardId'),
+        id: localStorage.getItem("currentCardId"),
+        id_avantage: id_avantage
+    }
+    return await post(url, data)
+}
+
+async function removeLike(id_avantage: string | number) {
+    const url = import.meta.env.VITE_API_URL + "/api/social/deleteAvantageLike"
+    const data = {
+        id: localStorage.getItem("currentCardId"),
+        id_avantage: id_avantage
+    }
+    return await post(url, data)
+}
+
+async function addNote(id_avantage: string | number, note: number) {
+    const url = import.meta.env.VITE_API_URL + "/api/social/addAvantageNote"
+    const data = {
+        id: localStorage.getItem("currentCardId"),
+        id_avantage: id_avantage,
+        note: note
+    }
+    return await post(url, data)
+}
+
+async function removeFavori(id_avantage: string | number) {
+    const url = import.meta.env.VITE_API_URL + "/api/social/deleteAvantageFavori"
+    const data = {
+        id: localStorage.getItem("currentCardId"),
         id_avantage: id_avantage
     }
     return await post(url, data)
 }
 
 async function checkAvailability(id_avantage: string | number) {
-    const url = import.meta.env.VITE_API_URL + '/api/carte/checkAvantageAvailabilities'
+    const url = import.meta.env.VITE_API_URL + "/api/carte/checkAvantageAvailabilities"
     const data = {
         id_avantage: id_avantage,
         array_id: [(await getAccount()).carte.id_carte]
@@ -67,8 +114,8 @@ async function checkAvailability(id_avantage: string | number) {
     return await post(url, data)
 }
 
-async function addTransactionAdvantage(id_avantage: string | number, id_organisme: string | number, id_carte: string) {
-    const url = import.meta.env.VITE_API_URL + '/api/carte/addTransaction'
+async function addTransactionAdvantage(id_avantage: string | number, id_organisme: string | number, id_carte: string | number) {
+    const url = import.meta.env.VITE_API_URL + "/api/carte/addTransaction"
     const data = {
         array_id: [id_carte],
         id_avantage: id_avantage,
@@ -78,8 +125,8 @@ async function addTransactionAdvantage(id_avantage: string | number, id_organism
     return await post(url, data)
 }
 
-async function getAdvantageCode(id_avantage: string | number, id_organisme: string | number, id_carte: string, mode_paiement: string) {
-    const url = import.meta.env.VITE_API_URL + '/api/avantage/obtenirCode'
+async function getAdvantageCode(id_avantage: string | number, id_organisme: string | number, id_carte: string | number, mode_paiement: string | number) {
+    const url = import.meta.env.VITE_API_URL + "/api/avantage/obtenirCode"
     const data = {
         cartes: [id_carte],
         type: mode_paiement,
@@ -96,14 +143,14 @@ async function obtainAdvantage(id_avantage: string | number, id_organisme: strin
     await addTransactionAdvantage(id_avantage, id_organisme, id_carte)
     const response = await getAdvantageCode(id_avantage, id_organisme, id_carte, mode_paiement) as any
     if (response.status_code == 10) {
-        await displayToast('Rendez-vous en magasin', 'Cet avantage ne nécessite pas de code... Présentez vous sur place avec votre carte !', 5000, 'primary')
+        await displayToast("Rendez-vous en magasin", "Cet avantage ne nécessite pas de code... Présentez vous sur place avec votre carte !", 5000, "primary")
         return
     }
     if (!response.status) {
-        await displayToast('Échec', 'Une erreur inconnue est survenue...', 2000, 'danger')
+        await displayToast("Échec", "Une erreur inconnue est survenue...", 2000, "danger")
         return
     }
-    await displayToast('Avantage confirmé', 'Retrouvez le code et les instructions dans la page avantages utilisés !', 3000, 'success')
+    await displayToast("Avantage confirmé", "Retrouvez le code et les instructions dans la page avantages utilisés !", 3000, "success")
 }
 
 async function getOrganisme(id_organisme: string | number): Promise<Organisme> {
@@ -114,8 +161,15 @@ async function getOrganisme(id_organisme: string | number): Promise<Organisme> {
 export {
     getAvantage,
     addFavori,
+    addLike,
+    removeLike,
+    addNote,
+    addComment,
+    removeComment,
+    addCommentLike,
     removeFavori,
     obtainAdvantage,
     checkAvailability,
-    getOrganisme
+    getOrganisme,
+    removeCommentLike
 }

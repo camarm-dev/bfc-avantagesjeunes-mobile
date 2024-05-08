@@ -1,4 +1,4 @@
-import {Badge} from "@/types/badges";
+import {Badge} from "@/types/badges"
 
 export const BADGES = {
     "20": {
@@ -341,7 +341,7 @@ export const BADGES = {
         "position": 10,
         // new fields
         "target": 30,
-        "target_type": 'likes'
+        "target_type": "likes"
     }
 } as unknown as {
     [key: string | number]: Badge

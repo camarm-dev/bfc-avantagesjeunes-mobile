@@ -1,4 +1,4 @@
-import { toastController } from "@ionic/vue";
+import { toastController } from "@ionic/vue"
 
 async function displayToast(header: string, message: string, duration: number, style: "primary" | "warning" | "danger" | "success") {
     const toast = await toastController.create({

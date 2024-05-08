@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import '@/theme/globals.css'
+import "@/theme/globals.css"
 import {
   IonPage,
   IonHeader,
@@ -54,15 +54,15 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonButton
-} from '@ionic/vue';
-import NewsCard from "@/components/NewsCard.vue";
-import {globeOutline, newspaperOutline} from "ionicons/icons";
+} from "@ionic/vue"
+import NewsCard from "@/components/NewsCard.vue"
+import {globeOutline, newspaperOutline} from "ionicons/icons"
 </script>
 
 <script lang="ts">
-import {getNews} from "@/functions/fetch/news";
-import {InfiniteScrollCustomEvent} from "@ionic/vue";
-import {News} from "@/types/news";
+import {getNews} from "@/functions/fetch/news"
+import {InfiniteScrollCustomEvent} from "@ionic/vue"
+import {News} from "@/types/news"
 
 export default {
   data () {
@@ -83,7 +83,7 @@ export default {
       this.news = (await getNews(this.page)).results as any[]
     },
     openInBrowser() {
-      window.open('https://www.avantagesjeunes.com/compte/news')
+      window.open("https://www.avantagesjeunes.com/compte/news")
     },
     loadMore(event: InfiniteScrollCustomEvent) {
       this.page += 1

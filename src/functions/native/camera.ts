@@ -1,6 +1,6 @@
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import {modalController} from "@ionic/vue";
-import ResizeImageModal from "@/components/ResizeImageModal.vue";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera"
+import {modalController} from "@ionic/vue"
+import ResizeImageModal from "@/components/ResizeImageModal.vue"
 
 
 async function openImageResizingModal(image: string, event: string) {
@@ -12,7 +12,7 @@ async function openImageResizingModal(image: string, event: string) {
             event: event
         }
     })
-    window.addEventListener('closeResizingModal', () => {
+    window.addEventListener("closeResizingModal", () => {
         modal.dismiss()
     })
     await modal.present()
@@ -28,9 +28,19 @@ async function takePhoto(text: string) {
     })
 }
 
+async function getPhoto() {
+    const image = await Camera.getPhoto({
+        resultType: CameraResultType.Base64,
+        source: CameraSource.Prompt,
+        quality: 100,
+        allowEditing: true
+    })
+    return image.base64String as string
+}
+
 async function saveCardImage(savingId: string, text: string, callback: CallableFunction) {
     const photo = await takePhoto(text)
-    const base64Image = `data:image/jpeg;base64,` + photo.base64String as string
+    const base64Image = "data:image/jpeg;base64," + photo.base64String as string
     await openImageResizingModal(base64Image, savingId)
 
     // @ts-ignore
@@ -42,5 +52,6 @@ async function saveCardImage(savingId: string, text: string, callback: CallableF
 }
 
 export {
-    saveCardImage
+    saveCardImage,
+    getPhoto
 }
