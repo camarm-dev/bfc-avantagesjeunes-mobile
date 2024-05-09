@@ -48,3 +48,10 @@ export async function getCacheStats(): Promise<{ length: number, size: number }>
         }
     })
 }
+
+/*
+Following function upgrade storage (remove old local storage values, upgrade indexed db ect...)
+ */
+export function upgradeStorage() {
+    localStorage.deleteItem("advantagesCache")
+}
