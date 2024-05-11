@@ -64,7 +64,20 @@
           <h2>{{ user.carte.date_vente }}</h2>
         </ion-label>
       </ion-item>
+      <ion-item :button="user.carte.livret" id="open-disclaimer">
+        <Compass class="icon ion-color-tertiary" />
+        <ion-label>
+          <p>Version</p>
+          <h2>{{ user.carte.livret ? 'Papier': 'Numérique' }}</h2>
+        </ion-label>
+      </ion-item>
     </ion-list>
+    <ion-alert
+        v-if="user.carte.livret"
+        trigger="open-disclaimer"
+        header="Version papier"
+        message="Vous ne pourrez pas utiliser les avantages depuis l'application avec la version papier. Utilisez les coupons physiques de votre livret."
+    />
 
     <div class="list-title">
       Actions
@@ -113,7 +126,8 @@ import {
   BadgeCheck,
   BadgeX,
   Focus,
-  Trash2
+  Trash2,
+  Compass
 } from "lucide-vue-next"
 import {scanOutline} from "ionicons/icons"
 import PulseItem from "@/components/PulseItem.vue"
@@ -231,5 +245,9 @@ export default {
 .swiper-pagination .swiper-pagination-bullet-active {
   width: 10px !important;
   height: 10px !important;
+}
+
+.alert-wrapper {
+  background: var(--ion-background-color) !important;
 }
 </style>
