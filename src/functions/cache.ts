@@ -54,4 +54,6 @@ Following function upgrade storage (remove old local storage values, upgrade ind
  */
 export function upgradeStorage() {
     localStorage.removeItem("advantagesCache")
+    localStorage.removeItem("frontCardImage")
+    localStorage.removeItem("backCardImage")
 }
