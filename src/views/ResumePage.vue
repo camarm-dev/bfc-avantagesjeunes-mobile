@@ -228,6 +228,7 @@ import {Badge} from "@/types/badges"
 import {Avantage, Transaction, TransactionAvantage} from "@/types/avantages"
 import {RefresherCustomEvent} from "@ionic/vue"
 import {getCredentials} from "@/functions/credentials"
+import {upgradeStorage} from "@/functions/cache";
 
 const refs = {
   modalLogin: ref(null),
@@ -287,6 +288,7 @@ export default {
     }
   },
   mounted() {
+    upgradeStorage()
     localStorage.setItem("userApiUrl", "https://api-ajc.camarm.fr")
     window.addEventListener("reload", () => {
       this.refreshAccount()
