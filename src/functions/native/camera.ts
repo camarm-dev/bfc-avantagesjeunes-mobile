@@ -1,6 +1,7 @@
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera"
 import {modalController} from "@ionic/vue"
 import ResizeImageModal from "@/components/ResizeImageModal.vue"
+import {displayToast} from "@/functions/toasts";
 
 
 async function openImageResizingModal(image: string, event: string) {
@@ -32,7 +33,7 @@ async function getPhoto() {
     const image = await Camera.getPhoto({
         resultType: CameraResultType.Base64,
         source: CameraSource.Prompt,
-        quality: 100,
+        quality: 20,
         allowEditing: true
     })
     return image.base64String as string
@@ -46,8 +47,12 @@ async function saveCardImage(savingId: string, text: string, callback: CallableF
     // @ts-ignore
     window.addEventListener(savingId, (event: CustomEvent) => {
         const resizedBase64Image = event.detail.image
-        localStorage.setItem(savingId, resizedBase64Image)
-        callback()
+        try {
+            localStorage.setItem(savingId, resizedBase64Image)
+            callback()
+        } catch (e) {
+            displayToast('Error', `${e}`, 10000, 'danger')
+        }
     })
 }
 
