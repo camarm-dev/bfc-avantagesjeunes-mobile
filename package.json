@@ -1,7 +1,7 @@
 {
   "name": "avantages-jeunes-connect",
   "private": true,
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0",
   "type": "module",
   "license": "CECILL-2.1",
   "scripts": {
