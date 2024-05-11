@@ -1,9 +1,11 @@
 <div align="center">
 <br>
-<img alt="Icon" src="public/welcome.png" height="50">
+<img alt="Icon" src=".github/icon.png" height="128">
 
 # Avantages Jeunes Connect
 Une application mobile pour la carte avantages jeunes en Bourgogne Franche-Comté.
+
+[Website](https://avantagesjeunesconnect.camarm.fr) [Download](/releases)
 
 </div>
 
