@@ -69,8 +69,13 @@ async function setImage(imageId: string, base64Image: string) {
     });
 }
 
+async function removeImage(imageId: string) {
+    await Preferences.remove({ key: imageId })
+}
+
 export {
     saveCardImage,
     getPhoto,
-    getImage
+    getImage,
+    removeImage
 }
