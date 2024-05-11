@@ -144,6 +144,7 @@ import "@ionic/vue/css/ionic-swiper.css"
 import FullscreenCardModal from "@/components/FullscreenCardModal.vue"
 import {ref} from "vue"
 import ScanCardModal from "@/components/ScanCardModal.vue"
+import {getImage, removeImage} from "@/functions/native/camera";
 
 const refs = {
   modalFullscreen: ref(null),
@@ -160,8 +161,8 @@ window.addEventListener("closeModals", () => {
 export default {
   data () {
     return {
-      frontCardImage: localStorage.getItem("frontCardImage") || "/carte.png",
-      backCardImage: localStorage.getItem("backCardImage") || "/carte-dos.png",
+      frontCardImage: "/carte.png",
+      backCardImage: "/carte-dos.png",
       user: {
         image_url: "",
         carte: {
@@ -178,8 +179,13 @@ export default {
   },
   mounted() {
     this.refreshAccount()
+    this.loadImages()
   },
   methods: {
+    async loadImages() {
+      this.frontCardImage = (await getImage('frontCardImage')) || "/carte.png"
+      this.backCardImage = (await getImage('backCardImage')) || "/carte-dos.png"
+    },
     open(url: string) {
       window.open(url)
     },
@@ -199,9 +205,9 @@ export default {
     async openCardFullscreen() {
       await createModal(FullscreenCardModal, "modalFullscreen", refs, { front: this.frontCardImage, back: this.backCardImage }, true, [0, 0.9], true)
     },
-    removeCardScans() {
-      localStorage.removeItem("frontCardImage")
-      localStorage.removeItem("backCardImage")
+    async removeCardScans() {
+      await removeImage("frontCardImage")
+      await removeImage("backCardImage")
       this.frontCardImage = "/carte.png"
       this.backCardImage = "/carte-dos.png"
     }
