@@ -151,7 +151,7 @@
             Ajouter votre carte, accédez à vos avantages utilisés et recherchez plus facilement ceux dont vous pouvez bénéficiez !
           </p>
         </ion-note>
-        <ion-note class="ion-color-medium ion-margin-auto underline">
+        <ion-note class="ion-color-medium ion-margin-auto underline" v-if="!canReconnect">
           <a href="https://avantagesjeunes.com/login" target="blank">Première connexion</a>
         </ion-note>
         <ion-list inset>
