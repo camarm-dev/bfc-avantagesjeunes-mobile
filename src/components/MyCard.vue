@@ -144,7 +144,7 @@ import "@ionic/vue/css/ionic-swiper.css"
 import FullscreenCardModal from "@/components/FullscreenCardModal.vue"
 import {ref} from "vue"
 import ScanCardModal from "@/components/ScanCardModal.vue"
-import {getImage, removeImage} from "@/functions/native/camera";
+import {getImage, removeImage} from "@/functions/native/camera"
 
 const refs = {
   modalFullscreen: ref(null),
@@ -183,8 +183,8 @@ export default {
   },
   methods: {
     async loadImages() {
-      this.frontCardImage = (await getImage('frontCardImage')) || "/carte.png"
-      this.backCardImage = (await getImage('backCardImage')) || "/carte-dos.png"
+      this.frontCardImage = (await getImage("frontCardImage")) || "/carte.png"
+      this.backCardImage = (await getImage("backCardImage")) || "/carte-dos.png"
     },
     open(url: string) {
       window.open(url)

@@ -231,7 +231,7 @@ import {Badge} from "@/types/badges"
 import {Avantage, Transaction, TransactionAvantage} from "@/types/avantages"
 import {RefresherCustomEvent} from "@ionic/vue"
 import {getCredentials} from "@/functions/credentials"
-import {upgradeStorage} from "@/functions/cache";
+import {upgradeStorage} from "@/functions/cache"
 
 const refs = {
   modalLogin: ref(null),

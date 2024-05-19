@@ -1,8 +1,8 @@
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera"
 import {modalController} from "@ionic/vue"
 import ResizeImageModal from "@/components/ResizeImageModal.vue"
-import {displayToast} from "@/functions/toasts";
-import { Preferences } from '@capacitor/preferences';
+import {displayToast} from "@/functions/toasts"
+import { Preferences } from "@capacitor/preferences"
 
 
 async function openImageResizingModal(image: string, event: string) {
@@ -53,7 +53,7 @@ async function saveCardImage(savingId: string, text: string, callback: CallableF
                 callback()
             })
         } catch (e) {
-            displayToast('Error', `${e}`, 10000, 'danger')
+            displayToast("Error", `${e}`, 10000, "danger")
         }
     })
 }
@@ -66,7 +66,7 @@ async function setImage(imageId: string, base64Image: string) {
     await Preferences.set({
         key: imageId,
         value: base64Image,
-    });
+    })
 }
 
 async function removeImage(imageId: string) {
