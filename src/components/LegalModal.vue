@@ -15,13 +15,13 @@
       <p>
         Avantages Jeunes Connect (AJC) est une application alternative au site <a href="https://avantagesjeunes.com" target="_blank">avantagejeunes.com</a> non-officielle, gratuite et open source.
       </p>
-      <h2>Mentions légales</h2>
+      <h2>Confidentialité et Conditions d'Utilisation</h2>
       <p>
-        <a href="https://github.com/camarm-dev/bfc-avantagesjeunes-mobile/blob/main/LEGAL.md" target="_blank">Mentions légales</a>
+        <a href="https://avantagesjeunesconnect.camarm.fr/cgu" target="_blank">Conditions Générales d'Utilisation</a>
         •
-        <a href="https://www.camarm.dev" target="_blank">Développeur</a>
+        <a href="https://avantagesjeunesconnect.camarm.fr/privacy" target="_blank">Politique de confidentialité</a>
         •
-        <a href="https://labse.camarm.fr" target="_blank">Labse Softwares</a>
+        <a href="https://avantagesjeunesconnect.camarm.fr/usage" target="_blank">Appels aux API publiques</a>
       </p>
       <h2>Licence</h2>
       <p>
@@ -29,6 +29,10 @@
         <a href="https://github.com/camarm-dev/bfc-avantagesjeunes-mobile" target="_blank">Github</a>
         •
         <a href="https://github.com/camarm-dev/bfc-avantagesjeunes-mobile/blob/main/LICENSE" target="_blank">Licence</a>
+      </p>
+      <h2>Renseignements</h2>
+      <p>
+        Pour tous renseignements supplémentaires, merci de nous contacter à l'adresse: <a href="mailto:software@camarm.dev">software@camarm.dev</a>
       </p>
     </ion-content>
   </ion-page>
