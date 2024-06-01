@@ -24,6 +24,10 @@ Les services concernés par cette politique de confidentialité incluent, mais n
 > Identifiants de connexion (numéro de carte et mot de passe)
 - Les données concernant les interactions effectuées sur "avantagesjeunes.com" et depuis l'application
 > Favoris, likes, notes, commentaires, photo de profil...
+- Votre position GPS (si consentement), stockée **ni sur votre appareil par AJC, ni sur les serveurs AJC**
+> Utilisée à chaque rechargement en **"one-shot"** pour afficher les avantages autour de vous.
+> 
+> Nous récupérons la position, effectuons la requête et n'avons pas accès à cette donnée qui **transite seulement** entre votre appareil et nos serveurs, via le protocole sécurisé HTTPS.
 
 **Données collectées depuis le site web de présentation**:
 
