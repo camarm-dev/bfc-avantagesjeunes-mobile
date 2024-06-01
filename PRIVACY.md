@@ -1,6 +1,6 @@
 # 📖 Politique de confidentialité
 
-Document juridique détaillant clairement et précisément ce que "Avantages Jeunes Connect" (dit "AJC") fait de vos données personnelles. 
+Document juridique détaillant clairement et précisément ce que "Avantages Jeunes Connect" (dit "AJC") fait de vos données personnelles.
 
 > Ce service peut être amené à collecter certaines données personnelles de ses utilisateurs.
 
@@ -9,10 +9,10 @@ Document juridique détaillant clairement et précisément ce que "Avantages Jeu
 
 ## 1. - Services concernés
 
-Les services concernés par cette politique de confidentialité incluent, mais ne se limite pas à: 
+Les services concernés par cette politique de confidentialité incluent, mais ne se limite pas à:
 
 - L'application mobile "Avantages Jeunes Connect"
-  - Code source disponible sur [le dépôt Github](https://github.com/camarm-dev/bfc-avantagesjeunes-mobile) 
+  - Code source disponible sur [le dépôt Github](https://github.com/camarm-dev/bfc-avantagesjeunes-mobile)
 - Le site web de présentation [https://avantagesjeunesconnect.camarm.fr](https://avantagesjeunesconnect.camarm.fr)
 
 ## 2. - Description de la collecte de données
@@ -20,14 +20,17 @@ Les services concernés par cette politique de confidentialité incluent, mais n
 ### 2.1 - Données collectées
 
 **Données collectées depuis l'application**:
-- Vos données d'identification à "avantagesjeunes.com", gardées dans un stockage sécurisé par votre appareil. 
+- Vos données d'identification à "avantagesjeunes.com", gardées dans un stockage sécurisé par votre appareil.
 > Identifiants de connexion (numéro de carte et mot de passe)
 - Les données concernant les interactions effectuées sur "avantagesjeunes.com" et depuis l'application
 > Favoris, likes, notes, commentaires, photo de profil...
 - Votre position GPS (si consentement), stockée **ni sur votre appareil par AJC, ni sur les serveurs AJC**
 > Utilisée à chaque rechargement en **"one-shot"** pour afficher les avantages autour de vous.
-> 
+>
 > Nous récupérons la position, effectuons la requête et n'avons pas accès à cette donnée qui **transite seulement** entre votre appareil et nos serveurs, via le protocole sécurisé HTTPS.
+> Cette donnée n'est pas conservée ensuite. Concernant la possibilité que votre position soit affichée dans **nos logs**, nous nous engageons à ne pas conserver ces logs (qui par ailleurs **ne quittent pas nos serveurs** et sont **uniquement consultable par notre équipe**) en les supprimant régulièrement de fait à ce que ceux-ci ne soient pas conservés plus d'un mois.
+>
+> Vous pouvez désactiver l'utilisation de votre position en retirant l'autorisation depuis les paramètres de votre téléphone. Pour plus d'informations ou de questionnement, merci de vous référer à la section [5. - Informations](#5---informations)
 
 **Données collectées depuis le site web de présentation**:
 
@@ -47,7 +50,7 @@ La suppression de l'application ou la déconnexion entraîne immédiatement la s
 
 ## 3. - Client mobile "Avantages Jeunes Connect"
 
-Le client mobile AJC est un logiciel libre, gratuit, open-source, indépendant, à but non-lucratif et collaboratif. 
+Le client mobile AJC est un logiciel libre, gratuit, open-source, indépendant, à but non-lucratif et collaboratif.
 Il est conçu avec l'objectif principal de faciliter l'accès aux données du service "avantagesjeunes.com", il agit comme une interface entre "avantagesjeunes.com" et votre téléphone.
 L'application s'engage à garantir une transparence totale concernant ses méthodes de fonctionnement et l'utilisation des données.
 Fondée sur des principes de développement collaboratif, AJC invite la communauté à participer à son évolution en contribuant au code, en proposant des améliorations et en signalant des bugs, afin de maintenir le logiciel à jour et de répondre au mieux aux besoins des utilisateurs.
