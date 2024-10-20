@@ -17,10 +17,12 @@
     <div class="list-title">
       Avantages favoris
     </div>
-    <div class="card card-only" v-if="avantages.length == 0">
-      <ion-note>
-        Vous n'avez pas encore utilisé d'avantages...
-      </ion-note>
+    <div class="ion-padding" v-if="avantages.length == 0">
+      <div class="card card-only">
+        <ion-note>
+          Vous n'avez pas encore utilisé d'avantages...
+        </ion-note>
+      </div>
     </div>
     <div v-else class="grid-results">
       <pulse-item v-for="avantage in avantages" :key="avantage.id_avantage">
