@@ -39,7 +39,7 @@
 
       <ion-list inset>
         <ion-note>
-          Recadrez l'image pour que votre carte tiennent dans le rectangle.
+          Recadrez l'image pour que votre carte tienne dans le rectangle.
         </ion-note>
       </ion-list>
     </ion-content>

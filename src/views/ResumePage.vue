@@ -151,6 +151,9 @@
             Ajouter votre carte, accédez à vos avantages utilisés et recherchez plus facilement ceux dont vous pouvez bénéficiez !
           </p>
         </ion-note>
+        <ion-note class="ion-color-medium ion-margin-auto underline" v-if="!canReconnect">
+          <a href="https://avantagesjeunes.com/login" target="blank">Première connexion</a>
+        </ion-note>
         <ion-list inset>
           <ion-item class="login-button" color="secondary" button @click="createModal(LoginModal, 'modalLogin', refs)">
             <AvantagesJeunesIcon class="ion-icon ion-color-primary" slot="start"/>
@@ -228,6 +231,7 @@ import {Badge} from "@/types/badges"
 import {Avantage, Transaction, TransactionAvantage} from "@/types/avantages"
 import {RefresherCustomEvent} from "@ionic/vue"
 import {getCredentials} from "@/functions/credentials"
+import {upgradeStorage} from "@/functions/cache"
 
 const refs = {
   modalLogin: ref(null),
@@ -287,6 +291,7 @@ export default {
     }
   },
   mounted() {
+    upgradeStorage()
     localStorage.setItem("userApiUrl", "https://api-ajc.camarm.fr")
     window.addEventListener("reload", () => {
       this.refreshAccount()

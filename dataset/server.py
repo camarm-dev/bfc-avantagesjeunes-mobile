@@ -16,7 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 mongo = pymongo.MongoClient(open('.mongodb').read())
-database = mongo.Dataset.avantages_0424
+database = mongo.Dataset.avantages_1024
 search_database = mongo.Dataset.search
 
 
