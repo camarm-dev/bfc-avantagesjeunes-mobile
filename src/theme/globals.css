@@ -5,9 +5,9 @@
     --ion-tab-bar-color: var(--ion-color-secondary);
     --ion-tab-bar-color-selected: var(--ion-color-secondary-shade);
     --ion-text-color: var(--ion-color-primary-contrast);
-    --ion-color-heart: #d5595a;
-    --ion-color-like: #3a3af0;
-    --ion-color-star: #b99c33;
+    --ion-color-heart: #a84748;
+    --ion-color-like: #2f2fbd;
+    --ion-color-star: #9b832c;
 }
 
 ion-nav-link {
