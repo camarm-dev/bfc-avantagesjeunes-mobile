@@ -201,7 +201,7 @@ input {
 }
 
 .ion-color-secondary::part(native) {
-    --background: linear-gradient(90deg, #e8d384, var(--ion-color-secondary));
+    --background: linear-gradient(90deg, var(--ion-color-secondary), var(--ion-color-secondary-tint), var(--ion-color-secondary));
     background: var(--background);
 }
 
@@ -216,7 +216,7 @@ input {
 }
 
 .ion-color-secondary:hover::part(native), .ion-color-secondary:hover::part(native)::after {
-    --background: linear-gradient(90deg, #c7b571, var(--ion-color-secondary-shade));
+    --background: linear-gradient(90deg, var(--ion-color-secondary-shade), var(--ion-color-secondary), var(--ion-color-secondary-shade));
     background: var(--background);
 }
 
