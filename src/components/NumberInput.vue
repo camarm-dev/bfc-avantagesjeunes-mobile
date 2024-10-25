@@ -1,0 +1,96 @@
+<script setup lang="ts">
+
+import {backspaceOutline} from "ionicons/icons";
+import {
+  IonGrid,
+  IonCol,
+  IonList,
+  IonItem,
+  IonIcon,
+  IonButton,
+  IonLabel
+} from "@ionic/vue"
+</script>
+
+<template>
+  <ion-grid>
+    <ion-row>
+      <ion-col :key="i" v-for="i in value.keys()">
+        <ion-list>
+          <ion-item :color="i == active ? 'dark': 'medium'">
+            <h1>{{ value[i] != -1 && value[i] != undefined ? value[i]: '_' }}</h1>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="ion-margin-top">
+    <ion-row v-for="row in [1, 4, 7]">
+      <ion-col v-for="col in [1, 2, 3]">
+        <ion-button :disabled="!value.includes(undefined)" @click="handleInput(row - 1 + col)">
+          <ion-label>
+            <h2>{{ row - 1 + col }}</h2>
+          </ion-label>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col>
+        <ion-button :disabled="!value.includes(undefined)" @click="handleInput(0)">
+          <ion-label><h2>0</h2></ion-label>
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button @click="erase()">
+          <ion-icon slot="icon-only" :icon="backspaceOutline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</template>
+
+<script lang="ts">
+
+export default {
+  data () {
+    return {
+      value: [-1, undefined, undefined, undefined, undefined, undefined],
+      active: 0
+    }
+  },
+  methods: {
+    handleInput (input: number) {
+      this.value[this.active] = input
+      this.$emit('inputChange', this.value.join(""))
+      if (this.active == 5) return
+      this.active += 1
+    },
+    erase () {
+      this.value[this.active] = undefined
+      this.$emit('inputChange', this.value.join(""))
+      if (this.active == 0) return
+      this.active -= 1
+    }
+  }
+}
+</script>
+
+<style scoped>
+ion-row, ion-grid {
+  width: 100%;
+}
+
+.ion-color-medium :not(.toast-header, .toast-message) {
+  color: var(--ion-color-medium);
+}
+
+.ion-color-medium::part(native) {
+  background: var(--ion-color-primary-tint);
+}
+
+ion-button {
+  width: 100%;
+}
+</style>
