@@ -7,6 +7,7 @@ import {
   IonList,
   IonItem,
   IonIcon,
+  IonRow,
   IonButton,
   IonLabel
 } from "@ionic/vue"
