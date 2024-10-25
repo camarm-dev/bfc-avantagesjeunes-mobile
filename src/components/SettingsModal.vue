@@ -36,6 +36,24 @@
         </ion-item>
       </ion-list>
       <div class="list-title">
+        Thème
+      </div>
+      <ion-list inset>
+        <ion-item class="ion-text-wrap">
+          <ion-select label="Thème" placeholder="Édition 2024-2025">
+            <ion-select-option value="current">Édition 2024 - 2025</ion-select-option>
+            <ion-select-option value="og">Édition 2023 - 2024</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item class="ion-color-danger">
+          <ion-label class="ion-text-wrap">
+            <p>
+              Choisissez le thème de l'application parmi les différentes éditions de la carte Avantages Jeune !
+            </p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <div class="list-title">
         API Map & Recherche
       </div>
       <ion-list inset>
@@ -99,7 +117,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonTitle, IonButton, IonList, IonPage, IonToggle, IonLabel, IonItem, IonSpinner, IonContent, IonHeader, IonToolbar, IonButtons, IonNote } from "@ionic/vue"
+import { IonTitle, IonButton, IonList, IonPage, IonToggle, IonLabel, IonItem, IonSpinner, IonContent, IonHeader, IonToolbar, IonButtons, IonNote, IonSelect, IonSelectOption } from "@ionic/vue"
 import { XCircle, BadgeCheck, BadgeX, Trash } from "lucide-vue-next"
 </script>
 

@@ -107,9 +107,9 @@
         </ion-nav-link>
       </ion-list>
       <ion-list inset>
-        <ion-item button @click="createModal(ExperimentalModal, 'modalExperimental', refs)">
+        <ion-item button @click="createModal(SettingsModal, 'modalSettings', refs)">
           <ion-label>
-            <p>Fonctionnalités expérimentales 🧪</p>
+            <p>Paramètres ⚙️</p>
           </ion-label>
         </ion-item>
       </ion-list>
@@ -120,53 +120,6 @@
           </ion-label>
         </ion-item>
       </ion-list>
-    </ion-content>
-
-    <ion-content class="ion-display-flex" v-else :fullscreen="true">
-      <div>
-        <img style="margin: auto; display: block" height="90" src="/welcome.png"/>
-        <br>
-        <ion-label class="ion-text-center">
-          <h1>Bienvenue</h1>
-          <h3 class="ion-color-medium">Sur Avantages Jeunes Connect !</h3>
-        </ion-label>
-        <br>
-        <ion-row class="ion-justify-content-center">
-          <pulse-item vibrate>
-            <ion-chip id="open-info-alert" class="chip-square" color="secondary">
-              <BadgeInfo :size="36" class="ion-color-primary"/>
-            </ion-chip>
-          </pulse-item>
-          <ion-alert class="ion-color-primary" sub-header="avantagesjeunes.com" trigger="open-info-alert" header="Informations" message="Avantages Jeunes Connect est une application non officielle open source développée par un unique étudiant. Nous nous dédommageons de tous dysfonctionnement créé."/>
-          <br>
-          <pulse-item vibrate>
-            <ion-chip id="open-question-alert" class="chip-square" color="tertiary">
-              <HelpCircle :size="36" class="ion-color-tertiary"/>
-            </ion-chip>
-          </pulse-item>
-          <ion-alert class="ion-color-primary" sub-header="avantagesjeunes.com" trigger="open-question-alert" header="Informations" message="Si c'est votre première connexion, merci de finir l'activation de votre compte sur avantagesjeunes.com/login avant de vous connecter sur Avantages Jeunes Connect"/>
-        </ion-row>
-        <ion-note class="ion-text-center">
-          <p>
-            Ajouter votre carte, accédez à vos avantages utilisés et recherchez plus facilement ceux dont vous pouvez bénéficiez !
-          </p>
-        </ion-note>
-        <ion-note class="ion-color-medium ion-margin-auto underline" v-if="!canReconnect">
-          <a href="https://avantagesjeunes.com/login" target="blank">Première connexion</a>
-        </ion-note>
-        <ion-list inset>
-          <ion-item class="login-button" color="secondary" button @click="createModal(LoginModal, 'modalLogin', refs)">
-            <AvantagesJeunesIcon class="ion-icon ion-color-primary" slot="start"/>
-            <ion-label class="ion-text-wrap">
-              <h2>Ajouter ma carte</h2>
-              <p>Avec mes identifiants Avantages Jeunes</p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-        <ion-note class="ion-color-medium ion-margin-auto underline" v-if="canReconnect">
-          <a href="/resume" @click="reload()">Utiliser le compte précédant</a>
-        </ion-note>
-      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -207,7 +160,7 @@ import LoginModal from "@/components/LoginModal.vue"
 import AvantagesJeunesIcon from "@/components/AvantagesJeunesIcon.vue"
 import MyCard from "@/components/MyCard.vue"
 import {askPermission} from "@/functions/native/geolocation"
-import ExperimentalModal from "@/components/ExperimentalModal.vue"
+import SettingsModal from "@/components/SettingsModal.vue"
 import AvantageCard from "@/components/AvantageCard.vue"
 import UsedAvantages from "@/components/UsedAvantages.vue"
 import {chevronForwardOutline, informationCircle} from "ionicons/icons"
@@ -229,15 +182,16 @@ import {createModal} from "@/functions/modals"
 import MapModal from "@/components/MapModal.vue"
 import {Badge} from "@/types/badges"
 import {Avantage, Transaction, TransactionAvantage} from "@/types/avantages"
-import {RefresherCustomEvent} from "@ionic/vue"
+import {modalController, RefresherCustomEvent} from "@ionic/vue"
 import {getCredentials} from "@/functions/credentials"
 import {upgradeStorage} from "@/functions/cache"
+import LandingScreen from "@/components/LandingScreen.vue";
 
 const refs = {
   modalLogin: ref(null),
   modalMap: ref(null),
   modalInfos: ref(null),
-  modalExperimental: ref(null)
+  modalSettings: ref(null)
 } as any
 
 window.addEventListener("closeModals", () => {
@@ -299,13 +253,28 @@ export default {
 
     this.refs["page"] = this.$refs.page
 
-    this.hasLoggedInFields().then(hasLoggedInFields => {
-      this.canReconnect = hasLoggedInFields
-      if (hasLoggedInFields) {
-        this.loggedIn = true
-        this.refreshAccount()
-      }
-    })
+    this.hasLoggedInFields()
+        .then(hasLoggedInFields => {
+          this.canReconnect = hasLoggedInFields
+          if (hasLoggedInFields) {
+            this.loggedIn = true
+            this.refreshAccount()
+          }
+        })
+        .then(async () => {
+          if (!this.loggedIn) {
+            const modal = await modalController.create({
+              component: LandingScreen,
+              presentingElement: this.$refs.page,
+              canDismiss: false,
+              handle: true
+            })
+            await modal.present()
+            window.addEventListener("landingScreenClosed", () => {
+              modal.dismiss()
+            })
+          }
+        })
 
     const now = new Date()
     if (now.getHours() > 12) {
@@ -314,7 +283,6 @@ export default {
     if (now.getHours() > 18) {
       this.welcome_formula = "Bonne soirée"
     }
-
   },
   methods: {
     async openAroundMeMap() {
