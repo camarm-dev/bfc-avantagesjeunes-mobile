@@ -93,4 +93,8 @@ ion-row, ion-grid {
 ion-button {
   width: 100%;
 }
+
+ion-item {
+  --border-width: 0 0 0 0;
+}
 </style>
