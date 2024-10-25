@@ -13,7 +13,7 @@
         <ion-progress-bar color="secondary" v-if="loading" type="indeterminate"></ion-progress-bar>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true" v-if="loggedIn">
+    <ion-content :fullscreen="true">
       <ion-refresher slot="fixed" @ionRefresh="refresh($event)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
