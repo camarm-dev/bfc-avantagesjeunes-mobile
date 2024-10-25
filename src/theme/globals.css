@@ -14,6 +14,11 @@ ion-nav-link {
     width: max-content;
 }
 
+.swiper-pagination span.swiper-pagination-bullet {
+    background: var(--ion-color-secondary) !important;
+    box-shadow: none !important;
+}
+
 ion-item.ion-color-secondary ion-input * {
     color: var(--ion-color-primary) !important;
 }
@@ -200,12 +205,24 @@ input {
     caret-color: var(--ion-color-primary) !important;
 }
 
-.ion-color-secondary::part(native) {
+.ion-color-secondary:not(.button-outline)::part(native) {
     --background: linear-gradient(90deg, var(--ion-color-secondary), var(--ion-color-secondary-tint), var(--ion-color-secondary));
     background: var(--background);
 }
 
-.ion-color-secondary.gradient-button ion-label, .ion-color-secondary.gradient-button ion-label *, .ion-color-secondary.gradient-button .icon * {
+.gradient-button.button-outline::part(native) {
+    --border-color: linear-gradient(90deg, var(--ion-color-secondary), var(--ion-color-secondary-tint), var(--ion-color-secondary));
+    border-color: var(--border-color) !important;
+    color: var(--ion-color-secondary);
+    border-right-width: var(--border-width);
+    border-left-width: var(--border-width);
+}
+
+ion-button[expand="full"] {
+    width: 100%;
+}
+
+.ion-color-secondary.gradient-button::part(native), .ion-color-secondary.gradient-button *, .ion-color-secondary.gradient-button .icon * {
     --color: var(--ion-color-primary);
     color: var(--color) !important;
 }

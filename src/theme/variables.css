@@ -108,7 +108,7 @@ body.og {
   --ion-toolbar-border-color: var(--ion-color-primary-tint);
 
   /** Background **/
-  --background: var(--ion-color-primary);
+  --background: #121214;
 
   /** secondary **/
   --ion-color-secondary: #C2A231;
