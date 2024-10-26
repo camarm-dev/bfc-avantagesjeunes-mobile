@@ -1,5 +1,5 @@
 <template>
-  <ion-button class="previous-button" color="light" fill="clear" @click="swiper.slidePrev()">
+  <ion-button class="previous-button gradient-button outline" color="light" fill="outline" expand="full" @click="swiper.slidePrev()">
     <ion-icon slot="start" :icon="chevronBack"/> {{ text || "Retour" }}
   </ion-button>
 </template>
