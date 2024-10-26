@@ -96,6 +96,7 @@ ion-row, ion-grid {
 
 ion-button {
   width: 100%;
+  --background: rgba(var(--ion-color-medium-rgb), 0.05);
 }
 
 ion-item::part(native) {
