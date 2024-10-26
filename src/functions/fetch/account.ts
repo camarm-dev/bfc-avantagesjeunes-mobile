@@ -3,7 +3,7 @@ import {APIResponse} from "@/functions/fetch/interfaces"
 import {removeCredentials} from "@/functions/credentials"
 import {Account} from "@/types/account"
 
-async function getToken(number: string, password: string): Promise<APIResponse> {
+async function getToken(number: string, password: string, checks: boolean = true): Promise<APIResponse> {
     const url = import.meta.env.VITE_API_URL + "/api/compte/login"
     const data = {
         numero: number,
@@ -19,7 +19,7 @@ async function getToken(number: string, password: string): Promise<APIResponse> 
         }
     } as any
 
-    return await handleResponse(fetch(url, config), true, config)
+    return await handleResponse(fetch(url, config), checks, config)
 }
 
 async function getAccount(): Promise<Account> {
