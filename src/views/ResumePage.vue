@@ -135,7 +135,6 @@ import {
   IonList,
   IonLabel,
   IonItem,
-  IonChip,
   IonSelect,
   IonSelectOption,
   IonRefresher,
@@ -143,21 +142,15 @@ import {
   IonSpinner,
   IonAvatar,
   IonNote,
-  IonRow,
-  IonAlert,
   IonProgressBar,
   IonIcon
 } from "@ionic/vue"
 import {
-  BadgeInfo,
-  HelpCircle,
   CreditCard,
   MapIcon,
   ChevronRight,
   Compass
 } from "lucide-vue-next"
-import LoginModal from "@/components/LoginModal.vue"
-import AvantagesJeunesIcon from "@/components/AvantagesJeunesIcon.vue"
 import MyCard from "@/components/MyCard.vue"
 import {askPermission} from "@/functions/native/geolocation"
 import SettingsModal from "@/components/SettingsModal.vue"
@@ -265,7 +258,7 @@ export default {
           if (!this.loggedIn) {
             const modal = await modalController.create({
               component: LandingScreen,
-              presentingElement: this.$refs.page,
+              presentingElement: this.$refs.page as HTMLElement,
               canDismiss: false,
               handle: true
             })
