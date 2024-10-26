@@ -263,6 +263,10 @@ ion-button[expand="full"] {
     border-radius: 18px;
 }
 
+.alert-button.sc-ion-alert-ios {
+    color: var(--ion-color-primary-contrast)
+}
+
 @media (min-width: 1024px) {
     .ion-page ion-content:nth-child(2) {
         width: 1024px;

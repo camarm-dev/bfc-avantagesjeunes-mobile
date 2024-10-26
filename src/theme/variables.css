@@ -49,12 +49,12 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-success-tint: #3aad5b;
 
   /** warning **/
-  --ion-color-warning: #eac637;
+  --ion-color-warning: #c49b32;
   --ion-color-warning-rgb: 194, 168, 62;
   --ion-color-warning-contrast: #000000;
   --ion-color-warning-contrast-rgb: 255, 255, 255;
-  --ion-color-warning-shade: #a48f3a;
-  --ion-color-warning-tint: #dec045;
+  --ion-color-warning-shade: #987827;
+  --ion-color-warning-tint: #e3b233;
 
   /** danger **/
   --ion-color-danger: #eb445a;
