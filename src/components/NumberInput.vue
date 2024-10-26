@@ -61,6 +61,9 @@ export default {
       active: 0
     }
   },
+  emits: {
+    inputChange: String
+  },
   methods: {
     handleInput (input: number) {
       this.value[this.active] = input
