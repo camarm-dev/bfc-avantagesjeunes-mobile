@@ -14,9 +14,9 @@ import {
 </script>
 
 <template>
-  <ion-grid>
+  <ion-grid fixed>
     <ion-row>
-      <ion-col :key="i" v-for="i in value.keys()">
+      <ion-col size="2" :key="i" v-for="i in value.keys()">
         <ion-list>
           <ion-item :color="i == active ? 'dark': 'medium'">
             <h1>{{ value[i] != -1 && value[i] != undefined ? value[i]: '_' }}</h1>
@@ -95,7 +95,8 @@ ion-button {
   width: 100%;
 }
 
-ion-item {
+ion-item::part(native) {
   --border-width: 0 0 0 0;
+  border-color: transparent;
 }
 </style>
