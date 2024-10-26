@@ -37,13 +37,13 @@ import {
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col></ion-col>
-      <ion-col>
+      <ion-col size="4"></ion-col>
+      <ion-col size="4">
         <ion-button :disabled="!value.includes(undefined)" @click="handleInput(0)">
           <ion-label><h2>0</h2></ion-label>
         </ion-button>
       </ion-col>
-      <ion-col>
+      <ion-col size="4">
         <ion-button @click="erase()">
           <ion-icon slot="icon-only" :icon="backspaceOutline"></ion-icon>
         </ion-button>
