@@ -67,10 +67,10 @@
             </ion-list>
           </div>
           <div class="bottom-container">
-            <ion-accordion-group ref="agreeAccordion">
+            <ion-accordion-group>
               <ion-accordion value="first">
                 <ion-item slot="header" class="ion-border ion-border-radius">
-                  <ion-checkbox aria-label="J'accepte les présentes conditions." slot="start" color="secondary" justify="start" :checked="agree"
+                  <ion-checkbox @click="$event.stopPropagation()" aria-label="J'accepte les présentes conditions." slot="start" color="secondary" justify="start" :checked="agree"
                                 @ionChange="changeAgreeStatus($event.detail.checked)" label-placement="end" required/>
                   <ion-label class="ion-text-wrap" color="light">
                     J'accepte les présentes conditions.
@@ -224,17 +224,6 @@ export default defineComponent({
     }
   },
   methods: {
-    closeAccordion() {
-      // TODO not working
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const agreeAccordion = this.$refs.agreeAccordion?.$el as unknown as HTMLIonAccordionGroupElement | undefined
-      console.log(agreeAccordion)
-      console.log(agreeAccordion?.value)
-      if (agreeAccordion && agreeAccordion?.value != undefined) {
-        agreeAccordion.value = undefined;
-      }
-    },
     goToSlide(slide: number) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -338,7 +327,6 @@ export default defineComponent({
     },
     changeAgreeStatus(status: boolean) {
       this.agree = status
-      this.closeAccordion()
     },
   }
 })
