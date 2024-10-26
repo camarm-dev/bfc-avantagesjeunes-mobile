@@ -178,7 +178,7 @@ import {Avantage, Transaction, TransactionAvantage} from "@/types/avantages"
 import {modalController, RefresherCustomEvent} from "@ionic/vue"
 import {getCredentials} from "@/functions/credentials"
 import {upgradeStorage} from "@/functions/cache"
-import LandingScreen from "@/components/LandingScreen.vue";
+import LandingScreen from "@/components/LandingScreen.vue"
 
 const refs = {
   modalLogin: ref(null),

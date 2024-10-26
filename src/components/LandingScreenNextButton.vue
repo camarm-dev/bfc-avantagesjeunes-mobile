@@ -10,7 +10,7 @@ import {
 } from "@ionic/vue"
 import {useSwiper} from "swiper/vue"
 import {chevronForward} from "ionicons/icons"
-import {PropType} from "vue";
+import {PropType} from "vue"
 
 type ActionFunction = () => Promise<void>
 
@@ -28,7 +28,7 @@ export default {
     action: {
       required: false,
       type: Function as PropType<ActionFunction>,
-      default: async () => {}
+      default: async () => { /* */ }
     }
   },
   components: {

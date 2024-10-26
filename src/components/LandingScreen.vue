@@ -144,7 +144,6 @@
 import {
   IonContent,
   IonHeader,
-  IonIcon,
   IonPage,
   IonButton,
   IonItem,
@@ -153,7 +152,8 @@ import {
   IonLabel,
   IonInput,
   IonAccordion,
-  IonAccordionGroup, alertController
+  IonAccordionGroup,
+  alertController
 } from "@ionic/vue"
 import {Swiper, SwiperSlide} from "swiper/vue"
 import "swiper/css"
@@ -169,15 +169,15 @@ import {arrowForward} from "ionicons/icons"
 import WelcomeImage from "@/assets/welcome.png"
 import CardImage from "@/assets/card3d.png"
 import Icon from "@/assets/icon3d.png"
-import NumberInput from "@/components/NumberInput.vue";
-import {displayToast} from "@/functions/toasts";
-import {getToken} from "@/functions/fetch/account";
-import {getCredentials, setCredentials} from "@/functions/credentials";
-import {getIDFromToken} from "@/functions/fetch/tools";
-import {vibrate} from "@/functions/native/tools";
-import {defineComponent} from "vue";
-import LandingScreenPreviousButton from "@/components/LandingScreenPreviousButton.vue";
-import type {Swiper as SwiperClass} from "swiper/types";
+import NumberInput from "@/components/NumberInput.vue"
+import {displayToast} from "@/functions/toasts"
+import {getToken} from "@/functions/fetch/account"
+import {getCredentials, setCredentials} from "@/functions/credentials"
+import {getIDFromToken} from "@/functions/fetch/tools"
+import {vibrate} from "@/functions/native/tools"
+import {defineComponent} from "vue"
+import LandingScreenPreviousButton from "@/components/LandingScreenPreviousButton.vue"
+import type {Swiper as SwiperClass} from "swiper/types"
 
 export default defineComponent({
   components: {
@@ -191,7 +191,6 @@ export default defineComponent({
     LandingScreenNextButton,
     IonPage,
     IonHeader,
-    IonIcon,
     IonContent,
     Swiper,
     SwiperSlide,
@@ -267,12 +266,12 @@ export default defineComponent({
         }, 2000)
       } else {
         const alert = await alertController.create({
-          header: 'Impossible de vous authentifier',
+          header: "Impossible de vous authentifier",
           message: `Veuillez réessayer de vous connecter.\navantagesjeunes.com «${response.message}»`,
           buttons: [
             {
-              text: 'Confirmer',
-              role: 'confirm',
+              text: "Confirmer",
+              role: "confirm",
               handler: () => {
                 this.goToSlide(1)
                 this.password = ""
@@ -281,9 +280,10 @@ export default defineComponent({
           ]
         })
         await alert.present()
-        throw 'Impossible de se connecter'
+        throw "Impossible de se connecter"
       }
       // TODO if first connection
+      // eslint-disable-next-line no-constant-condition
       if (false) {
         this.firstConnection = true
       }
@@ -291,12 +291,12 @@ export default defineComponent({
     async finishSigning () {
       if (this.changedPassword1 != this.changedPassword2) {
         const alert = await alertController.create({
-          header: 'Erreur',
-          message: `Les mots de passes ne correspondent pas.`,
+          header: "Erreur",
+          message: "Les mots de passes ne correspondent pas.",
           buttons: [
             {
-              text: 'Confirmer',
-              role: 'confirm'
+              text: "Confirmer",
+              role: "confirm"
             }
           ]
         })
@@ -310,12 +310,12 @@ export default defineComponent({
       }
       if (!response.status) {
         const alert = await alertController.create({
-          header: 'Erreur',
+          header: "Erreur",
           message: `Une erreur est survenue. avantagesjeunes.com «${response.message}»`,
           buttons: [
             {
-              text: 'Confirmer',
-              role: 'confirm'
+              text: "Confirmer",
+              role: "confirm"
             }
           ]
         })

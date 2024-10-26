@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {backspaceOutline} from "ionicons/icons";
+import {backspaceOutline} from "ionicons/icons"
 import {
   IonGrid,
   IonCol,
@@ -67,13 +67,13 @@ export default {
   methods: {
     handleInput (input: number) {
       this.value[this.active] = input
-      this.$emit('inputChange', this.value.join(""))
+      this.$emit("inputChange", this.value.join(""))
       if (this.active == 5) return
       this.active += 1
     },
     erase () {
       this.value[this.active] = undefined
-      this.$emit('inputChange', this.value.join(""))
+      this.$emit("inputChange", this.value.join(""))
       if (this.active == 0) return
       this.active -= 1
     }

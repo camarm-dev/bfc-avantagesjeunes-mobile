@@ -1,6 +1,5 @@
 import {getToken, logOut} from "@/functions/fetch/account"
 import { APIResponse } from "@/functions/fetch/interfaces"
-import { displayToast } from "@/functions/toasts"
 import {getCredentials} from "@/functions/credentials"
 
 
