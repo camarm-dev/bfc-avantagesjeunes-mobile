@@ -3,7 +3,7 @@
     <ion-header>
       <div class="handle"></div>
     </ion-header>
-    <ion-content :scroll-y="false">
+    <ion-content :scroll-y="false" :fullscreen="true">
       <swiper
           :speed="600"
           :allow-touch-move="false"
@@ -51,7 +51,6 @@
           </div>
           <div class="bottom-container">
             <LandingScreenNextButton :disabled="numero.length != 6" class="margin-bottom" text="Continuer"/>
-            <LandingScreenPreviousButton text="Retour"/>
           </div>
         </swiper-slide>
         <swiper-slide>
@@ -60,21 +59,22 @@
               <h1 class="second-font no-capitalize">Entrez votre <span class="contrast">code de connexion</span></h1>
             </div>
           </div>
-          <div class="text">
-            <ion-list inset>
-              <ion-input :value="password" @ionInput="password = $event.detail.value as string" type="password" placeholder="****************"/>
+          <div class="text fullwidth">
+            <ion-list class="fullwidth">
+              <ion-item class="ion-border fullwidth large">
+                <ion-input :value="password" @ionInput="password = $event.detail.value as string" type="password" placeholder="Entrez votre mot de passe"/>
+              </ion-item>
             </ion-list>
           </div>
           <div class="bottom-container">
             <ion-accordion-group ref="agreeAccordion">
               <ion-accordion value="first">
                 <ion-item slot="header" class="ion-border ion-border-radius">
+                  <ion-checkbox aria-label="J'accepte les présentes conditions." slot="start" color="secondary" justify="start" :checked="agree"
+                                @ionChange="changeAgreeStatus($event.detail.checked)" label-placement="end" required/>
                   <ion-label class="ion-text-wrap" color="light">
                     J'accepte les présentes conditions.
                   </ion-label>
-                  <ion-checkbox aria-label="J'accepte les présentes conditions." slot="start" color="secondary" justify="start" :checked="agree"
-                                @ionChange="changeAgreeStatus($event.detail.checked)" label-placement="end" required>
-                  </ion-checkbox>
                 </ion-item>
                 <div class="ion-padding accordion-content" slot="content">
                   <ion-label class="ion-text-wrap" color="light">
@@ -89,6 +89,7 @@
                 </div>
               </ion-accordion>
             </ion-accordion-group>
+            <LandingScreenPreviousButton text="Retour"/>
             <LandingScreenNextButton :action="login" :disabled="password.length == 0 || !agree" class="margin-bottom" text="Me connecter"/>
           </div>
         </swiper-slide>
@@ -101,15 +102,23 @@
               Ceci est votre première connexion, vous devez donc changer votre mot de passe et renseigner quelques informations supplémentaires pour pouvoir continuer...
             </div>
           </div>
-          <div class="text">
-            <ion-list inset>
-              <ion-input label-placement="floating" label="Email" @ionChange="email = $event.detail.value as string" type="email" placeholder="john@doe.com"/>
-              <ion-input label-placement="floating" label="Nouveau mot de passe" @ionChange="changedPassword1 = $event.detail.value as string" type="password" placeholder="****************"/>
-              <ion-input label-placement="floating" label="Confirmez le mot de passe" @ionChange="changedPassword1 = $event.detail.value as string" type="password" placeholder="****************"/>
-            </ion-list>
+          <div class="text fullwidth">
+            <form @submit.prevent="finishSigning()" class="fullwidth">
+              <ion-list class="fullwidth">
+                <ion-item class="ion-border fullwidth large">
+                  <ion-input @ionChange="email = $event.detail.value as string" type="email" placeholder="Entrez votre e-mail"/>
+                </ion-item>
+                <ion-item class="ion-border fullwidth large">
+                  <ion-input @ionChange="changedPassword1 = $event.detail.value as string" type="password" placeholder="Entrez votre nouveau mot de passe"/>
+                </ion-item>
+                <ion-item class="ion-border fullwidth large">
+                  <ion-input @ionChange="changedPassword2 = $event.detail.value as string" type="password" placeholder="Confirmez le mot de passe"/>
+                </ion-item>
+              </ion-list>
+            </form>
           </div>
           <div class="bottom-container">
-            <LandingScreenNextButton :action="finishSigning" class="margin-bottom" text="Sauvegarder"/>
+            <LandingScreenNextButton :disabled="changedPassword1 != changedPassword2 || email == ''" :action="finishSigning" class="margin-bottom" text="Sauvegarder"/>
           </div>
         </swiper-slide>
         <swiper-slide>
@@ -122,7 +131,7 @@
             </div>
           </div>
           <div class="text">
-            <img class="slide-image" :src="Icon" alt="Remède icon"/>
+            <img class="slide-image small" :src="Icon" alt="AJC icon"/>
           </div>
           <LandingScreenNextButton @click="close()" class="margin-bottom" text="Commencer"/>
         </swiper-slide>
@@ -150,7 +159,6 @@ import {Swiper, SwiperSlide} from "swiper/vue"
 import "swiper/css"
 import "swiper/css/navigation"
 import "@ionic/vue/css/ionic-swiper.css"
-import Icon from "@/assets/remede3d.png"
 import Quote from "@/assets/quote3d.png"
 import Ellipse from "@/assets/ellipse3d.png"
 import FunctionalitiesIllustration from "@/assets/functionalities.png"
@@ -160,13 +168,14 @@ import LandingScreenNextButton from "@/components/LandingScreenNextButton.vue"
 import {arrowForward} from "ionicons/icons"
 import WelcomeImage from "@/assets/welcome.png"
 import CardImage from "@/assets/card3d.png"
+import Icon from "@/assets/icon3d.png"
 import NumberInput from "@/components/NumberInput.vue";
 import {displayToast} from "@/functions/toasts";
 import {getToken} from "@/functions/fetch/account";
 import {getCredentials, setCredentials} from "@/functions/credentials";
 import {getIDFromToken} from "@/functions/fetch/tools";
 import {vibrate} from "@/functions/native/tools";
-import {defineComponent, ref} from "vue";
+import {defineComponent} from "vue";
 import LandingScreenPreviousButton from "@/components/LandingScreenPreviousButton.vue";
 import type {Swiper as SwiperClass} from "swiper/types";
 
@@ -221,7 +230,8 @@ export default defineComponent({
       // @ts-ignore
       const agreeAccordion = this.$refs.agreeAccordion?.$el as unknown as HTMLIonAccordionGroupElement | undefined
       console.log(agreeAccordion)
-      if (agreeAccordion) {
+      console.log(agreeAccordion?.value)
+      if (agreeAccordion && agreeAccordion?.value != undefined) {
         agreeAccordion.value = undefined;
       }
     },
@@ -237,7 +247,7 @@ export default defineComponent({
     close() {
       const event = new Event("landingScreenClosed")
       window.dispatchEvent(event)
-      const reloadEvent = new Event("reload")
+      const reloadEvent = new Event("refresh")
       window.dispatchEvent(reloadEvent)
     },
     open(url: string) {
@@ -291,11 +301,37 @@ export default defineComponent({
     },
     async finishSigning () {
       if (this.changedPassword1 != this.changedPassword2) {
-        await displayToast("Erreur", "Les mots de passes de correspondent pas.", 2000, "danger")
+        const alert = await alertController.create({
+          header: 'Erreur',
+          message: `Les mots de passes ne correspondent pas.`,
+          buttons: [
+            {
+              text: 'Confirmer',
+              role: 'confirm'
+            }
+          ]
+        })
+        await alert.present()
         return
       }
-      // TODO Change pwd
-
+      // TODO Change pwd and finish signing
+      const response = {
+        status: false,
+        message: ""
+      }
+      if (!response.status) {
+        const alert = await alertController.create({
+          header: 'Erreur',
+          message: `Une erreur est survenue. avantagesjeunes.com «${response.message}»`,
+          buttons: [
+            {
+              text: 'Confirmer',
+              role: 'confirm'
+            }
+          ]
+        })
+        await alert.present()
+      }
       // re-login
       this.password = this.changedPassword1
       await this.login()
@@ -317,6 +353,14 @@ export default defineComponent({
   margin: 6px auto auto;
   background: var(--ion-color-step-350, #c0c0be) !important;
   cursor: pointer;
+}
+
+.fullwidth {
+  width: 100%;
+}
+
+.large {
+  scale: 1.02;
 }
 
 ion-accordion-group {
@@ -415,6 +459,11 @@ ion-content {
   rotate: -9deg;
   animation: float 20s infinite ease-in-out;
   transition: .5s ease-in-out;
+}
+
+.slide-image.small {
+  width: 60% !important;
+  rotate: -10deg;
 }
 
 @keyframes float {
