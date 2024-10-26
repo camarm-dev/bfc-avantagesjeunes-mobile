@@ -27,8 +27,8 @@ import {
   </ion-grid>
 
   <ion-grid class="ion-margin-top">
-    <ion-row v-for="row in [1, 4, 7]">
-      <ion-col v-for="col in [1, 2, 3]">
+    <ion-row :key="row" v-for="row in [1, 4, 7]">
+      <ion-col :key="col" v-for="col in [1, 2, 3]">
         <ion-button :disabled="!value.includes(undefined)" @click="handleInput(row - 1 + col)">
           <ion-label>
             <h2>{{ row - 1 + col }}</h2>
