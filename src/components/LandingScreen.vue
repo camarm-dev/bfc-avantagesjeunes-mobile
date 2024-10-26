@@ -159,11 +159,6 @@ import {Swiper, SwiperSlide} from "swiper/vue"
 import "swiper/css"
 import "swiper/css/navigation"
 import "@ionic/vue/css/ionic-swiper.css"
-import Quote from "@/assets/quote3d.png"
-import Ellipse from "@/assets/ellipse3d.png"
-import FunctionalitiesIllustration from "@/assets/functionalities.png"
-import RocketIcon from "@/assets/rocket.png"
-import OpenSourceIcon from "@/assets/osi.png"
 import LandingScreenNextButton from "@/components/LandingScreenNextButton.vue"
 import {arrowForward} from "ionicons/icons"
 import WelcomeImage from "@/assets/welcome.png"
@@ -212,11 +207,6 @@ export default defineComponent({
   setup () {
     return {
       Icon,
-      Quote,
-      Ellipse,
-      FunctionalitiesIllustration,
-      RocketIcon,
-      OpenSourceIcon,
       arrowForward,
       WelcomeImage,
       CardImage
