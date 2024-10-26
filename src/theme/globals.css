@@ -173,6 +173,10 @@ ion-spinner.small {
     height: 14px
 }
 
+.is-underlined {
+    text-decoration: underline;
+}
+
 .ion-color-warning :not(.toast-header, .toast-message) {
     color: var(--ion-color-warning);
 }
@@ -197,7 +201,7 @@ ion-spinner.small {
     color: var(--ion-color-danger);
 }
 
-.ion-color-medium :not(.toast-header, .toast-message) {
+.ion-color-medium :not(.toast-header, .toast-message), a.ion-color-medium {
     color: var(--ion-color-medium);
 }
 

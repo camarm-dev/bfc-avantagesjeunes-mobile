@@ -31,7 +31,7 @@
             </div>
             <div class="subtitle">
               Connectez vous à l'aide de votre numéro de carte, et de votre mot de passe (ou code de première
-              connexion).
+              connexion). <a class="ion-color-medium is-underlined" href="https://www.avantagesjeunes.com/login/forgotpassword" target="_blank">Mot de passe oublié ?</a>
             </div>
           </div>
           <div class="text">
