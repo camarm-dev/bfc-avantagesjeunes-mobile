@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     handleClick() {
-      this.action().then(() => { this.swiper.slideNext() })
+      this.action().then(() => { this.swiper.slideNext() }).catch(err => console.log(`Caught err; ${err}; in LandingScreenNextButton action.`))
     }
   },
   setup() {
