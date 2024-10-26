@@ -80,19 +80,7 @@ async function handleResponse(request: Promise<Response>, checks = true, request
                 const newRequest = fetch(requestConfig.url, requestClone)
                 return await handleResponse(newRequest,false, requestConfig)
             } else {
-                // await displayToast('Error', 'Unable to access API: forbidden. Please (re)login.', 3000, 'danger')
                 logOut()
-                // setTimeout(() => {
-                //     location.href = '/resume'
-                // }, 3000)
-            }
-        } else {
-            if (err.response) await displayToast(`Error ${err.response.data.status}`, err.response.data.message, 2000, "danger")
-            else {
-                // await displayToast('Error', 'Unable to access API: forbidden. Please (re)login.', 3000, 'danger')
-                // setTimeout(() => {
-                //     location.href = '/resume'
-                // }, 3000)
             }
         }
         if (err.response) {
