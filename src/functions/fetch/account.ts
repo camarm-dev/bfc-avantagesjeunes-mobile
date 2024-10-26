@@ -3,6 +3,27 @@ import {APIResponse} from "@/functions/fetch/interfaces"
 import {removeCredentials} from "@/functions/credentials"
 import {Account} from "@/types/account"
 
+// TODO
+async function checkFirstConnectionCode(number: string, code: string): Promise<APIResponse> {
+    const url = import.meta.env.VITE_API_URL + "/api/compte/checkCodeConnexionInfos"
+    const data = {
+        numero: number,
+        code_connexion: code,
+        token: ""
+    }
+    // TODO; need headers ?
+    return await post(url, data)
+}
+
+// TODO
+async function finishSigning(number: string, email: string, password: string) {
+    const url = import.meta.env.VITE_API_URL + "/api/compte/???"
+    const data = {
+        numero: number,
+        email,
+    }
+}
+
 async function getToken(number: string, password: string, checks = true): Promise<APIResponse> {
     const url = import.meta.env.VITE_API_URL + "/api/compte/login"
     const data = {
@@ -71,6 +92,7 @@ function logOut() {
 }
 
 export {
+    checkFirstConnectionCode,
     getToken,
     getAccount,
     updateAccount,
