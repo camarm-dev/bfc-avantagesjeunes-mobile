@@ -240,7 +240,7 @@ export default {
   mounted() {
     upgradeStorage()
     localStorage.setItem("userApiUrl", "https://api-ajc.camarm.fr")
-    window.addEventListener("reload", () => {
+    window.addEventListener("refresh", () => {
       this.refreshAccount()
     })
 
