@@ -4,6 +4,9 @@ import {removeCredentials} from "@/functions/credentials"
 import {Account} from "@/types/account"
 
 // TODO
+// 1. Check if account is first connection
+// 2. Check first connection code
+// 3. Finish signing
 async function checkFirstConnectionCode(number: string, code: string): Promise<APIResponse> {
     const url = import.meta.env.VITE_API_URL + "/api/compte/checkCodeConnexionInfos"
     const data = {
@@ -16,12 +19,16 @@ async function checkFirstConnectionCode(number: string, code: string): Promise<A
 }
 
 // TODO
-async function finishSigning(number: string, email: string, password: string) {
-    const url = import.meta.env.VITE_API_URL + "/api/compte/???"
+async function createAccount(number: string, id: string, password: string, passwordConfirm: string, code: string) {
+    const url = import.meta.env.VITE_API_URL + "/api/compte/create"
     const data = {
         numero: number,
-        email,
+        passwordNew: password,
+        passwordConfirm: passwordConfirm,
+        id_carte: id,
+        code_connexion: code
     }
+    return await post(url, data)
 }
 
 async function getToken(number: string, password: string, checks = true): Promise<APIResponse> {
@@ -93,6 +100,7 @@ function logOut() {
 
 export {
     checkFirstConnectionCode,
+    createAccount,
     getToken,
     getAccount,
     updateAccount,
