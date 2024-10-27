@@ -105,9 +105,9 @@
           <div class="text fullwidth">
             <form @submit.prevent="finishSigning()" class="fullwidth">
               <ion-list class="fullwidth">
-                <ion-item class="ion-border fullwidth large">
-                  <ion-input @ionChange="email = $event.detail.value as string" type="email" placeholder="Entrez votre e-mail"/>
-                </ion-item>
+<!--                <ion-item class="ion-border fullwidth large">-->
+<!--                  <ion-input @ionChange="email = $event.detail.value as string" type="email" placeholder="Entrez votre e-mail"/>-->
+<!--                </ion-item>-->
                 <ion-item class="ion-border fullwidth large">
                   <ion-input @ionChange="changedPassword1 = $event.detail.value as string" type="password" placeholder="Entrez votre nouveau mot de passe"/>
                 </ion-item>
@@ -166,7 +166,7 @@ import CardImage from "@/assets/card3d.png"
 import Icon from "@/assets/icon3d.png"
 import NumberInput from "@/components/NumberInput.vue"
 import {displayToast} from "@/functions/toasts"
-import {getToken} from "@/functions/fetch/account"
+import {checkFirstConnectionCode, createAccount, getToken} from "@/functions/fetch/account"
 import {getCredentials, setCredentials} from "@/functions/credentials"
 import {getIDFromToken} from "@/functions/fetch/tools"
 import {vibrate} from "@/functions/native/tools"
@@ -201,7 +201,7 @@ export default defineComponent({
       firstConnection: false,
       changedPassword1: "",
       changedPassword2: "",
-      email: ""
+      cardID: ""
     }
   },
   setup () {
@@ -254,6 +254,14 @@ export default defineComponent({
           vibrate()
           this.close()
         }, 2000)
+      } else if (false) {
+        // TODO if first connection
+        // eslint-disable-next-line no-constant-condition
+        this.firstConnection = true
+        const response = await checkFirstConnectionCode(this.numero, this.password)
+        if (response.status) {
+          this.cardID = response.data.id_carte // TODO
+        }
       } else {
         const alert = await alertController.create({
           header: "Impossible de vous authentifier",
@@ -272,32 +280,10 @@ export default defineComponent({
         await alert.present()
         throw "Impossible de se connecter"
       }
-      // TODO if first connection
-      // eslint-disable-next-line no-constant-condition
-      if (false) {
-        this.firstConnection = true
-      }
     },
     async finishSigning () {
-      if (this.changedPassword1 != this.changedPassword2) {
-        const alert = await alertController.create({
-          header: "Erreur",
-          message: "Les mots de passes ne correspondent pas.",
-          buttons: [
-            {
-              text: "Confirmer",
-              role: "confirm"
-            }
-          ]
-        })
-        await alert.present()
-        return
-      }
       // TODO Change pwd and finish signing
-      const response = {
-        status: false,
-        message: ""
-      }
+      const response = await createAccount(this.numero, this.cardID, this.changedPassword1, this.changedPassword1, this.password)
       if (!response.status) {
         const alert = await alertController.create({
           header: "Erreur",
@@ -310,8 +296,9 @@ export default defineComponent({
           ]
         })
         await alert.present()
+        throw 'Erreur API'
       }
-      // re-login
+      // Account created; re-login
       this.password = this.changedPassword1
       await this.login()
     },
