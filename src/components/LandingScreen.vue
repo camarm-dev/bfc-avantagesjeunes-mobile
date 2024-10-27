@@ -254,9 +254,9 @@ export default defineComponent({
           vibrate()
           this.close()
         }, 2000)
+        // eslint-disable-next-line no-constant-condition
       } else if (false) {
         // TODO if first connection
-        // eslint-disable-next-line no-constant-condition
         this.firstConnection = true
         const response = await checkFirstConnectionCode(this.numero, this.password)
         if (response.status) {
@@ -296,7 +296,7 @@ export default defineComponent({
           ]
         })
         await alert.present()
-        throw 'Erreur API'
+        throw "Erreur API"
       }
       // Account created; re-login
       this.password = this.changedPassword1
