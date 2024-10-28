@@ -47,10 +47,10 @@ import { ChevronDown } from "lucide-vue-next"
 import {closeModals} from "@/functions/modals"
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { MapboxMap, MapboxMarker } from '@studiometa/vue-mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import InspectOrganisme from "@/components/InspectOrganisme.vue";
-import { ChevronRight } from "lucide-vue-next";
+import { MapboxMap, MapboxMarker } from "@studiometa/vue-mapbox-gl"
+import "mapbox-gl/dist/mapbox-gl.css"
+import InspectOrganisme from "@/components/InspectOrganisme.vue"
+import { ChevronRight } from "lucide-vue-next"
 </script>
 
 <script lang="ts">
