@@ -43,7 +43,7 @@ def to_geojson(advantage: dict):
             "description": advantage['description'],
             "image": advantage['image'],
             "otherAdvantages": advantage['other_advantages'],
-            "organismes": advantage['organismes']
+            "organismes": advantage['metadata']['organismes']
         }
     }
 
