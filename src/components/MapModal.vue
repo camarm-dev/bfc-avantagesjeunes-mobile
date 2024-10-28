@@ -28,7 +28,7 @@
               </ion-nav-link>
             </template>
           </MapboxMarker>
-          <MapboxMarker :lng-lat="user.coordinates">
+          <MapboxMarker v-if="user" :lng-lat="user.coordinates">
             <img :src="user.image" alt="Vous" class="user">
             <template v-slot:popup>
               <h3>Moi</h3>
