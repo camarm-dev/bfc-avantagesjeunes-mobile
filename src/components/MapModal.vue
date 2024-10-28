@@ -17,7 +17,7 @@
             :zoom="zoom || 9"
             :minZoom="4"
         >
-          <MapboxMarker :key="marker.properties.id" v-for="marker in markers.features" :position="marker.geometry.coordinates">
+          <MapboxMarker :key="marker.properties.id" v-for="marker in markers.features" :lng-lat="marker.geometry.coordinates">
             <div class="marker"></div>
             <template v-slot:popup>
               <h3>{{ marker.properties.title }}</h3>
@@ -28,7 +28,7 @@
               </ion-nav-link>
             </template>
           </MapboxMarker>
-          <MapboxMarker>
+          <MapboxMarker :lng-lat="user.coordinates">
             <img :src="user.image" alt="Vous" class="user">
             <template v-slot:popup>
               <h3>Moi</h3>
