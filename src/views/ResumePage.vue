@@ -239,7 +239,6 @@ export default {
   },
   mounted() {
     upgradeStorage()
-    localStorage.setItem("userApiUrl", "https://api-ajc.camarm.fr")
     window.addEventListener("refresh", () => {
       this.refreshAccount()
     })
@@ -348,7 +347,7 @@ export default {
       this.aroundMeLoading = true
       this.radius = radius
       const coordinates = this.position ? await getCurrentLocation(): [6.0258598544333974, 47.23521554332734]
-      this.aroundMeAdvantages = await get(`https://api-ajc.camarm.fr/around-me?longitude=${coordinates[0]}&latitude=${coordinates[1]}&radius=${radius}`) as any
+      this.aroundMeAdvantages = await get(`https://api-ajc.camarm.fr/around-me?longitude=${coordinates[0]}&latitude=${coordinates[1]}&radius=${radius}`, false) as any
       this.aroundMeLoading = false
     },
     getZoom() {
