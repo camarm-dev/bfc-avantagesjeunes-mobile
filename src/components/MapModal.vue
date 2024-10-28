@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import {IonPage, IonHeader, IonContent, IonToolbar, IonTitle, IonNavLink, IonIcon} from "@ionic/vue"
+import {IonPage, IonHeader, IonContent, IonToolbar, IonTitle, IonNavLink, IonIcon, IonButton} from "@ionic/vue"
 import { ChevronDown } from "lucide-vue-next"
 import {closeModals} from "@/functions/modals"
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
