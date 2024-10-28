@@ -15,7 +15,7 @@ function getIDFromToken(token: string) {
     return JSON.parse(jsonPayload)["id_compte"]
 }
 
-async function post(url: string, data: any, cors = true) {
+async function post(url: string, data: any, cors = true, checks: boolean = true) {
     if (data) data["token"] = localStorage.getItem("currentCardToken")
 
     const config = {
@@ -31,11 +31,11 @@ async function post(url: string, data: any, cors = true) {
 
     if (data) config.body = JSON.stringify(data)
 
-    return await handleResponse(fetch(url, config), true, config)
+    return await handleResponse(fetch(url, config), checks, config)
 }
 
 
-async function get(url: string) {
+async function get(url: string, checks: boolean = true) {
     const config = {
         method: "GET",
         headers: {
@@ -44,7 +44,7 @@ async function get(url: string) {
         },
         url: url
     } as any
-    return await handleResponse(fetch(url, config), true, config)
+    return await handleResponse(fetch(url, config), checks, config)
 }
 
 
