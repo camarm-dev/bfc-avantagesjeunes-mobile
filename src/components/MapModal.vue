@@ -24,7 +24,7 @@
               <p v-html="marker.properties.description"></p>
               <span v-if="marker.properties.otherAdvantages.length > 0">{{ marker.properties.otherAdvantages.length }} autres avantages disponibles ici</span>
               <ion-nav-link :key="organisme.id_organisme" v-for="organisme in marker.properties.organismes" router-direction="forward" :component="InspectOrganisme" :component-props="{ id_organisme: organisme.id_organisme }">
-                <p class="footer focusable">Tout voir pour "{{ organisme.nom }}"<ChevronRight/></p>
+                <ion-button size="small" expand="full" color="secondary" class="gradient-button ion-no-margin">Tout voir <ion-icon :icon="chevronForwardOutline"/></ion-button>
               </ion-nav-link>
             </template>
           </MapboxMarker>
@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import {IonPage, IonHeader, IonContent, IonToolbar, IonTitle, IonNavLink} from "@ionic/vue"
+import {IonPage, IonHeader, IonContent, IonToolbar, IonTitle, IonNavLink, IonIcon} from "@ionic/vue"
 import { ChevronDown } from "lucide-vue-next"
 import {closeModals} from "@/functions/modals"
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -50,7 +50,7 @@ import {closeModals} from "@/functions/modals"
 import { MapboxMap, MapboxMarker } from "@studiometa/vue-mapbox-gl"
 import "mapbox-gl/dist/mapbox-gl.css"
 import InspectOrganisme from "@/components/InspectOrganisme.vue"
-import { ChevronRight } from "lucide-vue-next"
+import {chevronForwardOutline} from "ionicons/icons";
 </script>
 
 <script lang="ts">
@@ -82,6 +82,10 @@ export default {
   border-radius: 50%;
   border: 2px solid var(--ion-color-primary);
   cursor: pointer;
+}
+
+.ion-no-margin {
+  margin: 0 !important;
 }
 
 .marker {
