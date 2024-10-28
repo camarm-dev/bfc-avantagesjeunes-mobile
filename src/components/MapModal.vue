@@ -21,7 +21,7 @@
             <div class="marker"></div>
             <template v-slot:popup>
               <h3>{{ marker.properties.title }}</h3>
-              <p>{{ marker.properties.description }}</p>
+              <p v-html="marker.properties.description"></p>
               <span v-if="marker.properties.otherAdvantages.length > 0">{{ marker.properties.otherAdvantages.length }} autres avantages disponibles ici</span>
               <ion-nav-link :key="organisme.id_organisme" v-for="organisme in marker.properties.organismes" router-direction="forward" :component="InspectOrganisme" :component-props="{ id_organisme: organisme.id_organisme }">
                 <p class="footer focusable">Tout voir pour "{{ organisme.nom }}"<ChevronRight/></p>
