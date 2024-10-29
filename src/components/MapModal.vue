@@ -59,14 +59,14 @@ import {
 } from "@ionic/vue"
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { MapboxMap, MapboxMarker, MapboxCluster } from "@studiometa/vue-mapbox-gl"
+import { MapboxMap, MapboxMarker } from "@studiometa/vue-mapbox-gl"
 import "mapbox-gl/dist/mapbox-gl.css"
 import InspectOrganisme from "@/components/InspectOrganisme.vue"
-import {chevronForwardOutline, radioButtonOffOutline, radioButtonOnOutline} from "ionicons/icons";
+import {chevronForwardOutline, radioButtonOffOutline, radioButtonOnOutline} from "ionicons/icons"
 </script>
 
 <script lang="ts">
-import {GeoJSONSourceRaw} from "mapbox-gl";
+import {GeoJSONSourceRaw} from "mapbox-gl"
 
 export default {
   props: ["markers", "center", "zoom", "user", "radius"],
@@ -86,12 +86,14 @@ export default {
       try {
         this.map.removeLayer("polygon")
         this.map.removeSource("polygon")
-      } catch {}
+      } catch {
+        console.log("[Map] Catching not existing source / layer.")
+      }
     },
     showCircle() {
       this.resetCircle()
       if (!this.circle) return
-      this.map.addSource("polygon", this.createGeoJSONCircle(this.user.coordinates, 64));
+      this.map.addSource("polygon", this.createGeoJSONCircle(this.user.coordinates, 64))
       this.map.addLayer({
         "id": "polygon",
         "type": "fill",
@@ -101,9 +103,9 @@ export default {
           "fill-color": "#E1B086",
           "fill-opacity": 0.6
         }
-      });
+      })
     },
-    createGeoJSONCircle(center: [number, number], points: number = 64, radius: number = 1) {
+    createGeoJSONCircle(center: [number, number], points = 64, radius = 1) {
       const coords = {
         latitude: center[1],
         longitude: center[0]
@@ -115,15 +117,15 @@ export default {
       const distanceX = km / (111.320 * Math.cos(coords.latitude * Math.PI / 180))
       const distanceY = km / 110.574
 
-      let theta, x, y;
+      let theta, x, y
       for(let i=0; i < points; i++) {
-        theta = (i / points) * (2 * Math.PI);
-        x = distanceX*Math.cos(theta);
-        y = distanceY*Math.sin(theta);
+        theta = (i / points) * (2 * Math.PI)
+        x = distanceX*Math.cos(theta)
+        y = distanceY*Math.sin(theta)
 
         ret.push([coords.longitude + x, coords.latitude + y])
       }
-      ret.push(ret[0]);
+      ret.push(ret[0])
 
       return {
         "type": "geojson",

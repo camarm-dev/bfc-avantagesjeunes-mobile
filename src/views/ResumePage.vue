@@ -165,6 +165,7 @@ import {BADGES} from "@/functions/fetch/badges"
 import UserBadge from "@/components/UserBadge.vue"
 import FavoritesAvantages from "@/components/FavoritesAvantages.vue"
 import InspectProfile from "@/components/InspectProfile.vue"
+import MapModal from "@/components/MapModal.vue"
 </script>
 
 <script lang="ts">
@@ -174,7 +175,6 @@ import {getAvantage} from "@/functions/fetch/avantages"
 import {get} from "@/functions/fetch/tools"
 import {hasPermission, getCurrentLocation} from "@/functions/native/geolocation"
 import {createModal} from "@/functions/modals"
-import MapModal from "@/components/MapModal.vue"
 import {Badge} from "@/types/badges"
 import {Avantage, Transaction, TransactionAvantage} from "@/types/avantages"
 import {modalController, RefresherCustomEvent} from "@ionic/vue"

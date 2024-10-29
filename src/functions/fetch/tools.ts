@@ -15,7 +15,7 @@ function getIDFromToken(token: string) {
     return JSON.parse(jsonPayload)["id_compte"]
 }
 
-async function post(url: string, data: any, cors = true, checks: boolean = true) {
+async function post(url: string, data: any, cors = true, checks = true) {
     if (data) data["token"] = localStorage.getItem("currentCardToken")
 
     const config = {
@@ -35,7 +35,7 @@ async function post(url: string, data: any, cors = true, checks: boolean = true)
 }
 
 
-async function get(url: string, checks: boolean = true) {
+async function get(url: string, checks = true) {
     const config = {
         method: "GET",
         headers: {
