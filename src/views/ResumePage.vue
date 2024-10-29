@@ -65,13 +65,15 @@
       </pulse-item>
 
       <ion-list inset>
-        <ion-item @click="openAroundMeMap()" button>
-          <MapIcon class="icon ion-color-success"/>
-          <ion-label>
-            <p>Autour de moi</p>
-            <h2>Ouvrir la carte</h2>
-          </ion-label>
-        </ion-item>
+        <ion-nav-link :component="MapModal" :component-props="{ markers: { features: aroundMeAdvantages.results }, user: user_marker, center: user_marker?.coordinates || [6.0258598544333974, 47.23521554332734], zoom: getZoom(), radius }">
+          <ion-item button>
+            <MapIcon class="icon ion-color-success"/>
+            <ion-label>
+              <p>Autour de moi</p>
+              <h2>Ouvrir la carte</h2>
+            </ion-label>
+          </ion-item>
+        </ion-nav-link>
         <ion-item>
           <ion-label>
             <p>
@@ -277,9 +279,6 @@ export default {
     }
   },
   methods: {
-    async openAroundMeMap() {
-      await createModal(MapModal, "modalMap", refs, { markers: { features: this.aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker?.coordinates || [6.0258598544333974, 47.23521554332734], zoom: this.getZoom() }, false, [], true)
-    },
     async refresh(event: RefresherCustomEvent) {
       this.refreshAccount()
       event.target?.complete()
