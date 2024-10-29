@@ -4,6 +4,12 @@
       <ion-buttons slot="start">
         <ion-back-button text="Retour"></ion-back-button>
       </ion-buttons>
+      <ion-title>Autour de moi</ion-title>
+      <ion-buttons v-if="radius" slot="end">
+        <ion-button @click="toggleCircle()" :color="circle ? 'light': 'medium'">
+          <ion-icon slot="icon-only" :icon="circle ? radioButtonOnOutline : radioButtonOffOutline"/>
+        </ion-button>
+      </ion-buttons>
     </ion-toolbar>
   </ion-header>
   <ion-content :fullscreen="true">
@@ -15,6 +21,8 @@
             :center="center || [6.0258598544333974, 47.23521554332734]"
             :zoom="zoom || 9"
             :minZoom="4"
+            @mb-created="(mapInstance: mapboxgl.Map) => map = mapInstance"
+            @mb-load="showCircle()"
         >
           <MapboxMarker :key="marker.properties.id" v-for="marker in markers.features" :lng-lat="marker.geometry.coordinates">
             <div class="marker"></div>
@@ -22,8 +30,7 @@
               <h3>{{ marker.properties.title }}</h3>
               <p v-html="marker.properties.description"></p>
               <span v-if="marker.properties.otherAdvantages.length > 0">{{ marker.properties.otherAdvantages.length }} autres avantages disponibles ici</span>
-              <!--              TODO nav link not working-->
-              <ion-nav-link @click="log()" :key="organisme.id_organisme" v-for="organisme in marker.properties.organismes" router-direction="forward" :component="InspectOrganisme" :component-props="{ id_organisme: organisme.id_organisme }">
+              <ion-nav-link :key="organisme.id_organisme" v-for="organisme in marker.properties.organismes" router-direction="forward" :component="InspectOrganisme" :component-props="{ id_organisme: organisme.id_organisme }">
                 <ion-button size="small" expand="full" color="secondary" class="gradient-button ion-no-margin">Tout voir <ion-icon :icon="chevronForwardOutline"/></ion-button>
               </ion-nav-link>
             </template>
@@ -42,34 +49,95 @@
 
 <script setup lang="ts">
 import {
-  IonPage,
   IonHeader,
   IonContent,
   IonToolbar,
   IonNavLink,
   IonIcon,
   IonButton,
-  IonBackButton, IonButtons
+  IonBackButton, IonButtons, IonTitle
 } from "@ionic/vue"
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { MapboxMap, MapboxMarker } from "@studiometa/vue-mapbox-gl"
+import { MapboxMap, MapboxMarker, MapboxCluster } from "@studiometa/vue-mapbox-gl"
 import "mapbox-gl/dist/mapbox-gl.css"
 import InspectOrganisme from "@/components/InspectOrganisme.vue"
-import {chevronForwardOutline} from "ionicons/icons";
+import {chevronForwardOutline, radioButtonOffOutline, radioButtonOnOutline} from "ionicons/icons";
 </script>
 
 <script lang="ts">
+import {GeoJSONSourceRaw} from "mapbox-gl";
+
 export default {
-  props: ["markers", "center", "zoom", "user"],
+  props: ["markers", "center", "zoom", "user", "radius"],
   data() {
     return {
-      fullscreen: false
+      fullscreen: false,
+      circle: false,
+      map: {} as mapboxgl.Map
     }
   },
   methods: {
-    log() {
-      console.log("ezfezluf")
+    toggleCircle() {
+      this.circle = !this.circle
+      this.showCircle()
+    },
+    resetCircle() {
+      try {
+        this.map.removeLayer("polygon")
+        this.map.removeSource("polygon")
+      } catch {}
+    },
+    showCircle() {
+      this.resetCircle()
+      if (!this.circle) return
+      this.map.addSource("polygon", this.createGeoJSONCircle(this.user.coordinates, 64));
+      this.map.addLayer({
+        "id": "polygon",
+        "type": "fill",
+        "source": "polygon",
+        "layout": {},
+        "paint": {
+          "fill-color": "#E1B086",
+          "fill-opacity": 0.6
+        }
+      });
+    },
+    createGeoJSONCircle(center: [number, number], points: number = 64, radius: number = 1) {
+      const coords = {
+        latitude: center[1],
+        longitude: center[0]
+      }
+
+      const km = this.radius ? this.radius: radius
+
+      const ret = []
+      const distanceX = km / (111.320 * Math.cos(coords.latitude * Math.PI / 180))
+      const distanceY = km / 110.574
+
+      let theta, x, y;
+      for(let i=0; i < points; i++) {
+        theta = (i / points) * (2 * Math.PI);
+        x = distanceX*Math.cos(theta);
+        y = distanceY*Math.sin(theta);
+
+        ret.push([coords.longitude + x, coords.latitude + y])
+      }
+      ret.push(ret[0]);
+
+      return {
+        "type": "geojson",
+        "data": {
+          "type": "FeatureCollection",
+          "features": [{
+            "type": "Feature",
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [ret]
+            }
+          }]
+        }
+      } as GeoJSONSourceRaw
     }
   }
 }
