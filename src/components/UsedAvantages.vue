@@ -9,7 +9,7 @@
   </ion-header>
   <ion-content :fullscreen="true">
     <div class="top-background purple"></div>
-    <div class="floating">
+    <div class="floating small">
       <p>Retrouvez vos codes et bons ici !</p>
       <h3>{{ total }} avantages utilisés</h3>
     </div>

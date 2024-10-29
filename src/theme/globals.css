@@ -332,6 +332,10 @@ ion-toolbar ion-label p {
     padding: .8em 1.2em 2em;
 }
 
+.floating.small {
+    padding: .8em 1.2em;
+}
+
 .floating p {
     color: var(--ion-color-medium);
     margin: 0;

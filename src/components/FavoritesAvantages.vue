@@ -9,7 +9,7 @@
   </ion-header>
   <ion-content :fullscreen="true">
     <div class="top-background red"></div>
-    <div class="floating">
+    <div class="floating small">
       <p>Retrouvez vos avantages favoris !</p>
       <h3>{{ avantages.length }} avantages favoris</h3>
     </div>
