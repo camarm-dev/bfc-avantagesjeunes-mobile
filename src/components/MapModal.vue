@@ -1,14 +1,13 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar @click="closeModals()">
-        <ion-title>
-          <ChevronDown class="focusable" @click="closeModals()"/>
-        </ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true">
-      <div class="map-wrapper">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button text="Retour"></ion-back-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content :fullscreen="true">
+    <div class="map-wrapper">
         <MapboxMap
             class="map-container"
             map-style="mapbox://styles/mapbox/streets-v12"
@@ -23,8 +22,8 @@
               <h3>{{ marker.properties.title }}</h3>
               <p v-html="marker.properties.description"></p>
               <span v-if="marker.properties.otherAdvantages.length > 0">{{ marker.properties.otherAdvantages.length }} autres avantages disponibles ici</span>
-<!--              TODO nav link not working-->
-              <ion-nav-link :key="organisme.id_organisme" v-for="organisme in marker.properties.organismes" router-direction="forward" :component="InspectOrganisme" :component-props="{ id_organisme: organisme.id_organisme }">
+              <!--              TODO nav link not working-->
+              <ion-nav-link @click="log()" :key="organisme.id_organisme" v-for="organisme in marker.properties.organismes" router-direction="forward" :component="InspectOrganisme" :component-props="{ id_organisme: organisme.id_organisme }">
                 <ion-button size="small" expand="full" color="secondary" class="gradient-button ion-no-margin">Tout voir <ion-icon :icon="chevronForwardOutline"/></ion-button>
               </ion-nav-link>
             </template>
@@ -38,14 +37,20 @@
           </MapboxMarker>
         </MapboxMap>
       </div>
-    </ion-content>
-  </ion-page>
+  </ion-content>
 </template>
 
 <script setup lang="ts">
-import {IonPage, IonHeader, IonContent, IonToolbar, IonTitle, IonNavLink, IonIcon, IonButton} from "@ionic/vue"
-import { ChevronDown } from "lucide-vue-next"
-import {closeModals} from "@/functions/modals"
+import {
+  IonPage,
+  IonHeader,
+  IonContent,
+  IonToolbar,
+  IonNavLink,
+  IonIcon,
+  IonButton,
+  IonBackButton, IonButtons
+} from "@ionic/vue"
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { MapboxMap, MapboxMarker } from "@studiometa/vue-mapbox-gl"
@@ -62,6 +67,11 @@ export default {
       fullscreen: false
     }
   },
+  methods: {
+    log() {
+      console.log("ezfezluf")
+    }
+  }
 }
 </script>
 
