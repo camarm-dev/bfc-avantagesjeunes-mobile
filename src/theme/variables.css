@@ -22,7 +22,9 @@ http://ionicframework.com/docs/theming/ */
   --ion-toolbar-border-color: var(--ion-color-primary-tint);
 
   /** Background **/
-  --background: var(--ion-color-primary-shade);
+  --background: #131112;
+  --ion-item-background: var(--background);
+  --ion-background-color: var(--ion-color-primary-shade);
 
   /** secondary **/
   --ion-color-secondary: #A16C47;
