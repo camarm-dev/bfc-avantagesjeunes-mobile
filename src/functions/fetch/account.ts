@@ -1,12 +1,8 @@
 import {get, handleResponse, post} from "@/functions/fetch/tools"
 import {APIResponse} from "@/functions/fetch/interfaces"
 import {removeCredentials} from "@/functions/credentials"
-import {Account} from "@/types/account"
+import {Account, FinishSigningData} from "@/types/account"
 
-// TODO
-// 1. Check if account is first connection
-// 2. Check first connection code
-// 3. Finish signing
 async function checkFirstConnectionCode(number: string, code: string): Promise<APIResponse> {
     const url = import.meta.env.VITE_API_URL + "/api/compte/checkCodeConnexionInfos"
     const data = {
@@ -14,21 +10,29 @@ async function checkFirstConnectionCode(number: string, code: string): Promise<A
         code_connexion: code,
         token: ""
     }
-    // TODO; need headers ?
-    return await post(url, data)
+    return await post(url, data, true, false)
 }
 
-// TODO
-async function createAccount(number: string, id: string, password: string, passwordConfirm: string, code: string) {
+async function changePasswordOnAccountCreation(number: string, id: number, password: string, passwordConfirm: string, code: string, photo: string) {
     const url = import.meta.env.VITE_API_URL + "/api/compte/create"
     const data = {
         numero: number,
         passwordNew: password,
         passwordConfirm: passwordConfirm,
         id_carte: id,
-        code_connexion: code
+        code_connexion: code,
+        logo: photo
     }
-    return await post(url, data)
+    return await post(url, data, true, false)
+}
+
+async function finishAccountCreation(id: number, account: FinishSigningData) {
+    const url = import.meta.env.VITE_API_URL + "/api/compte/createOrUpdate"
+    const data = {
+        id_carte: id,
+        data: account
+    }
+    return await post(url, data, true, false)
 }
 
 async function getToken(number: string, password: string, checks = true): Promise<APIResponse> {
@@ -100,7 +104,8 @@ function logOut() {
 
 export {
     checkFirstConnectionCode,
-    createAccount,
+    finishAccountCreation,
+    changePasswordOnAccountCreation,
     getToken,
     getAccount,
     updateAccount,
