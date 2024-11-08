@@ -53,6 +53,23 @@
         </div>
         <AvantageCard :key="favori.id_avantage" :used="usedAdvantagesIds.includes(favori.id_avantage)" :favori="true" :avantage="favori" v-for="favori in user.favoris"/>
       </div>
+      <ion-nav-link router-direction="forward" :component="InspectProfile" :component-props="{ editable: true, id: user.id_compte }">
+        <pulse-item vibrate>
+          <ion-list inset v-if="firstConnectionDisclaimer">
+            <ion-item button @click="closeDisclaimer()" color="secondary">
+              <BadgeAlert class="icon-ion-color-light"/>
+              <ion-note class="ion-padding" color="light">Pensez à vérifier vos informations.</ion-note>
+            </ion-item>
+            <ion-item>
+              <ion-note class="ion-padding" color="light">
+                Vous venez de vous connecter, pensez à vérifier vos informations personnelles disponible depuis votre page profil en haut à droite.
+                Pensez à maintenir votre profil à jour avec des données authentiques.
+              </ion-note>
+            </ion-item>
+          </ion-list>
+        </pulse-item>
+      </ion-nav-link>
+
       <pulse-item vibrate>
         <ion-list inset v-if="!position">
           <ion-item @click="askPermission().then(refreshPosition)" color="danger">
@@ -127,7 +144,7 @@
 </template>
 
 <script setup lang="ts">
-import "@/theme/globals.css"
+import  "@/theme/globals.css"
 import {
   IonPage,
   IonHeader,
@@ -151,7 +168,8 @@ import {
   CreditCard,
   MapIcon,
   ChevronRight,
-  Compass
+  Compass,
+  BadgeAlert
 } from "lucide-vue-next"
 import MyCard from "@/components/MyCard.vue"
 import {askPermission} from "@/functions/native/geolocation"
@@ -203,6 +221,7 @@ export default {
       user_marker: null as any,
       refs: refs,
       aroundMeLoading: true,
+      firstConnectionDisclaimer: false,
       user: {
         image_url: "",
         carte: {
@@ -277,6 +296,7 @@ export default {
     if (now.getHours() > 18) {
       this.welcome_formula = "Bonne soirée"
     }
+    this.firstConnectionDisclaimer = (localStorage.getItem("firstConnectionDisclaimer") || "true") == "true";
   },
   methods: {
     async refresh(event: RefresherCustomEvent) {
@@ -294,6 +314,10 @@ export default {
     },
     goTo(href: string) {
       this.$router.push(href)
+    },
+    closeDisclaimer() {
+      localStorage.setItem("firstConnectionDisclaimer", "false")
+      this.firstConnectionDisclaimer = false
     },
     async refreshPosition() {
       this.position = await hasPermission()
