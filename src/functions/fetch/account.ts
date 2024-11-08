@@ -27,7 +27,7 @@ async function changePasswordOnAccountCreation(number: string, id: number, passw
 }
 
 async function finishAccountCreation(id: number, account: FinishSigningData) {
-    const url = import.meta.env.VITE_API_URL + "/api/compte/createOrUpdate"
+    const url = import.meta.env.VITE_API_URL + "/api/carte/createOrUpdate"
     const data = {
         id_carte: id,
         data: account
