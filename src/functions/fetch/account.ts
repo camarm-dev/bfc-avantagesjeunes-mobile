@@ -98,6 +98,7 @@ function logOut() {
         localStorage.removeItem("backCardImage")
         localStorage.removeItem("advantagesCache")
         localStorage.removeItem("userApiUrl")
+        localStorage.removeItem("firstConnectionDisclaimer")
         location.reload()
     })
 }
