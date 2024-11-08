@@ -17,12 +17,14 @@ async function changePasswordOnAccountCreation(number: string, id: number, passw
     const url = import.meta.env.VITE_API_URL + "/api/compte/create"
     const data = {
         numero: number,
+        password: password,
         passwordNew: password,
         passwordConfirm: passwordConfirm,
         id_carte: id,
         code_connexion: code,
         logo: photo
     }
+
     return await post(url, data, true, false)
 }
 
