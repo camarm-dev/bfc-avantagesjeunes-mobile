@@ -174,7 +174,7 @@ export default {
       return this.favoris.includes(id_avantage)
     },
     async performSearchRequest() {
-      let url = `${localStorage.getItem("userApiUrl")}/search?q=${this.query}&page=${this.page}`
+      let url = `https://api-ajc.camarm.fr/search?q=${this.query}&page=${this.page}`
       if (this.secteurs.length > 0) {
         url += `&secteurs=${this.secteurs.join(",")}`
       }
