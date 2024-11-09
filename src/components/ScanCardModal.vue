@@ -13,21 +13,21 @@
           </ion-note>
           <ion-label>
             <h6>{{ state }}</h6>
-            <ion-progress-bar color="success" :value="progress"/>
+            <ion-progress-bar color="secondary" :value="progress"/>
           </ion-label>
         </ion-item>
       </ion-list>
       <br>
       <ion-list>
         <ion-item @click="scanCardFront()" :disabled="frontImageDone" button>
-          <Check :class="`icon ion-color-${frontImageDone ? 'success': 'medium'}`"/>
+          <Check :class="`icon ion-color-${frontImageDone ? 'secondary': 'medium'}`"/>
           <ion-label>
             <p>Scanner le devant de la carte</p>
             <h3>Capturer la face avant</h3>
           </ion-label>
         </ion-item>
         <ion-item @click="scanCardBack()" button :disabled="!frontImageDone || backImageDone" lines="none">
-          <Check :class="`icon ion-color${backImageDone ? 'success': 'medium'}`"/>
+          <Check :class="`icon ion-color${backImageDone ? 'secondary': 'medium'}`"/>
           <ion-label>
             <p>Scanner le dos de la carte</p>
             <h3>Capturer le dos</h3>
@@ -38,7 +38,7 @@
       <br>
       <pulse-item>
         <ion-list>
-          <ion-item :detail-icon="checkmarkOutline" :disabled="!(frontImageDone && backImageDone)" color="success" button @click="close()">
+          <ion-item :detail-icon="checkmarkOutline" :disabled="!(frontImageDone && backImageDone)" color="secondary" button @click="close()">
             Terminer
           </ion-item>
        </ion-list>
@@ -46,7 +46,7 @@
       <br>
       <ion-list>
         <ion-note>
-          <ion-icon :icon="helpOutline"/>&nbsp;Prenez votre carte en photo le plus à plat possible et en évitant les reflets.
+          <ion-icon :icon="helpOutline"/>&nbsp;Prends ta carte en photo le plus à plat possible et en évitant les reflets.
         </ion-note>
       </ion-list>
     </ion-content>
@@ -70,21 +70,21 @@ export default {
     return {
       frontImageDone: false,
       backImageDone: false,
-      state: "Numérisez le devant de votre carte.",
+      state: "Numérise le devant de ta carte.",
       progress: 0/3
     }
   },
   methods: {
     async scanCardFront() {
-      await saveCardImage("frontCardImage", "Ajoutez une photo du devant de votre carte et recadrez là.", () => {
-        this.state = "Numérisez le dos de votre carte."
+      await saveCardImage("frontCardImage", "Ajoute une photo du devant de ta carte et recadre là.", () => {
+        this.state = "Numérise le dos de ta carte."
         this.progress = 1/3
         this.frontImageDone = true
       })
     },
     async scanCardBack() {
-      await saveCardImage("backCardImage", "Ajoutez une photo du dos de votre carte et recadrez là.", () => {
-        this.state = "Finalisez la numérisation."
+      await saveCardImage("backCardImage", "Ajoute une photo du dos de ta carte et recadre là.", () => {
+        this.state = "Finalise la numérisation."
         this.progress = 2/3
         this.backImageDone = true
       })
@@ -93,7 +93,7 @@ export default {
       this.progress = 3/3
       setTimeout(() => {
         closeModals()
-        displayToast("Images enregistrées", "Les photos de ta carte ont bien été modifiées", 3000, "success")
+        displayToast("Images enregistrées", "Les photos de ta carte ont bien été modifiées", 3000, "primary")
       }, 500)
     }
   }
