@@ -57,7 +57,7 @@ import {
   IonNavLink,
   IonNote
 } from "@ionic/vue"
-import { ClipboardIcon, File, Newspaper } from "lucide-vue-next"
+import { File, Newspaper } from "lucide-vue-next"
 import AvantageCard from "@/components/AvantageCard.vue"
 import UsedAdvantageValidationScreen from "@/components/UsedAdvantageValidationScreen.vue"
 import InspectUsedAvantage from "@/components/InspectUsedAvantage.vue"
