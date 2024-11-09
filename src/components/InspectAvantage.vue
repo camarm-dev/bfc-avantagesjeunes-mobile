@@ -91,7 +91,7 @@
           <h2 class="ion-text-capitalize">{{ dynamicAvantage.type }}</h2>
         </ion-label>
       </ion-item>
-      <ion-item>
+      <ion-item v-if="dynamicAvantage.saison">
         <SquareAsterisk class="icon ion-color-tertiary"/>
         <ion-label>
           <p>Saison de validité</p>
