@@ -19,7 +19,7 @@
           <img @click="openCardFullscreen()" width="200" class="card-picture" :src="frontCardImage" alt="Votre carte">
         </div>
       </pulse-item>
-      <ion-chip class="large-chip" color="success" v-if="user.carte.valid">
+      <ion-chip class="large-chip" color="success" v-if="isValid">
         <BadgeCheck class="icon ion-color-success"/>
         {{ user.carte.numero }}
       </ion-chip>
@@ -42,7 +42,7 @@
         </ion-label>
       </ion-item>
       <ion-item>
-        <SquareAsterisk v-if="user.carte.valid" class="icon ion-color-success"/>
+        <SquareAsterisk v-if="isValid" class="icon ion-color-success"/>
         <SquareAsterisk v-else class="icon ion-color-danger"/>
         <ion-label>
           <p>Saison de validité</p>
@@ -50,7 +50,7 @@
         </ion-label>
       </ion-item>
       <ion-item>
-        <ShieldCheck v-if="user.carte.valid" class="icon ion-color-success"/>
+        <ShieldCheck v-if="isValid" class="icon ion-color-success"/>
         <ShieldClose v-else class="icon ion-color-danger"/>
         <ion-label>
           <p>Valide jusqu'au</p>
@@ -145,6 +145,7 @@ import FullscreenCardModal from "@/components/FullscreenCardModal.vue"
 import {ref} from "vue"
 import ScanCardModal from "@/components/ScanCardModal.vue"
 import {getImage, removeImage} from "@/functions/native/camera"
+import {Account} from "@/types/account";
 
 const refs = {
   modalFullscreen: ref(null),
@@ -163,6 +164,7 @@ export default {
     return {
       frontCardImage: "/carte.png",
       backCardImage: "/carte-dos.png",
+      isValid: false,
       user: {
         image_url: "",
         carte: {
@@ -174,7 +176,7 @@ export default {
           valid_datefin: "",
           valid: false
         }
-      } as any,
+      } as unknown as Account,
     }
   },
   mounted() {
@@ -195,6 +197,10 @@ export default {
     refreshAccount() {
       getAccount().then(user => {
         this.user = user
+        const now = new Date().getTime()
+        const startDate = new Date(this.user.carte.valid_datedebut).getTime()
+        const endDate = new Date(this.user.carte.valid_datefin).getTime()
+        this.isValid = startDate < now && now < endDate
         this.user.carte.valid_datefin = readableDate(this.user.carte.valid_datefin)
         this.user.carte.date_vente = readableDate(this.user.carte.date_vente)
       })
