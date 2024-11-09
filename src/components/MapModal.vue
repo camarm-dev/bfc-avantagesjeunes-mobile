@@ -4,7 +4,7 @@
       <ion-buttons slot="start">
         <ion-back-button text="Retour"></ion-back-button>
       </ion-buttons>
-      <ion-title>Autour de moi</ion-title>
+      <ion-title>{{ title || "Autour de moi" }}</ion-title>
       <ion-buttons v-if="radius" slot="end">
         <ion-button @click="toggleCircle()" :color="circle ? 'light': 'medium'">
           <ion-icon slot="icon-only" :icon="circle ? radioButtonOnOutline : radioButtonOffOutline"/>
@@ -69,7 +69,7 @@ import {chevronForwardOutline, radioButtonOffOutline, radioButtonOnOutline} from
 import {GeoJSONSourceRaw} from "mapbox-gl"
 
 export default {
-  props: ["markers", "center", "zoom", "user", "radius"],
+  props: ["markers", "center", "zoom", "user", "radius", "title"],
   data() {
     return {
       fullscreen: false,
