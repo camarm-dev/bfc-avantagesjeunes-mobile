@@ -16,16 +16,16 @@
     <header class="profile">
       <pulse-item vibrate>
         <div class="card-swiper">
-          <img @click="openCardFullscreen()" height="200" class="card-picture" :src="frontCardImage" alt="Votre carte">
+          <img @click="openCardFullscreen()" width="200" class="card-picture" :src="frontCardImage" alt="Votre carte">
         </div>
       </pulse-item>
       <ion-chip class="large-chip" color="success" v-if="user.carte.valid">
-        <BadgeCheck class="icon ion-color-success" size="30"/>
+        <BadgeCheck class="icon ion-color-success"/>
         {{ user.carte.numero }}
       </ion-chip>
 
       <ion-chip class="large-chip" color="danger" v-else>
-        <BadgeX class="icon ion-color-danger" size="30"/>
+        <BadgeX class="icon ion-color-danger"/>
         {{ user.carte.numero }}
       </ion-chip>
     </header>
