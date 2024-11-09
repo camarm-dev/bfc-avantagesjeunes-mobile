@@ -135,11 +135,13 @@
           <h2>{{ org.site2 }}</h2>
         </ion-label>
       </ion-item>
-      <ion-item button @click="openMap(org.nom, `${org.adresse}, ${org.cp} ${org.commune}`)">
-        <ion-label>
-          <p>Voir sur la carte</p>
-        </ion-label>
-      </ion-item>
+      <ion-nav-link router-direction="forward" :component="MapModal" :component-props="mapProps[org.id_organisme]">
+        <ion-item button>
+          <ion-label>
+            <p>Voir sur la carte</p>
+          </ion-label>
+        </ion-item>
+      </ion-nav-link>
     </ion-list>
 
     <div class="list-title">
@@ -237,6 +239,7 @@ import InspectOrganisme from "@/components/InspectOrganisme.vue"
 import { defineProps } from "vue"
 import {Avantage} from "@/types/avantages"
 import InspectAvantageComments from "@/components/InspectAvantageComments.vue"
+import MapModal from "@/components/MapModal.vue";
 
 // eslint-disable-next-line
 const { avantage, used, favori, type } = defineProps<{
@@ -252,7 +255,6 @@ import {readableDate} from "@/functions/native/dates"
 import {Ref, ref} from "vue"
 import {getPosition} from "@/functions/fetch/geolocation"
 import {createModal} from "@/functions/modals"
-import MapModal from "@/components/MapModal.vue"
 import { Share } from "@capacitor/share"
 import {authenticateWithBiometry, setupBiometry} from "@/functions/native/biometry"
 import {displayToast} from "@/functions/toasts"
@@ -270,11 +272,17 @@ export default {
       selectedOrg: this.avantage.organismes[0].id_organisme,
       dynamicUsed: this.used,
       dynamicAvantage: this.avantage,
-      dynamicLiked: liked as number[]
+      dynamicLiked: liked as number[],
+      mapProps: {} as { [key: number]: { center: any, zoom: number, title: string, markers: { features: any[], type: string } } }
     }
   },
   mounted() {
     setupBiometry()
+    for (const org of this.avantage.organismes) {
+      this.getMapProps(org.nom, `${org.adresse}, ${org.cp} ${org.commune}`).then(props => {
+        this.mapProps[org.id_organisme] = props
+      })
+    }
   },
   methods: {
     open(url: string) {
@@ -336,18 +344,7 @@ export default {
         alert("Lien copié dans le presse papier")
       }
     },
-    async openMap(org: string, address: string) {
-      const refs = {
-        modalMap: ref(null),
-      }
-      window.addEventListener("closeModals", () => {
-        Object.keys(refs).forEach(key => {
-          // @ts-ignore
-          const object = refs[key] as Ref<any>
-          if (object.value) object.value.dismiss()
-        })
-      })
-
+    async getMapProps(org: string, address: string) {
       const features = []
 
       for (const organisme of this.avantage.organismes) {
@@ -372,8 +369,7 @@ export default {
       }
 
       const zoom = this.avantage.organismes.length === 1 ? 11: 8
-
-      await createModal(MapModal, "modalMap", refs, { markers: geojson, center: geojson.features[0].geometry.coordinates, zoom: zoom }, false, [], true)
+      return { title: 'Carte', markers: geojson, center: geojson.features[0].geometry.coordinates, zoom: zoom }
     },
     async getAvantageCoords(address: string) {
       const coords = await getPosition(address)
