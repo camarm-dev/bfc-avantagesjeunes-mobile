@@ -624,5 +624,5 @@ ion-list ion-nav-link:first-child:last-child ion-item:last-child {
 
 ion-list ion-nav-link:not(:first-child):last-child ion-item:last-child {
     border-radius: 0 0 10px 10px;
-    --inner-border-width: 0 0 0 0 !important;
+    --inner-border-width: 0.55px 0 0 0 !important;
 }
