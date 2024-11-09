@@ -1,11 +1,12 @@
 <template>
   <ion-header>
-    <ion-toolbar>
+    <ion-toolbar v-if="backButton">
       <ion-buttons slot="start">
         <ion-back-button text="Retour"></ion-back-button>
       </ion-buttons>
       <ion-title>Reçu</ion-title>
     </ion-toolbar>
+    <div v-else class="handle"></div>
   </ion-header>
   <ion-content :fullscreen="true">
     <ion-content class="content">
@@ -28,6 +29,7 @@
           Valider
         </ion-button>
       </div>
+      <img style="width: 85%; height: 100px; object-fit: cover;" class="ion-margin-top ion-padding-top" :src="Footer" alt="Pied de page">
     </ion-content>
     <ion-item>
       <ion-note class="ion-padding">
@@ -50,6 +52,7 @@ import {
 } from "@ionic/vue"
 import { checkmarkCircleOutline } from "ionicons/icons"
 import Banner from "@/assets/banner.png"
+import Footer from "@/assets/footer.jpg"
 import PartnersBanner from "@/assets/partners-banner.png"
 import StarsRange from "@/components/StarsRange.vue";
 </script>
@@ -69,6 +72,11 @@ export default {
     avantage: {
       required: true,
       type: Object as PropType<TransactionAvantage>
+    },
+    backButton: {
+      required: false,
+      type: Boolean,
+      default: true
     }
   },
   methods: {
@@ -80,6 +88,16 @@ export default {
 }
 </script>
 <style>
+.handle {
+  width: 36px;
+  height: 5px;
+  border-radius: 8px;
+  display: block;
+  background: var(--ion-color-step-350, #c0c0be) !important;
+  cursor: pointer;
+  margin: 6px auto 6px;
+}
+
 .content {
   --background: #fff;
   --color: var(--ion-color-dark);
