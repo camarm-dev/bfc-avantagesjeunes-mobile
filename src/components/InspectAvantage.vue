@@ -309,15 +309,17 @@ export default {
         await loader.dismiss()
         await displayToast("Avantage indisponible", "Cet avantage est indisponible ou a déjà été utilisé", 2000, "danger")
       }
-      await authenticateWithBiometry(() => {
-        loader.dismiss()
-        obtainAdvantage(this.avantage.id_avantage, this.selectedOrg).then(() => {
-          this.dynamicUsed = true
+      await authenticateWithBiometry(
+        () => {
+          loader.dismiss()
+          obtainAdvantage(this.avantage.id_avantage, this.selectedOrg).then(() => {
+            this.dynamicUsed = true
+          })
+        },
+        () => {
+          displayToast("Échec d'authentification", "Impossible de vous authentifier avec la biométrie", 2000, "danger")
+          loader.dismiss()
         })
-        }, () => {
-        displayToast("Échec d'authentification", "Impossible de vous authentifier avec la biométrie", 2000, "danger")
-        loader.dismiss()
-      })
     },
     async shareAdvantage() {
       const url = `https://www.avantagesjeunes.com/avantage/${this.avantage.id_avantage}`
