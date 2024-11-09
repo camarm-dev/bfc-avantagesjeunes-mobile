@@ -314,6 +314,7 @@ export default {
           loader.dismiss()
           obtainAdvantage(this.avantage.id_avantage, this.selectedOrg).then(() => {
             this.dynamicUsed = true
+            // TODO ouvrir le reçu
           })
         },
         () => {
