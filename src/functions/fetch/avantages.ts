@@ -140,7 +140,7 @@ async function obtainAdvantage(id_avantage: string | number, id_organisme: strin
     const user = await getAccount()
     const id_carte = user.carte.id_carte
     const mode_paiement = user.carte.mode_paiement
-    await addTransactionAdvantage(id_avantage, id_organisme, id_carte)
+    const transactions = await addTransactionAdvantage(id_avantage, id_organisme, id_carte) as unknown as any[]
     const response = await getAdvantageCode(id_avantage, id_organisme, id_carte, mode_paiement) as any
     if (response.status_code == 10) {
         await displayToast("Rendez-vous en magasin", "Cet avantage ne nécessite pas de code... Présentez vous sur place avec votre carte !", 5000, "primary")
@@ -151,6 +151,7 @@ async function obtainAdvantage(id_avantage: string | number, id_organisme: strin
         return
     }
     await displayToast("Avantage confirmé", "Retrouvez le code et les instructions dans la page avantages utilisés !", 3000, "success")
+    return transactions[0]
 }
 
 async function getOrganisme(id_organisme: string | number): Promise<Organisme> {
