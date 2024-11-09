@@ -18,7 +18,7 @@
             <ion-icon slot="icon-only" color="success" :icon="checkmarkOutline"/>
           </ion-button>
         </ion-buttons>
-        <ion-title>Recadrez l'image</ion-title>
+        <ion-title>Recadre l'image</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
@@ -29,17 +29,17 @@
           :src="base64Image"
           :auto-zoom="true"
           :stencil-props="{
-            aspectRatio: 280/445
+            aspectRatio: 445/280
           }"
           :stencil-size="{
-            width: 280,
-            height: 445
+            width: 445,
+            height: 280
           }"
       />
 
       <ion-list inset>
         <ion-note>
-          Recadrez l'image pour que votre carte tienne dans le rectangle.
+          Recadre l'image pour que ta carte tienne dans le rectangle.
         </ion-note>
       </ion-list>
     </ion-content>
