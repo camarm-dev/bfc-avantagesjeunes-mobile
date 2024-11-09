@@ -99,7 +99,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonTitle, IonButton, IonList, IonPage, IonToggle, IonLabel, IonItem, IonSpinner, IonContent, IonHeader, IonToolbar, IonButtons, IonNote, IonSelect, IonSelectOption } from "@ionic/vue"
+import { IonTitle, IonButton, IonList, IonPage, IonToggle, IonLabel, IonItem, IonSpinner, IonContent, IonHeader, IonToolbar, IonButtons, IonNote } from "@ionic/vue"
 import { XCircle, BadgeCheck, BadgeX, Trash } from "lucide-vue-next"
 </script>
 
