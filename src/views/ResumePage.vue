@@ -199,7 +199,7 @@ import MapModal from "@/components/MapModal.vue"
 <script lang="ts">
 import { ref } from "vue"
 import {getAccount} from "@/functions/fetch/account"
-import {getAvantage, getOrganisme} from "@/functions/fetch/avantages"
+import {getAvantage} from "@/functions/fetch/avantages"
 import {get} from "@/functions/fetch/tools"
 import {hasPermission, getCurrentLocation} from "@/functions/native/geolocation"
 import {createModal} from "@/functions/modals"
