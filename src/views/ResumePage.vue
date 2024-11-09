@@ -126,9 +126,9 @@
         </ion-nav-link>
       </ion-list>
       <ion-list inset>
-        <ion-item button @click="createModal(SettingsModal, 'modalSettings', refs)">
+        <ion-item button :detail-icon="cogOutline" @click="createModal(SettingsModal, 'modalSettings', refs)">
           <ion-label>
-            <p>Paramètres ⚙️</p>
+            <p>Paramètres</p>
           </ion-label>
         </ion-item>
       </ion-list>
@@ -176,7 +176,7 @@ import {askPermission} from "@/functions/native/geolocation"
 import SettingsModal from "@/components/SettingsModal.vue"
 import AvantageCard from "@/components/AvantageCard.vue"
 import UsedAvantages from "@/components/UsedAvantages.vue"
-import {chevronForwardOutline, informationCircle} from "ionicons/icons"
+import {chevronForwardOutline, informationCircle, cogOutline} from "ionicons/icons"
 import LegalModal from "@/components/LegalModal.vue"
 import PulseItem from "@/components/PulseItem.vue"
 import {BADGES} from "@/functions/fetch/badges"
