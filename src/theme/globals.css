@@ -263,7 +263,7 @@ ion-button[expand="full"] {
 }
 
 .card-picture {
-    height: 275px !important;
+    width: 275px !important;
     border-radius: 18px;
 }
 
