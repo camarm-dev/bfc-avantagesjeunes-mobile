@@ -156,4 +156,5 @@ export interface TransactionAvantage extends Avantage {
     date_transaction: string
     type_transaction: "dématérialisé" | string
     coupon_traite?: boolean
+    organisme: Organisme
 }

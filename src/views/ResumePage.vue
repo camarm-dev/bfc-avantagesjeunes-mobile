@@ -199,7 +199,7 @@ import MapModal from "@/components/MapModal.vue"
 <script lang="ts">
 import { ref } from "vue"
 import {getAccount} from "@/functions/fetch/account"
-import {getAvantage} from "@/functions/fetch/avantages"
+import {getAvantage, getOrganisme} from "@/functions/fetch/avantages"
 import {get} from "@/functions/fetch/tools"
 import {hasPermission, getCurrentLocation} from "@/functions/native/geolocation"
 import {createModal} from "@/functions/modals"
@@ -209,6 +209,7 @@ import {modalController, RefresherCustomEvent} from "@ionic/vue"
 import {getCredentials} from "@/functions/credentials"
 import {upgradeStorage} from "@/functions/cache"
 import LandingScreen from "@/components/LandingScreen.vue"
+import {Organisme} from "@/types/organismes";
 
 const refs = {
   modalLogin: ref(null),
@@ -358,6 +359,7 @@ export default {
           object.date_transaction = advantage.date_transaction
           object.type_transaction = advantage.type
           object.coupon_traite = advantage.coupon_traite
+          object.organisme = (await getAvantage(advantage.rid_avantage)).organismes.find(org => org.id_organisme == advantage.rid_organisme) as Organisme
           usedAdvantages.push(object)
           this.usedAdvantagesIds.push(advantage.rid_avantage)
         }
