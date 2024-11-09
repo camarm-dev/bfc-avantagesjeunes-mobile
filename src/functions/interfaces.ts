@@ -212,6 +212,38 @@ const rubriques = {
     "169": {
         nom: "Produits bio, produits régionaux, fruits et légumes",
         icon: "Vegan"
+    },
+    "173": {
+        nom: "Alimentation, boisson",
+        icon: "Vegan"
+    },
+    "174": {
+        nom: "Auto-école",
+        icon: "Car"
+    },
+    "175": {
+        nom: "Auto, moto, cycle",
+        icon: "Bike"
+    },
+    "176": {
+        nom: "Logement",
+        icon: "Building"
+    },
+    "177": {
+        nom: "Pressing, laverie",
+        icon: "Shirt"
+    },
+    "178": {
+        nom: "Puériculture",
+        icon: "Baby"
+    },
+    "179": {
+        nom: "Restauration",
+        icon: "CakeSlice"
+    },
+    "180": {
+        nom: "Transport",
+        icon: "Bus"
     }
 } as {
     [key: number | string]: { nom: string, icon: string }

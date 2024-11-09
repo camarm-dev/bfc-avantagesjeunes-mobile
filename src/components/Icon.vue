@@ -49,7 +49,10 @@ import {
   CakeSlice,
   Phone,
   CreditCard,
-  Vegan
+  Vegan,
+  Bike,
+  Building,
+  Bus
 } from "lucide-vue-next"
 
 const icons = {
@@ -101,7 +104,10 @@ const icons = {
   CakeSlice,
   Phone,
   CreditCard,
-  Vegan
+  Vegan,
+  Bike,
+  Building,
+  Bus
 }
 
 const props = defineProps({
