@@ -280,7 +280,7 @@ export default {
             const modal = await modalController.create({
               component: LandingScreen,
               presentingElement: this.$refs.page as HTMLElement,
-              canDismiss: () => this.canLandingScreenDismiss,
+              canDismiss: async () => this.canLandingScreenDismiss,
               handle: true
             })
             await modal.present()
@@ -365,6 +365,7 @@ export default {
         })
         await this.getAroundMeAdvantages()
         this.loading = false
+        this.loggedIn = true
       }).catch(() => {
         this.loggedIn = false
       })
