@@ -209,7 +209,7 @@ import {modalController, RefresherCustomEvent} from "@ionic/vue"
 import {getCredentials} from "@/functions/credentials"
 import {upgradeStorage} from "@/functions/cache"
 import LandingScreen from "@/components/LandingScreen.vue"
-import {Organisme} from "@/types/organismes";
+import {Organisme} from "@/types/organismes"
 
 const refs = {
   modalLogin: ref(null),
@@ -310,7 +310,7 @@ export default {
     if (now.getHours() > 18) {
       this.welcome_formula = "Bonne soirée"
     }
-    this.firstConnectionDisclaimer = (localStorage.getItem("firstConnectionDisclaimer") || "true") == "true";
+    this.firstConnectionDisclaimer = (localStorage.getItem("firstConnectionDisclaimer") || "true") == "true"
   },
   methods: {
     async refresh(event: RefresherCustomEvent) {

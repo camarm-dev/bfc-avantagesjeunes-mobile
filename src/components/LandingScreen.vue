@@ -211,7 +211,7 @@ import {vibrate} from "@/functions/native/tools"
 import {defineComponent} from "vue"
 import LandingScreenPreviousButton from "@/components/LandingScreenPreviousButton.vue"
 import type {Swiper as SwiperClass} from "swiper/types"
-import {CheckConnectionCodeInfosResponse, FinishSigningData} from "@/types/account";
+import {CheckConnectionCodeInfosResponse, FinishSigningData} from "@/types/account"
 
 export default defineComponent({
   components: {
@@ -303,7 +303,7 @@ export default defineComponent({
         }, 2000)
         return
       }
-      const checkFirstConnection = await checkFirstConnectionCode(this.numero, this.password);
+      const checkFirstConnection = await checkFirstConnectionCode(this.numero, this.password)
       if (checkFirstConnection.status) {
         const data = checkFirstConnection as unknown as CheckConnectionCodeInfosResponse
         this.firstConnection = true

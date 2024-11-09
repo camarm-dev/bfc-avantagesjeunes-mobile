@@ -54,10 +54,10 @@ import {getAccount, updatePassword} from "@/functions/fetch/account"
 import {Account} from "@/types/account"
 import {closeModals} from "@/functions/modals"
 import {alertController, loadingController} from "@ionic/vue"
-import {getCredentials, setCredentials} from "@/functions/credentials";
-import {Card} from "@/functions/fetch/interfaces";
-import {getIDFromToken} from "@/functions/fetch/tools";
-import {displayToast} from "@/functions/toasts";
+import {getCredentials, setCredentials} from "@/functions/credentials"
+import {Card} from "@/functions/fetch/interfaces"
+import {getIDFromToken} from "@/functions/fetch/tools"
+import {displayToast} from "@/functions/toasts"
 
 export default {
   data () {

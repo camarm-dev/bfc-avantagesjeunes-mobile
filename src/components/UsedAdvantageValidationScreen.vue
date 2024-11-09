@@ -54,14 +54,14 @@ import { checkmarkCircleOutline } from "ionicons/icons"
 import Banner from "@/assets/banner.png"
 import Footer from "@/assets/footer.jpg"
 import PartnersBanner from "@/assets/partners-banner.png"
-import StarsRange from "@/components/StarsRange.vue";
+import StarsRange from "@/components/StarsRange.vue"
 </script>
 <script lang="ts">
 import "@/theme/globals.css"
-import {addNote} from "@/functions/fetch/avantages";
-import {PropType} from "vue";
-import {TransactionAvantage} from "@/types/avantages";
-import {displayToast} from "@/functions/toasts";
+import {addNote} from "@/functions/fetch/avantages"
+import {PropType} from "vue"
+import {TransactionAvantage} from "@/types/avantages"
+import {displayToast} from "@/functions/toasts"
 export default {
   data() {
     return {
@@ -82,7 +82,7 @@ export default {
   methods: {
     async sendNote() {
       await addNote(this.avantage.id_avantage, this.note)
-      await displayToast('', 'Note ajoutée', 2000, 'primary')
+      await displayToast("", "Note ajoutée", 2000, "primary")
     }
   }
 }

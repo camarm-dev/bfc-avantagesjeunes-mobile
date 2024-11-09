@@ -145,7 +145,7 @@ import FullscreenCardModal from "@/components/FullscreenCardModal.vue"
 import {ref} from "vue"
 import ScanCardModal from "@/components/ScanCardModal.vue"
 import {getImage, removeImage} from "@/functions/native/camera"
-import {Account} from "@/types/account";
+import {Account} from "@/types/account"
 
 const refs = {
   modalFullscreen: ref(null),

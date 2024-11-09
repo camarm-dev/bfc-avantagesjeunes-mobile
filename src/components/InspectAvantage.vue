@@ -239,7 +239,7 @@ import InspectOrganisme from "@/components/InspectOrganisme.vue"
 import { defineProps } from "vue"
 import {Avantage} from "@/types/avantages"
 import InspectAvantageComments from "@/components/InspectAvantageComments.vue"
-import MapModal from "@/components/MapModal.vue";
+import MapModal from "@/components/MapModal.vue"
 
 // eslint-disable-next-line
 const { avantage, used, favori, type } = defineProps<{
@@ -262,9 +262,9 @@ import {loadingController} from "@ionic/vue"
 import {addLike, checkAvailability, getAvantage, obtainAdvantage, removeLike} from "@/functions/fetch/avantages"
 import {APIResponse} from "@/functions/fetch/interfaces"
 import AddNoteModal from "@/components/AddNoteModal.vue"
-import UsedAdvantageValidationModal from "@/components/UsedAdvantageValidationModal.vue";
-import {TransactionAvantage} from "@/types/avantages";
-import {Organisme} from "@/types/organismes";
+import UsedAdvantageValidationModal from "@/components/UsedAdvantageValidationModal.vue"
+import {TransactionAvantage} from "@/types/avantages"
+import {Organisme} from "@/types/organismes"
 
 export default {
   data() {
@@ -337,7 +337,7 @@ export default {
               type_transaction: transaction.transaction.type,
               ...this.avantage
             }
-            createModal(UsedAdvantageValidationModal, 'modalValidatedAdvantage', refs, { avantage: data, backButton: false }, true, [0, 0.95])
+            createModal(UsedAdvantageValidationModal, "modalValidatedAdvantage", refs, { avantage: data, backButton: false }, true, [0, 0.95])
           })
         },
         () => {
@@ -384,7 +384,7 @@ export default {
       }
 
       const zoom = this.avantage.organismes.length === 1 ? 11: 8
-      return { title: 'Carte', markers: geojson, center: geojson.features[0].geometry.coordinates, zoom: zoom }
+      return { title: "Carte", markers: geojson, center: geojson.features[0].geometry.coordinates, zoom: zoom }
     },
     async getAvantageCoords(address: string) {
       const coords = await getPosition(address)

@@ -107,8 +107,8 @@ import {
 import ModifyInterests from "@/components/ModifyInterests.vue"
 import {logOut} from "@/functions/fetch/account"
 import ModifyProfile from "@/components/ModifyProfile.vue"
-import ModifyEmail from "@/components/ModifyEmail.vue";
-import ModifyPassword from "@/components/ModifyPassword.vue";
+import ModifyEmail from "@/components/ModifyEmail.vue"
+import ModifyPassword from "@/components/ModifyPassword.vue"
 </script>
 
 <script lang="ts">

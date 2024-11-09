@@ -4,12 +4,12 @@
   </ion-page>
 </template>
 <script lang="ts" setup>
-import { IonPage } from '@ionic/vue'
+import { IonPage } from "@ionic/vue"
 import UsedAdvantageValidationScreen from "@/components/UsedAdvantageValidationScreen.vue"
 </script>
 <script lang="ts">
-import { PropType } from 'vue'
-import { TransactionAvantage } from "@/types/avantages";
+import { PropType } from "vue"
+import { TransactionAvantage } from "@/types/avantages"
 
 export default {
   props: {
