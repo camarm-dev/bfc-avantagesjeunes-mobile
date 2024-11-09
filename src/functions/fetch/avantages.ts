@@ -3,7 +3,7 @@ import {getAccount} from "@/functions/fetch/account"
 import {displayToast} from "@/functions/toasts"
 import moment from "moment"
 import {Organisme} from "@/types/organismes"
-import {Avantage} from "@/types/avantages"
+import {Avantage, Transaction} from "@/types/avantages"
 import {cacheAdvantage, getCachedAdvantage} from "@/functions/cache"
 
 
@@ -140,7 +140,7 @@ async function obtainAdvantage(id_avantage: string | number, id_organisme: strin
     const user = await getAccount()
     const id_carte = user.carte.id_carte
     const mode_paiement = user.carte.mode_paiement
-    const transactions = await addTransactionAdvantage(id_avantage, id_organisme, id_carte) as unknown as any[]
+    const transactions = await addTransactionAdvantage(id_avantage, id_organisme, id_carte) as unknown as { id_avantage: number, transaction: Transaction }[]
     const response = await getAdvantageCode(id_avantage, id_organisme, id_carte, mode_paiement) as any
     if (response.status_code == 10) {
         await displayToast("Rendez-vous en magasin", "Cet avantage ne nécessite pas de code... Présentez vous sur place avec votre carte !", 5000, "primary")
