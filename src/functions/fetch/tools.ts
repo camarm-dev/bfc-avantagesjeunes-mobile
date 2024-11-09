@@ -57,7 +57,10 @@ async function handleResponse(request: Promise<Response>, checks = true, request
     if (requestConfig.body) requestClone.body = requestConfig.body
     try {
         const response = await request
-        const data = await response.json()
+        const data = await response.json().catch((e) => {
+            if (!response.ok) throw e
+            return { code: 200, status_code: 200, status: true, data: {}, message: "" }
+        })
         return data
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
