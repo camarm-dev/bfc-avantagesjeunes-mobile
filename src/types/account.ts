@@ -165,7 +165,7 @@ export type UserCard = {
     livraison: number
     id_point_relais: unknown,
     datetime_update: string
-    livret: true,
+    livret: boolean,
     rid_commande: unknown,
     carte_retiree: boolean
     carte_retiree_datetime: unknown,
