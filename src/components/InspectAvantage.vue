@@ -1,5 +1,5 @@
 <template>
-  <ion-header>
+  <ion-header ref="page">
     <ion-toolbar>
       <ion-buttons slot="start">
         <ion-back-button text="Retour"></ion-back-button>
@@ -262,6 +262,9 @@ import {loadingController} from "@ionic/vue"
 import {addLike, checkAvailability, getAvantage, obtainAdvantage, removeLike} from "@/functions/fetch/avantages"
 import {APIResponse} from "@/functions/fetch/interfaces"
 import AddNoteModal from "@/components/AddNoteModal.vue"
+import UsedAdvantageValidationModal from "@/components/UsedAdvantageValidationModal.vue";
+import {TransactionAvantage} from "@/types/avantages";
+import {Organisme} from "@/types/organismes";
 
 export default {
   data() {
@@ -320,9 +323,21 @@ export default {
       await authenticateWithBiometry(
         () => {
           loader.dismiss()
-          obtainAdvantage(this.avantage.id_avantage, this.selectedOrg).then(() => {
+          obtainAdvantage(this.avantage.id_avantage, this.selectedOrg).then((transaction) => {
             this.dynamicUsed = true
-            // TODO ouvrir le reçu
+            if (!transaction) return
+            const refs = {
+              modalValidatedAdvantage: ref(null),
+              page: this.$refs.page
+            }
+            const data: TransactionAvantage = {
+              date_transaction: transaction.transaction.date_transaction,
+              id_transaction: transaction.transaction.id_transaction,
+              organisme: this.avantage.organismes.find(org => org.id_organisme == this.selectedOrg) as Organisme,
+              type_transaction: transaction.transaction.type,
+              ...this.avantage
+            }
+            createModal(UsedAdvantageValidationModal, 'modalValidatedAdvantage', refs, { avantage: data, backButton: false }, true, [0, 0.95])
           })
         },
         () => {
