@@ -280,7 +280,7 @@ export default defineComponent({
     },
     async login () {
       if (!this.agree) {
-        await displayToast("Conditions d'utilisation", "Veuillez lire et accepter les conditions d'utilisation pour ajouter une carte.", 2000, "danger")
+        await displayToast("Conditions d'utilisation", "Il faut lire et accepter les conditions d'utilisation pour ajouter une carte.", 2000, "danger")
         return
       }
       const response = await getToken(this.numero, this.password, false)
@@ -296,7 +296,7 @@ export default defineComponent({
         await setCredentials(cards)
         localStorage.setItem("currentCardToken", token)
         localStorage.setItem("currentCardId", accountId)
-        await displayToast("Connecté", "Votre carte Avantages Jeunes a bien été ajoutée !", 2000, "primary")
+        await displayToast("Connecté", "Ta carte Avantages Jeunes a bien été ajoutée !", 2000, "primary")
         setTimeout(() => {
           vibrate()
           this.close()
@@ -334,8 +334,8 @@ export default defineComponent({
         }
       } else {
         const alert = await alertController.create({
-          header: "Impossible de vous authentifier",
-          message: `Veuillez réessayer de vous connecter.\navantagesjeunes.com «${response.message}»`,
+          header: "Impossible de t'authentifier",
+          message: `Réessaye de te connecter.\navantagesjeunes.com «${response.message}»`,
           buttons: [
             {
               text: "Confirmer",
