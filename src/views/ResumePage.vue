@@ -255,6 +255,7 @@ export default {
       radius: "1",
       welcome_formula: "Bonjour",
       loading: false,
+      canLandingScreenDismiss: false,
       canReconnect: false as boolean
     }
   },
@@ -279,11 +280,12 @@ export default {
             const modal = await modalController.create({
               component: LandingScreen,
               presentingElement: this.$refs.page as HTMLElement,
-              canDismiss: false,
+              canDismiss: () => this.canLandingScreenDismiss,
               handle: true
             })
             await modal.present()
             window.addEventListener("landingScreenClosed", () => {
+              this.canLandingScreenDismiss = true
               modal.dismiss()
               this.loggedIn = true
             })
