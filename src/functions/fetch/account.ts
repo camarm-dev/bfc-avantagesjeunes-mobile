@@ -81,6 +81,19 @@ async function updateAccount(user: Account) {
     return await post(url, data)
 }
 
+
+async function updateEmail(id: number, oldEmail: string, newEmail: string) {
+    const url = import.meta.env.VITE_API_URL + "/api/carte/updateEmail"
+    const data = {
+        token: localStorage.getItem("currentCardToken"),
+        id,
+        email_old: oldEmail,
+        email_new: newEmail
+    }
+    return await post(url, data)
+}
+
+
 async function updatePhoto(image: string) {
     const url = import.meta.env.VITE_API_URL + "/api/compte/updatePhoto"
     const data = {
@@ -111,6 +124,7 @@ export {
     changePasswordOnAccountCreation,
     getToken,
     getAccount,
+    updateEmail,
     updateAccount,
     logOut,
     getUser,
