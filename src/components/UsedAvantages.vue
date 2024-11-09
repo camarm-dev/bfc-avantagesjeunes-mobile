@@ -25,9 +25,15 @@
       </div>
       <div :key="avantage.id_avantage" class="action-item" v-for="avantage in avantages">
         <AvantageCard :expand="true" :avantage="avantage" :type="'green'" :used="true" :favori="favoris.includes(avantage.avantage_id)"/>
-        <div class="action" @click="copy(avantage.id_transaction)">
-          <ClipboardIcon class="bubble-icon"/>
-          <p>Copier</p>
+<!--        <div class="action" @click="copy(avantage.id_transaction)">-->
+<!--          <ClipboardIcon class="bubble-icon"/>-->
+<!--          <p>Copier</p>-->
+<!--        </div>-->
+        <div class="action">
+          <ion-nav-link router-direction="forward" :component="UsedAdvantageValidationScreen" :component-props="{ avantage: avantage }">
+            <File class="bubble-icon"/>
+            <p>Reçu</p>
+          </ion-nav-link>
         </div>
         <div class="action">
           <ion-nav-link router-direction="forward" :component="InspectUsedAvantage" :component-props="{ avantage: avantage }">
@@ -51,8 +57,9 @@ import {
   IonNavLink,
   IonNote
 } from "@ionic/vue"
-import { ClipboardIcon, Newspaper } from "lucide-vue-next"
+import { ClipboardIcon, File, Newspaper } from "lucide-vue-next"
 import AvantageCard from "@/components/AvantageCard.vue"
+import UsedAdvantageValidationScreen from "@/components/UsedAdvantageValidationScreen.vue"
 import InspectUsedAvantage from "@/components/InspectUsedAvantage.vue"
 </script>
 
