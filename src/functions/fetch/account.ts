@@ -81,7 +81,6 @@ async function updateAccount(user: Account) {
     return await post(url, data)
 }
 
-
 async function updateEmail(id: number, oldEmail: string, newEmail: string) {
     const url = import.meta.env.VITE_API_URL + "/api/carte/updateEmail"
     const data = {
@@ -93,6 +92,16 @@ async function updateEmail(id: number, oldEmail: string, newEmail: string) {
     return await post(url, data)
 }
 
+async function updatePassword(id: number, oldPassword: string, newPassword: string) {
+    const url = import.meta.env.VITE_API_URL + "/api/compte/updatePassword"
+    const data = {
+        token: localStorage.getItem("currentCardToken"),
+        id,
+        password_old: oldPassword,
+        password_new: newPassword
+    }
+    return await post(url, data)
+}
 
 async function updatePhoto(image: string) {
     const url = import.meta.env.VITE_API_URL + "/api/compte/updatePhoto"
@@ -125,6 +134,7 @@ export {
     getToken,
     getAccount,
     updateEmail,
+    updatePassword,
     updateAccount,
     logOut,
     getUser,
