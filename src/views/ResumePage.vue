@@ -356,6 +356,7 @@ export default {
           object.id_transaction = advantage.id_transaction
           object.date_transaction = advantage.date_transaction
           object.type_transaction = advantage.type
+          object.coupon_traite = advantage.coupon_traite
           usedAdvantages.push(object)
           this.usedAdvantagesIds.push(advantage.rid_avantage)
         }

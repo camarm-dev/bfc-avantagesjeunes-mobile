@@ -155,4 +155,5 @@ export interface TransactionAvantage extends Avantage {
     id_transaction: number
     date_transaction: string
     type_transaction: "dématérialisé" | string
+    coupon_traite?: boolean
 }
