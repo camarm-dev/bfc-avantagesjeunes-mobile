@@ -170,11 +170,6 @@ export default {
     goTo(href: string) {
       this.$router.push(href)
     },
-    getInnerContent(html_string: string) {
-      const el = document.createElement("div")
-      el.innerHTML = html_string
-      return el.innerText
-    },
     isAvantageFavori(id_avantage: number) {
       return this.favoris.includes(id_avantage)
     },
@@ -257,6 +252,7 @@ ion-alert [aria-checked="true"].sc-ion-alert-ios .alert-checkbox-icon.sc-ion-ale
   align-items: center;
   padding-bottom: 5px;
   margin-right: 0;
+  width: 100%;
 }
 
 .loader ion-spinner {
