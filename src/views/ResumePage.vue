@@ -26,6 +26,16 @@
         </ion-nav-link>
       </div>
 
+      <pulse-item vibrate>
+        <ion-list inset v-if="!loggedIn">
+          <ion-item @click="refreshAccount()">
+            <ion-note class="ion-padding" color="light">
+              Mmmh 🤔 Il semblerait que nous avons un problème pour charger les dernières informations. Clique ici pour recharger. Déconnecte toi si cela se reproduit.
+            </ion-note>
+          </ion-item>
+        </ion-list>
+      </pulse-item>
+
       <div class="list-title" v-if="user.badges">Mes badges</div>
       <div class="horizontal-carousel" v-if="user.badges">
         <UserBadge :badge="BADGES[badge.id_badge]" :date="badge.datetime" :key="badge.id_badge" :user="user" v-for="badge in user.badges"/>
@@ -53,15 +63,6 @@
         </div>
         <AvantageCard :key="favori.id_avantage" :used="usedAdvantagesIds.includes(favori.id_avantage)" :favori="true" :avantage="favori" v-for="favori in user.favoris"/>
       </div>
-      <pulse-item vibrate>
-        <ion-list inset v-if="!loggedIn">
-          <ion-item @click="refreshAccount()">
-            <ion-note class="ion-padding" color="light">
-              Mmmh 🤔 Il semblerait que nous avons un problème pour charger les dernières informations. Clique ici pour recharger. Déconnecte toi si cela se reproduit.
-            </ion-note>
-          </ion-item>
-        </ion-list>
-      </pulse-item>
       <ion-nav-link router-direction="forward" :component="InspectProfile" :component-props="{ editable: true, id: user.id_compte }">
         <pulse-item vibrate>
           <ion-list inset v-if="firstConnectionDisclaimer">
