@@ -48,7 +48,7 @@
       <div class="horizontal-carousel">
         <div class="card card-only" v-if="!user.favoris || user.favoris.length == 0">
           <ion-note>
-            Vous n'avez pas d'avantages favoris...
+            Tu n'as pas d'avantages favoris...
           </ion-note>
         </div>
         <AvantageCard :key="favori.id_avantage" :used="usedAdvantagesIds.includes(favori.id_avantage)" :favori="true" :avantage="favori" v-for="favori in user.favoris"/>
@@ -58,12 +58,12 @@
           <ion-list inset v-if="firstConnectionDisclaimer">
             <ion-item button @click="closeDisclaimer()" color="secondary">
               <BadgeAlert class="icon-ion-color-light"/>
-              <ion-note class="ion-padding" color="light">Pensez à vérifier vos informations.</ion-note>
+              <ion-note class="ion-padding" color="light">Pense à vérifier tes informations.</ion-note>
             </ion-item>
             <ion-item>
               <ion-note class="ion-padding" color="light">
-                Vous venez de vous connecter, pensez à vérifier vos informations personnelles disponible depuis votre page profil en haut à droite.
-                Pensez à maintenir votre profil à jour avec des données authentiques.
+                Tu viens de te connecter, pense à vérifier tes informations personnelles disponible depuis ta page profil en haut à droite.
+                Pense à maintenir ton profil à jour avec des données authentiques.
               </ion-note>
             </ion-item>
           </ion-list>
@@ -75,7 +75,7 @@
           <ion-item @click="askPermission().then(refreshPosition)" color="danger">
             <Compass :size="64" class="icon-ion-color-light"/>
             <ion-note class="ion-padding" color="light">
-              Activez la localisation en cliquant ici. Vous pourrez voir les avantages autour de vous.
+              Active la localisation en cliquant ici. Tu pourra voir les avantages autour de toi.
             </ion-note>
           </ion-item>
         </ion-list>
@@ -285,6 +285,7 @@ export default {
             await modal.present()
             window.addEventListener("landingScreenClosed", () => {
               modal.dismiss()
+              this.loggedIn = true
             })
           }
         })
@@ -339,7 +340,7 @@ export default {
         this.user.suggestions = suggestionAvantages
 
         const usedAdvantages = []
-        for (const advantage of this.user.transactions) {
+        for (const advantage of (this.user.transactions || [])) {
           const object = await getAvantage(advantage.rid_avantage) as TransactionAvantage
           object.id_transaction = advantage.id_transaction
           object.date_transaction = advantage.date_transaction
