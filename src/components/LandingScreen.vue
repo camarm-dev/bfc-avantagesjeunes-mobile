@@ -342,6 +342,7 @@ export default defineComponent({
               role: "confirm",
               handler: () => {
                 this.goToSlide(1)
+                this.firstConnection = false
                 this.password = ""
               }
             }
