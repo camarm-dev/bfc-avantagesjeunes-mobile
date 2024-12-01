@@ -32,21 +32,23 @@ import {getAccount, updateAccount} from "@/functions/fetch/account"
 import {closeModals} from "@/functions/modals"
 import {displayToast} from "@/functions/toasts"
 
+type Category = typeof categories[keyof typeof categories] & { selected: boolean, id: string }
+
 export default {
   props: ["user"],
   data() {
     return {
-      userInterests: []
+      userInterests: [] as Category[]
     }
   },
   mounted() {
     const userInterests = []
     const currentUserInterests = this.user.centres_interet ? this.user.centres_interet: []
-    const categoriesList = Object.values(categories)
+    const categoriesList: Category[] = Object.values(categories) as any[] as Category[]
     for (const category of categoriesList) {
       const categoryId = Object.keys(categories)[Object.values(categories).indexOf(category)]
-      category["selected"] = currentUserInterests.includes(Number(categoryId))
-      category["id"] = categoryId
+      category.selected = currentUserInterests.includes(Number(categoryId))
+      category.id = categoryId
       userInterests.push(category)
     }
     this.userInterests = userInterests
@@ -60,11 +62,10 @@ export default {
       closeModals()
     },
     getSelectedInterests() {
-      const selectedInterests = []
-      for (const categoryId in this.userInterests) {
-        const category = this.userInterests[categoryId]
+      const selectedInterests: number[] = []
+      for (const category of this.userInterests) {
         if (category.selected) {
-          selectedInterests.push(category.id)
+          selectedInterests.push(Number(category.id))
         }
       }
       return selectedInterests
