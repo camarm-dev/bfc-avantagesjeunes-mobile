@@ -8,7 +8,7 @@
 </div>
 </template>
 
-<script>
+<script lang="ts">
 import {vibrate} from "@/functions/native/tools"
 
 export default {
