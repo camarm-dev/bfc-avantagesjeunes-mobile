@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-searchbar  color="primary" @ionInput="handleInput($event.detail.value)" :value="query" show-clear-button="always" :animated="true" placeholder="Rechercher un avantage"></ion-searchbar>
+        <ion-searchbar  color="primary" @ionInput="handleInput($event.detail.value || '')" :value="query" show-clear-button="always" :animated="true" placeholder="Rechercher un avantage"></ion-searchbar>
       </ion-toolbar>
       <ion-toolbar style="height: max-content">
         <ion-list inset class="list-border">
@@ -137,7 +137,7 @@ export default {
   mounted() {
     getAccount().then(user => {
       this.favoris = user.favoris
-      for (const object in user.transactions) {
+      for (const object of user.transactions) {
         this.used.push(object.rid_avantage)
       }
       if (!this.favoris) this.favoris = []
