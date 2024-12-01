@@ -24,24 +24,25 @@ export default {
     }
   },
   mounted() {
-    this.$refs.item.addEventListener("touchstart", this.downEffect)
-    this.$refs.item.addEventListener("touchend", this.upEffect)
+    const item = this.$refs.item as HTMLDivElement
+    item.addEventListener("touchstart", this.downEffect);
+    item.addEventListener("touchend", this.upEffect)
   },
   methods: {
     reset() {
-      const item = this.$refs.item
+      const item = this.$refs.item as HTMLDivElement
       item.classList.remove("up")
       item.classList.remove("down")
     },
     downEffect() {
-      const item = this.$refs.item
+      const item = this.$refs.item as HTMLDivElement
       this.reset()
       item.classList.add("down")
       this.animated = true
       setTimeout(() => { this.animated = false; if (this.vibrate) vibrate() }, 250)
     },
     upEffect() {
-      const item = this.$refs.item
+      const item = this.$refs.item as HTMLDivElement
       if (this.animated) {
         setTimeout(this.upEffect, 50)
         return
