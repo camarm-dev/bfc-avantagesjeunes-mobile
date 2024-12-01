@@ -71,7 +71,7 @@ export default {
           dialogTitle: "Partager cet article"
         })
       } catch {
-        await navigator.clipboard.write(url)
+        await navigator.clipboard.writeText(url)
         alert("Lien copié dans le presse papier")
       }
     }
