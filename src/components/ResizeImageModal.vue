@@ -53,7 +53,9 @@ import {
   RotateCcw,
   RotateCw
 } from "lucide-vue-next"
-import { Cropper }  from "vue-advanced-cropper/dist/index.esm-browser"
+// @ts-expect-error
+import { Cropper } from "vue-advanced-cropper/dist/index.esm-browser"
+import { type Cropper as CropperType } from "vue-advanced-cropper"
 import "vue-advanced-cropper/dist/style.css"
 </script>
 
@@ -62,13 +64,13 @@ export default {
   props: ["base64Image", "event"],
   methods: {
     rotateLeft() {
-      this.$refs.cropper.rotate(-90)
+      (this.$refs.cropper as typeof CropperType).rotate(-90)
     },
     rotateRight() {
-      this.$refs.cropper.rotate(90)
+      (this.$refs.cropper as typeof CropperType).rotate(90)
     },
     saveEditedImage() {
-      const { canvas } = this.$refs.cropper.getResult()
+      const { canvas } = (this.$refs.cropper as typeof CropperType).getResult()
       const editedImageEvent = new CustomEvent(this.event, { detail: { image: canvas.toDataURL() } })
       window.dispatchEvent(editedImageEvent)
       this.abort()
