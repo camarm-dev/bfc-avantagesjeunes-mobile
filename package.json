@@ -9,6 +9,7 @@
     "start": "vite --host 0.0.0.0 --port 3000",
     "build": "vite build",
     "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit",
     "lint": "eslint -c .eslintrc.cjs src",
     "lint:fix": "eslint --fix -c .eslintrc.cjs src"
   },
@@ -56,6 +57,7 @@
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-typescript": "^11.0.2",
     "@vue/test-utils": "^2.3.0",
+    "@vuedx/typecheck": "^0.7.6",
     "cypress": "^12.7.0",
     "eslint": "^8.35.0",
     "eslint-plugin-vue": "^9.9.0",
@@ -64,7 +66,7 @@
     "vite": "^4.3.9",
     "vite-plugin-pwa": "^0.16.4",
     "vitest": "^0.32.2",
-    "vue-tsc": "^1.0.24"
+    "vue-tsc": "^2.1.10"
   },
   "description": "Une application mobile pour la carte avantages jeunes !"
 }
