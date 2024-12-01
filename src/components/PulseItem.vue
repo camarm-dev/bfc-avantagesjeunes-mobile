@@ -25,7 +25,7 @@ export default {
   },
   mounted() {
     const item = this.$refs.item as HTMLDivElement
-    item.addEventListener("touchstart", this.downEffect);
+    item.addEventListener("touchstart", this.downEffect)
     item.addEventListener("touchend", this.upEffect)
   },
   methods: {
