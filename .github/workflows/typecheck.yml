@@ -31,5 +31,5 @@ jobs:
       - name: Setup Environnement
         run: npm install
 
-      - name: Run ESLint
+      - name: Run typecheck
         run: npm run typecheck
