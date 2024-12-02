@@ -28,8 +28,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Environnement
-        run: npm install
+      - name: Setup environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
 
       - name: Run typecheck
-        run: npm run typecheck
+        uses: keita-hino/vue-tsc-action@main
