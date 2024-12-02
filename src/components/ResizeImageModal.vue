@@ -18,7 +18,7 @@
             <ion-icon slot="icon-only" color="success" :icon="checkmarkOutline"/>
           </ion-button>
         </ion-buttons>
-        <ion-title>Recadrez l'image</ion-title>
+        <ion-title>Recadre l'image</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
@@ -29,17 +29,17 @@
           :src="base64Image"
           :auto-zoom="true"
           :stencil-props="{
-            aspectRatio: 280/445
+            aspectRatio: 445/280
           }"
           :stencil-size="{
-            width: 280,
-            height: 445
+            width: 445,
+            height: 280
           }"
       />
 
       <ion-list inset>
         <ion-note>
-          Recadrez l'image pour que votre carte tiennent dans le rectangle.
+          Recadre l'image pour que ta carte tienne dans le rectangle.
         </ion-note>
       </ion-list>
     </ion-content>
@@ -53,7 +53,9 @@ import {
   RotateCcw,
   RotateCw
 } from "lucide-vue-next"
-import { Cropper }  from "vue-advanced-cropper/dist/index.esm-browser"
+// @ts-expect-error
+import { Cropper } from "vue-advanced-cropper/dist/index.esm-browser"
+import { type Cropper as CropperType } from "vue-advanced-cropper"
 import "vue-advanced-cropper/dist/style.css"
 </script>
 
@@ -62,13 +64,13 @@ export default {
   props: ["base64Image", "event"],
   methods: {
     rotateLeft() {
-      this.$refs.cropper.rotate(-90)
+      (this.$refs.cropper as typeof CropperType).rotate(-90)
     },
     rotateRight() {
-      this.$refs.cropper.rotate(90)
+      (this.$refs.cropper as typeof CropperType).rotate(90)
     },
     saveEditedImage() {
-      const { canvas } = this.$refs.cropper.getResult()
+      const { canvas } = (this.$refs.cropper as typeof CropperType).getResult()
       const editedImageEvent = new CustomEvent(this.event, { detail: { image: canvas.toDataURL() } })
       window.dispatchEvent(editedImageEvent)
       this.abort()

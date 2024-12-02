@@ -16,16 +16,16 @@
     <header class="profile">
       <pulse-item vibrate>
         <div class="card-swiper">
-          <img @click="openCardFullscreen()" height="200" class="card-picture" :src="frontCardImage" alt="Votre carte">
+          <img @click="openCardFullscreen()" width="200" class="card-picture" :src="frontCardImage" alt="Votre carte">
         </div>
       </pulse-item>
-      <ion-chip class="large-chip" color="success" v-if="user.carte.valid">
-        <BadgeCheck class="icon ion-color-success" size="30"/>
+      <ion-chip class="large-chip" color="success" v-if="isValid">
+        <BadgeCheck class="icon ion-color-success"/>
         {{ user.carte.numero }}
       </ion-chip>
 
       <ion-chip class="large-chip" color="danger" v-else>
-        <BadgeX class="icon ion-color-danger" size="30"/>
+        <BadgeX class="icon ion-color-danger"/>
         {{ user.carte.numero }}
       </ion-chip>
     </header>
@@ -42,7 +42,7 @@
         </ion-label>
       </ion-item>
       <ion-item>
-        <SquareAsterisk v-if="user.carte.valid" class="icon ion-color-success"/>
+        <SquareAsterisk v-if="isValid" class="icon ion-color-success"/>
         <SquareAsterisk v-else class="icon ion-color-danger"/>
         <ion-label>
           <p>Saison de validité</p>
@@ -50,7 +50,7 @@
         </ion-label>
       </ion-item>
       <ion-item>
-        <ShieldCheck v-if="user.carte.valid" class="icon ion-color-success"/>
+        <ShieldCheck v-if="isValid" class="icon ion-color-success"/>
         <ShieldClose v-else class="icon ion-color-danger"/>
         <ion-label>
           <p>Valide jusqu'au</p>
@@ -64,7 +64,20 @@
           <h2>{{ user.carte.date_vente }}</h2>
         </ion-label>
       </ion-item>
+      <ion-item :button="user.carte.livret" id="open-disclaimer">
+        <Compass class="icon ion-color-tertiary" />
+        <ion-label>
+          <p>Version</p>
+          <h2>{{ user.carte.livret ? 'Papier': 'Numérique' }}</h2>
+        </ion-label>
+      </ion-item>
     </ion-list>
+    <ion-alert
+        v-if="user.carte.livret"
+        trigger="open-disclaimer"
+        header="Version papier"
+        message="Vous ne pourrez pas utiliser les avantages depuis l'application avec la version papier. Utilisez les coupons physiques de votre livret."
+    />
 
     <div class="list-title">
       Actions
@@ -113,7 +126,8 @@ import {
   BadgeCheck,
   BadgeX,
   Focus,
-  Trash2
+  Trash2,
+  Compass
 } from "lucide-vue-next"
 import {scanOutline} from "ionicons/icons"
 import PulseItem from "@/components/PulseItem.vue"
@@ -130,6 +144,8 @@ import "@ionic/vue/css/ionic-swiper.css"
 import FullscreenCardModal from "@/components/FullscreenCardModal.vue"
 import {ref} from "vue"
 import ScanCardModal from "@/components/ScanCardModal.vue"
+import {getImage, removeImage} from "@/functions/native/camera"
+import {Account} from "@/types/account"
 
 const refs = {
   modalFullscreen: ref(null),
@@ -146,8 +162,9 @@ window.addEventListener("closeModals", () => {
 export default {
   data () {
     return {
-      frontCardImage: localStorage.getItem("frontCardImage") || "/carte.png",
-      backCardImage: localStorage.getItem("backCardImage") || "/carte-dos.png",
+      frontCardImage: "/carte.png",
+      backCardImage: "/carte-dos.png",
+      isValid: false,
       user: {
         image_url: "",
         carte: {
@@ -159,13 +176,18 @@ export default {
           valid_datefin: "",
           valid: false
         }
-      } as any,
+      } as unknown as Account,
     }
   },
   mounted() {
     this.refreshAccount()
+    this.loadImages()
   },
   methods: {
+    async loadImages() {
+      this.frontCardImage = (await getImage("frontCardImage")) || "/carte.png"
+      this.backCardImage = (await getImage("backCardImage")) || "/carte-dos.png"
+    },
     open(url: string) {
       window.open(url)
     },
@@ -175,6 +197,10 @@ export default {
     refreshAccount() {
       getAccount().then(user => {
         this.user = user
+        const now = new Date().getTime()
+        const startDate = new Date(this.user.carte.valid_datedebut).getTime()
+        const endDate = new Date(this.user.carte.valid_datefin).getTime()
+        this.isValid = startDate < now && now < endDate
         this.user.carte.valid_datefin = readableDate(this.user.carte.valid_datefin)
         this.user.carte.date_vente = readableDate(this.user.carte.date_vente)
       })
@@ -185,9 +211,9 @@ export default {
     async openCardFullscreen() {
       await createModal(FullscreenCardModal, "modalFullscreen", refs, { front: this.frontCardImage, back: this.backCardImage }, true, [0, 0.9], true)
     },
-    removeCardScans() {
-      localStorage.removeItem("frontCardImage")
-      localStorage.removeItem("backCardImage")
+    async removeCardScans() {
+      await removeImage("frontCardImage")
+      await removeImage("backCardImage")
       this.frontCardImage = "/carte.png"
       this.backCardImage = "/carte-dos.png"
     }
@@ -231,5 +257,9 @@ export default {
 .swiper-pagination .swiper-pagination-bullet-active {
   width: 10px !important;
   height: 10px !important;
+}
+
+.alert-wrapper {
+  background: var(--ion-background-color) !important;
 }
 </style>

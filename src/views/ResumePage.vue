@@ -13,7 +13,7 @@
         <ion-progress-bar color="secondary" v-if="loading" type="indeterminate"></ion-progress-bar>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true" v-if="loggedIn">
+    <ion-content :fullscreen="true">
       <ion-refresher slot="fixed" @ionRefresh="refresh($event)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
@@ -25,6 +25,16 @@
           <p class="footer focusable">Tout voir<ChevronRight/></p>
         </ion-nav-link>
       </div>
+
+      <pulse-item vibrate>
+        <ion-list inset v-if="!loggedIn">
+          <ion-item @click="refreshAccount()">
+            <ion-note class="ion-padding" color="light">
+              Mmmh 🤔 Il semblerait que nous avons un problème pour charger les dernières informations. Clique ici pour recharger. Déconnecte toi si cela se reproduit.
+            </ion-note>
+          </ion-item>
+        </ion-list>
+      </pulse-item>
 
       <div class="list-title" v-if="user.badges">Mes badges</div>
       <div class="horizontal-carousel" v-if="user.badges">
@@ -48,30 +58,49 @@
       <div class="horizontal-carousel">
         <div class="card card-only" v-if="!user.favoris || user.favoris.length == 0">
           <ion-note>
-            Vous n'avez pas d'avantages favoris...
+            Tu n'as pas d'avantages favoris...
           </ion-note>
         </div>
         <AvantageCard :key="favori.id_avantage" :used="usedAdvantagesIds.includes(favori.id_avantage)" :favori="true" :avantage="favori" v-for="favori in user.favoris"/>
       </div>
+      <ion-nav-link router-direction="forward" :component="InspectProfile" :component-props="{ editable: true, id: user.id_compte }">
+        <pulse-item vibrate>
+          <ion-list inset v-if="firstConnectionDisclaimer">
+            <ion-item button @click="closeDisclaimer()" color="secondary">
+              <BadgeAlert class="icon-ion-color-light"/>
+              <ion-note class="ion-padding" color="light">Pense à vérifier tes informations.</ion-note>
+            </ion-item>
+            <ion-item>
+              <ion-note class="ion-padding" color="light">
+                Tu viens de te connecter, pense à vérifier tes informations personnelles disponible depuis ta page profil en haut à droite.
+                Pense à maintenir ton profil à jour avec des données authentiques.
+              </ion-note>
+            </ion-item>
+          </ion-list>
+        </pulse-item>
+      </ion-nav-link>
+
       <pulse-item vibrate>
         <ion-list inset v-if="!position">
           <ion-item @click="askPermission().then(refreshPosition)" color="danger">
             <Compass :size="64" class="icon-ion-color-light"/>
             <ion-note class="ion-padding" color="light">
-              Activez la localisation en cliquant ici. Vous pourrez voir les avantages autour de vous.
+              Active la localisation en cliquant ici. Tu pourra voir les avantages autour de toi.
             </ion-note>
           </ion-item>
         </ion-list>
       </pulse-item>
 
       <ion-list inset>
-        <ion-item @click="openAroundMeMap()" button>
-          <MapIcon class="icon ion-color-success"/>
-          <ion-label>
-            <p>Autour de moi</p>
-            <h2>Ouvrir la carte</h2>
-          </ion-label>
-        </ion-item>
+        <ion-nav-link :component="MapModal" :component-props="{ markers: { features: aroundMeAdvantages.results }, user: user_marker, center: user_marker?.coordinates || [6.0258598544333974, 47.23521554332734], zoom: getZoom(), radius }">
+          <ion-item button>
+            <MapIcon class="icon ion-color-success"/>
+            <ion-label>
+              <p>Autour de moi</p>
+              <h2>Ouvrir la carte</h2>
+            </ion-label>
+          </ion-item>
+        </ion-nav-link>
         <ion-item>
           <ion-label>
             <p>
@@ -107,9 +136,9 @@
         </ion-nav-link>
       </ion-list>
       <ion-list inset>
-        <ion-item button @click="createModal(ExperimentalModal, 'modalExperimental', refs)">
+        <ion-item button :detail-icon="cogOutline" @click="createModal(SettingsModal, 'modalSettings', refs)">
           <ion-label>
-            <p>Fonctionnalités expérimentales 🧪</p>
+            <p>Paramètres</p>
           </ion-label>
         </ion-item>
       </ion-list>
@@ -121,55 +150,11 @@
         </ion-item>
       </ion-list>
     </ion-content>
-
-    <ion-content class="ion-display-flex" v-else :fullscreen="true">
-      <div>
-        <img style="margin: auto; display: block" height="90" src="/welcome.png"/>
-        <br>
-        <ion-label class="ion-text-center">
-          <h1>Bienvenue</h1>
-          <h3 class="ion-color-medium">Sur Avantages Jeunes Connect !</h3>
-        </ion-label>
-        <br>
-        <ion-row class="ion-justify-content-center">
-          <pulse-item vibrate>
-            <ion-chip id="open-info-alert" class="chip-square" color="secondary">
-              <BadgeInfo :size="36" class="ion-color-primary"/>
-            </ion-chip>
-          </pulse-item>
-          <ion-alert class="ion-color-primary" sub-header="avantagesjeunes.com" trigger="open-info-alert" header="Informations" message="Avantages Jeunes Connect est une application non officielle open source développée par un unique étudiant. Nous nous dédommageons de tous dysfonctionnement créé."/>
-          <br>
-          <pulse-item vibrate>
-            <ion-chip id="open-question-alert" class="chip-square" color="tertiary">
-              <HelpCircle :size="36" class="ion-color-tertiary"/>
-            </ion-chip>
-          </pulse-item>
-          <ion-alert class="ion-color-primary" sub-header="avantagesjeunes.com" trigger="open-question-alert" header="Informations" message="Si c'est votre première connexion, merci de finir l'activation de votre compte sur avantagesjeunes.com/login avant de vous connecter sur Avantages Jeunes Connect"/>
-        </ion-row>
-        <ion-note class="ion-text-center">
-          <p>
-            Ajouter votre carte, accédez à vos avantages utilisés et recherchez plus facilement ceux dont vous pouvez bénéficiez !
-          </p>
-        </ion-note>
-        <ion-list inset>
-          <ion-item class="login-button" color="secondary" button @click="createModal(LoginModal, 'modalLogin', refs)">
-            <AvantagesJeunesIcon class="ion-icon ion-color-primary" slot="start"/>
-            <ion-label class="ion-text-wrap">
-              <h2>Ajouter ma carte</h2>
-              <p>Avec mes identifiants Avantages Jeunes</p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-        <ion-note class="ion-color-medium ion-margin-auto underline" v-if="canReconnect">
-          <a href="/resume" @click="reload()">Utiliser le compte précédant</a>
-        </ion-note>
-      </div>
-    </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import "@/theme/globals.css"
+import  "@/theme/globals.css"
 import {
   IonPage,
   IonHeader,
@@ -179,7 +164,6 @@ import {
   IonList,
   IonLabel,
   IonItem,
-  IonChip,
   IonSelect,
   IonSelectOption,
   IonRefresher,
@@ -187,33 +171,29 @@ import {
   IonSpinner,
   IonAvatar,
   IonNote,
-  IonRow,
-  IonAlert,
   IonProgressBar,
   IonIcon
 } from "@ionic/vue"
 import {
-  BadgeInfo,
-  HelpCircle,
   CreditCard,
   MapIcon,
   ChevronRight,
-  Compass
+  Compass,
+  BadgeAlert
 } from "lucide-vue-next"
-import LoginModal from "@/components/LoginModal.vue"
-import AvantagesJeunesIcon from "@/components/AvantagesJeunesIcon.vue"
 import MyCard from "@/components/MyCard.vue"
 import {askPermission} from "@/functions/native/geolocation"
-import ExperimentalModal from "@/components/ExperimentalModal.vue"
+import SettingsModal from "@/components/SettingsModal.vue"
 import AvantageCard from "@/components/AvantageCard.vue"
 import UsedAvantages from "@/components/UsedAvantages.vue"
-import {chevronForwardOutline, informationCircle} from "ionicons/icons"
+import {chevronForwardOutline, informationCircle, cogOutline} from "ionicons/icons"
 import LegalModal from "@/components/LegalModal.vue"
 import PulseItem from "@/components/PulseItem.vue"
 import {BADGES} from "@/functions/fetch/badges"
 import UserBadge from "@/components/UserBadge.vue"
 import FavoritesAvantages from "@/components/FavoritesAvantages.vue"
 import InspectProfile from "@/components/InspectProfile.vue"
+import MapModal from "@/components/MapModal.vue"
 </script>
 
 <script lang="ts">
@@ -223,17 +203,19 @@ import {getAvantage} from "@/functions/fetch/avantages"
 import {get} from "@/functions/fetch/tools"
 import {hasPermission, getCurrentLocation} from "@/functions/native/geolocation"
 import {createModal} from "@/functions/modals"
-import MapModal from "@/components/MapModal.vue"
 import {Badge} from "@/types/badges"
 import {Avantage, Transaction, TransactionAvantage} from "@/types/avantages"
-import {RefresherCustomEvent} from "@ionic/vue"
+import {modalController, RefresherCustomEvent} from "@ionic/vue"
 import {getCredentials} from "@/functions/credentials"
+import {upgradeStorage} from "@/functions/cache"
+import LandingScreen from "@/components/LandingScreen.vue"
+import {Organisme} from "@/types/organismes"
 
 const refs = {
   modalLogin: ref(null),
   modalMap: ref(null),
   modalInfos: ref(null),
-  modalExperimental: ref(null)
+  modalSettings: ref(null)
 } as any
 
 window.addEventListener("closeModals", () => {
@@ -250,6 +232,7 @@ export default {
       user_marker: null as any,
       refs: refs,
       aroundMeLoading: true,
+      firstConnectionDisclaimer: false,
       user: {
         image_url: "",
         carte: {
@@ -283,24 +266,42 @@ export default {
       radius: "1",
       welcome_formula: "Bonjour",
       loading: false,
+      canLandingScreenDismiss: false,
       canReconnect: false as boolean
     }
   },
   mounted() {
-    localStorage.setItem("userApiUrl", "https://api-ajc.camarm.fr")
-    window.addEventListener("reload", () => {
+    upgradeStorage()
+    window.addEventListener("refresh", () => {
       this.refreshAccount()
     })
 
     this.refs["page"] = this.$refs.page
 
-    this.hasLoggedInFields().then(hasLoggedInFields => {
-      this.canReconnect = hasLoggedInFields
-      if (hasLoggedInFields) {
-        this.loggedIn = true
-        this.refreshAccount()
-      }
-    })
+    this.hasLoggedInFields()
+        .then(hasLoggedInFields => {
+          this.canReconnect = hasLoggedInFields
+          if (hasLoggedInFields) {
+            this.loggedIn = true
+            this.refreshAccount()
+          }
+        })
+        .then(async () => {
+          if (!this.loggedIn) {
+            const modal = await modalController.create({
+              component: LandingScreen,
+              presentingElement: this.$refs.page as HTMLElement,
+              canDismiss: async () => this.canLandingScreenDismiss,
+              handle: true
+            })
+            await modal.present()
+            window.addEventListener("landingScreenClosed", () => {
+              this.canLandingScreenDismiss = true
+              modal.dismiss()
+              this.loggedIn = true
+            })
+          }
+        })
 
     const now = new Date()
     if (now.getHours() > 12) {
@@ -309,12 +310,9 @@ export default {
     if (now.getHours() > 18) {
       this.welcome_formula = "Bonne soirée"
     }
-
+    this.firstConnectionDisclaimer = (localStorage.getItem("firstConnectionDisclaimer") || "true") == "true"
   },
   methods: {
-    async openAroundMeMap() {
-      await createModal(MapModal, "modalMap", refs, { markers: { features: this.aroundMeAdvantages.results }, user: this.user_marker, center: this.user_marker?.coordinates || [6.0258598544333974, 47.23521554332734], zoom: this.getZoom() }, false, [], true)
-    },
     async refresh(event: RefresherCustomEvent) {
       this.refreshAccount()
       event.target?.complete()
@@ -330,6 +328,10 @@ export default {
     },
     goTo(href: string) {
       this.$router.push(href)
+    },
+    closeDisclaimer() {
+      localStorage.setItem("firstConnectionDisclaimer", "false")
+      this.firstConnectionDisclaimer = false
     },
     async refreshPosition() {
       this.position = await hasPermission()
@@ -351,11 +353,13 @@ export default {
         this.user.suggestions = suggestionAvantages
 
         const usedAdvantages = []
-        for (const advantage of this.user.transactions) {
+        for (const advantage of (this.user.transactions || [])) {
           const object = await getAvantage(advantage.rid_avantage) as TransactionAvantage
           object.id_transaction = advantage.id_transaction
           object.date_transaction = advantage.date_transaction
           object.type_transaction = advantage.type
+          object.coupon_traite = advantage.coupon_traite
+          object.organisme = (await getAvantage(advantage.rid_avantage)).organismes.find(org => org.id_organisme == advantage.rid_organisme) as Organisme
           usedAdvantages.push(object)
           this.usedAdvantagesIds.push(advantage.rid_avantage)
         }
@@ -374,6 +378,7 @@ export default {
         })
         await this.getAroundMeAdvantages()
         this.loading = false
+        this.loggedIn = true
       }).catch(() => {
         this.loggedIn = false
       })
@@ -382,7 +387,7 @@ export default {
       this.aroundMeLoading = true
       this.radius = radius
       const coordinates = this.position ? await getCurrentLocation(): [6.0258598544333974, 47.23521554332734]
-      this.aroundMeAdvantages = await get(`https://api-ajc.camarm.fr/around-me?longitude=${coordinates[0]}&latitude=${coordinates[1]}&radius=${radius}`) as any
+      this.aroundMeAdvantages = await get(`https://api-ajc.camarm.fr/around-me?longitude=${coordinates[0]}&latitude=${coordinates[1]}&radius=${radius}`, false) as any
       this.aroundMeLoading = false
     },
     getZoom() {

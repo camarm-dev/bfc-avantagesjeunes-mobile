@@ -1,91 +1,146 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar @click="closeModals()">
-        <ion-title>
-          <ChevronDown class="focusable" @click="closeModals()"/>
-        </ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true">
-      <div class="map-wrapper">
-        <div ref="mapContainer" class="map-container"></div>
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button text="Retour"></ion-back-button>
+      </ion-buttons>
+      <ion-title>{{ title || "Autour de moi" }}</ion-title>
+      <ion-buttons v-if="radius" slot="end">
+        <ion-button @click="toggleCircle()" :color="circle ? 'light': 'medium'">
+          <ion-icon slot="icon-only" :icon="circle ? radioButtonOnOutline : radioButtonOffOutline"/>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content :fullscreen="true">
+    <div class="map-wrapper">
+        <MapboxMap
+            class="map-container"
+            map-style="mapbox://styles/mapbox/streets-v12"
+            access-token="pk.eyJ1IjoiY2FtYXJtLWRldiIsImEiOiJja3B6czl2bGowa2g2Mm5ycmdqMThhOHEzIn0.H-PjLIG_jQqZqvz3gPvjeQ"
+            :center="center || [6.0258598544333974, 47.23521554332734]"
+            :zoom="zoom || 9"
+            :minZoom="4"
+            @mb-created="(mapInstance: mapboxgl.Map) => map = mapInstance"
+            @mb-load="showCircle()"
+        >
+          <MapboxMarker :key="marker.properties.id" v-for="marker in markers.features" :lng-lat="marker.geometry.coordinates">
+            <div class="marker"></div>
+            <template v-slot:popup>
+              <h3>{{ marker.properties.title }}</h3>
+              <p v-html="marker.properties.description"></p>
+              <span v-if="marker.properties.otherAdvantages.length > 0">{{ marker.properties.otherAdvantages.length }} autres avantages disponibles ici</span>
+              <ion-nav-link :key="organisme.id_organisme" v-for="organisme in marker.properties.organismes" router-direction="forward" :component="InspectOrganisme" :component-props="{ id_organisme: organisme.id_organisme }">
+                <ion-button size="small" expand="full" color="secondary" class="gradient-button ion-no-margin">Tout voir <ion-icon :icon="chevronForwardOutline"/></ion-button>
+              </ion-nav-link>
+            </template>
+          </MapboxMarker>
+          <MapboxMarker v-if="user" :lng-lat="user.coordinates">
+            <img :src="user.image" alt="Vous" class="user">
+            <template v-slot:popup>
+              <h3>Moi</h3>
+              <p>{{ user.name }}</p>
+            </template>
+          </MapboxMarker>
+        </MapboxMap>
       </div>
-    </ion-content>
-  </ion-page>
+  </ion-content>
 </template>
 
 <script setup lang="ts">
-import {IonPage, IonHeader, IonContent, IonToolbar, IonTitle} from "@ionic/vue"
-import { ChevronDown } from "lucide-vue-next"
-import {closeModals} from "@/functions/modals"
+import {
+  IonHeader,
+  IonContent,
+  IonToolbar,
+  IonNavLink,
+  IonIcon,
+  IonButton,
+  IonBackButton, IonButtons, IonTitle
+} from "@ionic/vue"
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { MapboxMap, MapboxMarker } from "@studiometa/vue-mapbox-gl"
+import "mapbox-gl/dist/mapbox-gl.css"
+import InspectOrganisme from "@/components/InspectOrganisme.vue"
+import {chevronForwardOutline, radioButtonOffOutline, radioButtonOnOutline} from "ionicons/icons"
 </script>
 
 <script lang="ts">
-import mapboxgl from "mapbox-gl"
-import "mapbox-gl/dist/mapbox-gl.css"
-mapboxgl.accessToken = "pk.eyJ1IjoiY2FtYXJtLWRldiIsImEiOiJja3B6czl2bGowa2g2Mm5ycmdqMThhOHEzIn0.H-PjLIG_jQqZqvz3gPvjeQ"
+import {GeoJSONSourceRaw} from "mapbox-gl"
 
 export default {
-  props: ["markers", "center", "zoom", "user"],
+  props: ["markers", "center", "zoom", "user", "radius", "title"],
   data() {
     return {
-      map: {} as mapboxgl.Map,
-      fullscreen: false
+      fullscreen: false,
+      circle: false,
+      map: {} as mapboxgl.Map
     }
   },
-  mounted() {
-    setTimeout(() => {
-      const center = this.center || [6.0258598544333974, 47.23521554332734]
-      const map = new mapboxgl.Map({
-        container: this.$refs.mapContainer,
-        style: "mapbox://styles/mapbox/streets-v12",
-        center: center,
-        zoom: this.zoom || 9,
-        minZoom: 4,
-      })
-
-      map.on("load", () => {
-        if (this.markers) {
-          for (const feature of this.markers.features) {
-            const el = document.createElement("div")
-            el.className = "marker"
-            const moreAdvantages = feature.properties.otherAdvantages.length > 0 ? `${feature.properties.otherAdvantages.length} autres avantages disponibles ici`: ""
-            const popup = new mapboxgl.Popup({ offset: 25 })
-                .setHTML(
-                    `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>${moreAdvantages}`
-                )
-
-            new mapboxgl.Marker(el)
-                .setLngLat(feature.geometry.coordinates)
-                .setPopup(popup)
-                .addTo(map)
-          }
-        }
-
-        if (this.user) {
-          const el = document.createElement("img")
-          el.className = "user"
-          el.src = this.user.image
-
-          const popup = new mapboxgl.Popup({ offset: 25 })
-              .setHTML(
-                  `<h3>Moi</h3><p>${this.user.name}</p>`
-              )
-
-          new mapboxgl.Marker(el)
-              .setLngLat(this.user.coordinates)
-              .setPopup(popup)
-              .addTo(map)
+  methods: {
+    toggleCircle() {
+      this.circle = !this.circle
+      this.showCircle()
+    },
+    resetCircle() {
+      try {
+        this.map.removeLayer("polygon")
+        this.map.removeSource("polygon")
+      } catch {
+        console.log("[Map] Catching not existing source / layer.")
+      }
+    },
+    showCircle() {
+      this.resetCircle()
+      if (!this.circle) return
+      this.map.addSource("polygon", this.createGeoJSONCircle(this.user.coordinates, 64))
+      this.map.addLayer({
+        "id": "polygon",
+        "type": "fill",
+        "source": "polygon",
+        "layout": {},
+        "paint": {
+          "fill-color": "#E1B086",
+          "fill-opacity": 0.6
         }
       })
+    },
+    createGeoJSONCircle(center: [number, number], points = 64, radius = 1) {
+      const coords = {
+        latitude: center[1],
+        longitude: center[0]
+      }
 
+      const km = this.radius ? this.radius: radius
 
-      this.map = map
-    }, 500)
-  },
-  unmounted() {
-    // this.map.remove()
+      const ret = []
+      const distanceX = km / (111.320 * Math.cos(coords.latitude * Math.PI / 180))
+      const distanceY = km / 110.574
+
+      let theta, x, y
+      for(let i=0; i < points; i++) {
+        theta = (i / points) * (2 * Math.PI)
+        x = distanceX*Math.cos(theta)
+        y = distanceY*Math.sin(theta)
+
+        ret.push([coords.longitude + x, coords.latitude + y])
+      }
+      ret.push(ret[0])
+
+      return {
+        "type": "geojson",
+        "data": {
+          "type": "FeatureCollection",
+          "features": [{
+            "type": "Feature",
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [ret]
+            }
+          }]
+        }
+      } as GeoJSONSourceRaw
+    }
   }
 }
 </script>
@@ -108,6 +163,10 @@ export default {
   border-radius: 50%;
   border: 2px solid var(--ion-color-primary);
   cursor: pointer;
+}
+
+.ion-no-margin {
+  margin: 0 !important;
 }
 
 .marker {

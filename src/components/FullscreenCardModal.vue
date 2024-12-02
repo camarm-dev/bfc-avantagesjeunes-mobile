@@ -14,7 +14,7 @@
       <ion-item color="black" lines="none">
         <SunDim slot="start"/>
         <ion-label>
-          <ion-range :value="brightness * 100" @ionChange="setBrightness($event.detail.value)"/>
+          <ion-range :value="brightness * 100" @ionChange="setBrightness(($event.detail.value || 0.5) as number)"/>
         </ion-label>
         <Sun slot="end"/>
       </ion-item>

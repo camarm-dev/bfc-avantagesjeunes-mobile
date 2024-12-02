@@ -60,6 +60,19 @@
         </ion-item>
       </ion-list>
 
+      <div class="list-title">
+        Mes préférences
+      </div>
+      <ion-list inset>
+        <ion-item>
+          <ion-checkbox :checked="user.utiliser_pseudo" @ionChange="user.utiliser_pseudo = $event.detail.checked" color="secondary">
+            <ion-label class="ion-text-wrap" color="medium">
+              <p>Utiliser le pseudo plutôt que le nom ?</p>
+            </ion-label>
+          </ion-checkbox>
+        </ion-item>
+      </ion-list>
+
       <ion-list inset>
         <ion-item button color="secondary" @click="save().then(closeModals)">
           Enregistrer

@@ -1,9 +1,43 @@
 import {get, handleResponse, post} from "@/functions/fetch/tools"
 import {APIResponse} from "@/functions/fetch/interfaces"
 import {removeCredentials} from "@/functions/credentials"
-import {Account} from "@/types/account"
+import {Account, FinishSigningData} from "@/types/account"
 
-async function getToken(number: string, password: string): Promise<APIResponse> {
+async function checkFirstConnectionCode(number: string, code: string): Promise<APIResponse> {
+    const url = import.meta.env.VITE_API_URL + "/api/compte/checkCodeConnexionInfos"
+    const data = {
+        numero: number,
+        code_connexion: code,
+        token: ""
+    }
+    return await post(url, data, true, false)
+}
+
+async function changePasswordOnAccountCreation(number: string, id: number, password: string, passwordConfirm: string, code: string, photo: string) {
+    const url = import.meta.env.VITE_API_URL + "/api/compte/create"
+    const data = {
+        numero: number,
+        password: password,
+        passwordNew: password,
+        passwordConfirm: passwordConfirm,
+        id_carte: id,
+        code_connexion: code,
+        logo: photo
+    }
+
+    return await post(url, data, true, false)
+}
+
+async function finishAccountCreation(id: number, account: FinishSigningData) {
+    const url = import.meta.env.VITE_API_URL + "/api/carte/createOrUpdate"
+    const data = {
+        id_carte: id,
+        data: account
+    }
+    return await post(url, data, true, false)
+}
+
+async function getToken(number: string, password: string, checks = true): Promise<APIResponse> {
     const url = import.meta.env.VITE_API_URL + "/api/compte/login"
     const data = {
         numero: number,
@@ -19,7 +53,7 @@ async function getToken(number: string, password: string): Promise<APIResponse> 
         }
     } as any
 
-    return await handleResponse(fetch(url, config), true, config)
+    return await handleResponse(fetch(url, config), checks, config)
 }
 
 async function getAccount(): Promise<Account> {
@@ -47,6 +81,28 @@ async function updateAccount(user: Account) {
     return await post(url, data)
 }
 
+async function updateEmail(id: number, oldEmail: string, newEmail: string) {
+    const url = import.meta.env.VITE_API_URL + "/api/carte/updateEmail"
+    const data = {
+        token: localStorage.getItem("currentCardToken"),
+        id,
+        email_old: oldEmail,
+        email_new: newEmail
+    }
+    return await post(url, data)
+}
+
+async function updatePassword(id: number, oldPassword: string, newPassword: string) {
+    const url = import.meta.env.VITE_API_URL + "/api/compte/updatePassword"
+    const data = {
+        token: localStorage.getItem("currentCardToken"),
+        id,
+        password_old: oldPassword,
+        password_new: newPassword
+    }
+    return await post(url, data)
+}
+
 async function updatePhoto(image: string) {
     const url = import.meta.env.VITE_API_URL + "/api/compte/updatePhoto"
     const data = {
@@ -66,13 +122,19 @@ function logOut() {
         localStorage.removeItem("backCardImage")
         localStorage.removeItem("advantagesCache")
         localStorage.removeItem("userApiUrl")
+        localStorage.removeItem("firstConnectionDisclaimer")
         location.reload()
     })
 }
 
 export {
+    checkFirstConnectionCode,
+    finishAccountCreation,
+    changePasswordOnAccountCreation,
     getToken,
     getAccount,
+    updateEmail,
+    updatePassword,
     updateAccount,
     logOut,
     getUser,

@@ -42,11 +42,13 @@ export default {
   mounted() {
     this.updateTheme()
     this.updateLoggedInStatus()
-    window.addEventListener("closeModals", () => {
+    const update = () => {
       this.updateTheme()
       endVibration()
       this.updateLoggedInStatus()
-    })
+    }
+    window.addEventListener("closeModals", update)
+    window.addEventListener("refresh", update)
     window.addEventListener("reloaded", changedVibration)
   },
   beforeUpdate() {

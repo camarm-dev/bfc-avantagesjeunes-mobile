@@ -25,22 +25,18 @@
       </div>
       <ion-list inset>
         <ion-item>
-          <Phone class="icon ion-color-success" v-if="user.carte.tel_accepte"/>
-          <Phone class="icon ion-color-danger" v-else/>
+          <Phone class="icon ion-color-success"/>
           <ion-label>
             <p>Téléphone</p>
             <h2>{{ user.carte.tel || "Non renseigné" }}</h2>
           </ion-label>
         </ion-item>
         <ion-item>
-          <Mail class="icon ion-color-success" v-if="user.carte.email_accepte"/>
-          <Mail class="icon ion-color-danger" v-else/>
+          <Mail class="icon ion-color-success"/>
           <ion-label>
             <p>Email</p>
             <h2>{{ user.carte.email|| "Non renseigné" }}</h2>
           </ion-label>
-          <BadgeAlert id="verify-email-alert" v-if="!user.carte.email_accepte" slot="end" class="focusable ion-color-danger"/>
-          <ion-alert :buttons="verifyEmailButtons" class="ion-color-primary" :sub-header="user.carte.email || 'Non renseigné'" trigger="verify-email-alert" header="Email non vérifiée" message="Votre addresse email n'a pas été vérifiée."/>
         </ion-item>
         <ion-item>
           <Cake class="icon ion-color-secondary"/>
@@ -62,10 +58,24 @@
           </ion-label>
         </ion-item>
         <ion-item button @click="createModal(ModifyInterests, 'modalModifyInterests', refs, { user }, true, [0, 0.75, 0.9])">
-          <Zap class="icon"/>
+          <Zap class="icon ion-color-secondary"/>
           <ion-label>
             <p>Personnalisez vos suggestions</p>
             <h2>Mes centres d'intérêts</h2>
+          </ion-label>
+        </ion-item>
+        <ion-item button @click="createModal(ModifyEmail, 'modalModifyEmail', refs, { user })">
+          <Mail class="icon ion-color-tertiary"/>
+          <ion-label>
+            <p>Corriger vos informations</p>
+            <h2>Modifier mon email</h2>
+          </ion-label>
+        </ion-item>
+        <ion-item button @click="createModal(ModifyPassword, 'modalModifyPassword', refs, { user })">
+          <KeyRound class="icon ion-color-tertiary"/>
+          <ion-label>
+            <p>Corriger vos informations</p>
+            <h2>Modifier mon mot de passe</h2>
           </ion-label>
         </ion-item>
       </ion-list>
@@ -83,21 +93,22 @@ import {
   IonLabel,
   IonItem,
   IonBackButton,
-  IonButtons,
-  IonAlert
+  IonButtons
 } from "@ionic/vue"
 import {
   Phone,
   Mail,
   Cake,
   Zap,
-  BadgeAlert,
+  KeyRound,
   LogOut,
   Edit
 } from "lucide-vue-next"
 import ModifyInterests from "@/components/ModifyInterests.vue"
 import {logOut} from "@/functions/fetch/account"
 import ModifyProfile from "@/components/ModifyProfile.vue"
+import ModifyEmail from "@/components/ModifyEmail.vue"
+import ModifyPassword from "@/components/ModifyPassword.vue"
 </script>
 
 <script lang="ts">
@@ -108,6 +119,8 @@ import {ref} from "vue"
 
 const refs = {
   modalModifyInterests: ref(null),
+  modalModifyEmail: ref(null),
+  modalModifyPassword: ref(null),
   modalEdit: ref(null)
 } as any
 

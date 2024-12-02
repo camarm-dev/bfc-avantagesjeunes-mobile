@@ -212,6 +212,38 @@ const rubriques = {
     "169": {
         nom: "Produits bio, produits régionaux, fruits et légumes",
         icon: "Vegan"
+    },
+    "173": {
+        nom: "Alimentation, boisson",
+        icon: "Vegan"
+    },
+    "174": {
+        nom: "Auto-école",
+        icon: "Car"
+    },
+    "175": {
+        nom: "Auto, moto, cycle",
+        icon: "Bike"
+    },
+    "176": {
+        nom: "Logement",
+        icon: "Building"
+    },
+    "177": {
+        nom: "Pressing, laverie",
+        icon: "Shirt"
+    },
+    "178": {
+        nom: "Puériculture",
+        icon: "Baby"
+    },
+    "179": {
+        nom: "Restauration",
+        icon: "CakeSlice"
+    },
+    "180": {
+        nom: "Transport",
+        icon: "Bus"
     }
 } as {
     [key: number | string]: { nom: string, icon: string }
@@ -406,6 +438,63 @@ const secteurs = {
     },
     "94": {
         nom: "Chagny"
+    },
+    "95": {
+        nom: "Decize"
+    },
+    "96": {
+        nom: "Chagny"
+    },
+    "97": {
+        nom: "Gueugnon"
+    },
+    "98": {
+        nom: "La Charité-sur-Loire"
+    },
+    "99": {
+        nom: "Chauffailles"
+    },
+    "100": {
+        nom: "Varennes-Sous-Dun"
+    },
+    "101": {
+        nom: "Cluny"
+    },
+    "102": {
+        nom: "Sanvignes-les-Mines"
+    },
+    "103": {
+        nom: "La Clayette"
+    },
+    "104": {
+        nom: "Port-sur-Saône"
+    },
+    "105": {
+        nom: "Scey-sur-Saône-et-Saint-Albin"
+    },
+    "106": {
+        nom: "Epinac"
+    },
+    "107": {
+        nom: "Givry"
+    },
+    "108": {
+        nom: "Montchanin"
+    },
+    "109": {
+        nom: "Ouroux-sur-Saône"
+    },
+    "110": {
+        nom: "Cuisery"
+    },
+    "111": {
+        nom: "Saint-Vallier"
+    },
+    "112": {
+        nom: "Branges"
+    },
+    "113": {
+        nom: "Blanzy"
     }
 } as {
     [key: number | string]: { nom: string }

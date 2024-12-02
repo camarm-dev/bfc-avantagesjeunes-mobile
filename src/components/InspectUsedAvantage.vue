@@ -38,10 +38,17 @@
         </ion-label>
       </ion-item>
       <ion-item>
-        <Ticket class="icon ion-color-secondary"/>
+        <Hash class="icon ion-color-tertiary"/>
         <ion-label class="ion-text-wrap">
           <p>Identifiant de la transaction</p>
           <h2>{{ avantage.id_transaction }}</h2>
+        </ion-label>
+      </ion-item>
+      <ion-item v-if="avantage.coupon_traite != undefined">
+        <Ticket class="icon ion-color-secondary"/>
+        <ion-label class="ion-text-wrap">
+          <p>Information coupon</p>
+          <h2>{{ avantage.coupon_traite ? 'Le coupon a été traité': 'Le coupon n\'a pas été traité' }}</h2>
         </ion-label>
       </ion-item>
     </ion-list>
@@ -65,7 +72,8 @@ import {
 import {
   CalendarClock,
   Ticket,
-  ArrowLeftRight
+  ArrowLeftRight,
+  Hash
 } from "lucide-vue-next"
 import {chevronBackOutline} from "ionicons/icons"
 export default {
@@ -85,6 +93,7 @@ export default {
     CalendarClock,
     Ticket,
     ArrowLeftRight,
+    Hash
   },
   setup() {
     return {
@@ -182,5 +191,12 @@ ion-fab.top {
 
 ion-action-sheet {
   --button-background-selected: var(--ion-color-step-150, #fff) !important;
+}
+
+.item-container::part(native) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 </style>

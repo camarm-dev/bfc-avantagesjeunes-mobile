@@ -1,5 +1,5 @@
 <template>
-  <ion-header>
+  <ion-header ref="page">
     <ion-toolbar>
       <ion-buttons slot="start">
         <ion-back-button text="Retour"></ion-back-button>
@@ -91,7 +91,7 @@
           <h2 class="ion-text-capitalize">{{ dynamicAvantage.type }}</h2>
         </ion-label>
       </ion-item>
-      <ion-item>
+      <ion-item v-if="dynamicAvantage.saison">
         <SquareAsterisk class="icon ion-color-tertiary"/>
         <ion-label>
           <p>Saison de validité</p>
@@ -135,11 +135,13 @@
           <h2>{{ org.site2 }}</h2>
         </ion-label>
       </ion-item>
-      <ion-item button @click="openMap(org.nom, `${org.adresse}, ${org.cp} ${org.commune}`)">
-        <ion-label>
-          <p>Voir sur la carte</p>
-        </ion-label>
-      </ion-item>
+      <ion-nav-link router-direction="forward" :component="MapModal" :component-props="mapProps[org.id_organisme]">
+        <ion-item button>
+          <ion-label>
+            <p>Voir sur la carte</p>
+          </ion-label>
+        </ion-item>
+      </ion-nav-link>
     </ion-list>
 
     <div class="list-title">
@@ -237,6 +239,7 @@ import InspectOrganisme from "@/components/InspectOrganisme.vue"
 import { defineProps } from "vue"
 import {Avantage} from "@/types/avantages"
 import InspectAvantageComments from "@/components/InspectAvantageComments.vue"
+import MapModal from "@/components/MapModal.vue"
 
 // eslint-disable-next-line
 const { avantage, used, favori, type } = defineProps<{
@@ -252,7 +255,6 @@ import {readableDate} from "@/functions/native/dates"
 import {Ref, ref} from "vue"
 import {getPosition} from "@/functions/fetch/geolocation"
 import {createModal} from "@/functions/modals"
-import MapModal from "@/components/MapModal.vue"
 import { Share } from "@capacitor/share"
 import {authenticateWithBiometry, setupBiometry} from "@/functions/native/biometry"
 import {displayToast} from "@/functions/toasts"
@@ -260,6 +262,9 @@ import {loadingController} from "@ionic/vue"
 import {addLike, checkAvailability, getAvantage, obtainAdvantage, removeLike} from "@/functions/fetch/avantages"
 import {APIResponse} from "@/functions/fetch/interfaces"
 import AddNoteModal from "@/components/AddNoteModal.vue"
+import UsedAdvantageValidationModal from "@/components/UsedAdvantageValidationModal.vue"
+import {TransactionAvantage} from "@/types/avantages"
+import {Organisme} from "@/types/organismes"
 
 export default {
   data() {
@@ -270,11 +275,17 @@ export default {
       selectedOrg: this.avantage.organismes[0].id_organisme,
       dynamicUsed: this.used,
       dynamicAvantage: this.avantage,
-      dynamicLiked: liked as number[]
+      dynamicLiked: liked as number[],
+      mapProps: {} as { [key: number]: { center: any, zoom: number, title: string, markers: { features: any[], type: string } } }
     }
   },
   mounted() {
     setupBiometry()
+    for (const org of this.avantage.organismes) {
+      this.getMapProps(org.nom, `${org.adresse}, ${org.cp} ${org.commune}`).then(props => {
+        this.mapProps[org.id_organisme] = props
+      })
+    }
   },
   methods: {
     open(url: string) {
@@ -309,15 +320,30 @@ export default {
         await loader.dismiss()
         await displayToast("Avantage indisponible", "Cet avantage est indisponible ou a déjà été utilisé", 2000, "danger")
       }
-      await authenticateWithBiometry(() => {
-        loader.dismiss()
-        obtainAdvantage(this.avantage.id_avantage, this.selectedOrg).then(() => {
-          this.dynamicUsed = true
+      await authenticateWithBiometry(
+        () => {
+          loader.dismiss()
+          obtainAdvantage(this.avantage.id_avantage, this.selectedOrg).then((transaction) => {
+            this.dynamicUsed = true
+            if (!transaction) return
+            const refs = {
+              modalValidatedAdvantage: ref(null),
+              page: this.$refs.page
+            }
+            const data: TransactionAvantage = {
+              date_transaction: transaction.transaction.date_transaction,
+              id_transaction: transaction.transaction.id_transaction,
+              organisme: this.avantage.organismes.find(org => org.id_organisme == this.selectedOrg) as Organisme,
+              type_transaction: transaction.transaction.type,
+              ...this.avantage
+            }
+            createModal(UsedAdvantageValidationModal, "modalValidatedAdvantage", refs, { avantage: data, backButton: false }, true, [0, 0.95])
+          })
+        },
+        () => {
+          displayToast("Échec d'authentification", "Impossible de vous authentifier avec la biométrie", 2000, "danger")
+          loader.dismiss()
         })
-        }, () => {
-        displayToast("Échec d'authentification", "Impossible de vous authentifier avec la biométrie", 2000, "danger")
-        loader.dismiss()
-      })
     },
     async shareAdvantage() {
       const url = `https://www.avantagesjeunes.com/avantage/${this.avantage.id_avantage}`
@@ -333,18 +359,7 @@ export default {
         alert("Lien copié dans le presse papier")
       }
     },
-    async openMap(org: string, address: string) {
-      const refs = {
-        modalMap: ref(null),
-      }
-      window.addEventListener("closeModals", () => {
-        Object.keys(refs).forEach(key => {
-          // @ts-ignore
-          const object = refs[key] as Ref<any>
-          if (object.value) object.value.dismiss()
-        })
-      })
-
+    async getMapProps(org: string, address: string) {
       const features = []
 
       for (const organisme of this.avantage.organismes) {
@@ -369,8 +384,7 @@ export default {
       }
 
       const zoom = this.avantage.organismes.length === 1 ? 11: 8
-
-      await createModal(MapModal, "modalMap", refs, { markers: geojson, center: geojson.features[0].geometry.coordinates, zoom: zoom }, false, [], true)
+      return { title: "Carte", markers: geojson, center: geojson.features[0].geometry.coordinates, zoom: zoom }
     },
     async getAvantageCoords(address: string) {
       const coords = await getPosition(address)

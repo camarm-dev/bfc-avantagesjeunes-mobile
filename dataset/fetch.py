@@ -135,14 +135,14 @@ def start_fetch_while():
 
 
 if __name__ == '__main__':
-    # Version 04/24
+    # Version 10/24
     silent = '-s' in sys.argv or '--silent' in sys.argv
 
     mongo = pymongo.MongoClient(open('.mongodb').read())
     if input("Réinitialiser la base [Y/n] ?").lower() == 'y':
-        mongo.Dataset.drop_collection('avantages_0424')
+        mongo.Dataset.drop_collection('avantages_1024')
         mongo.Dataset.drop_collection('search')
-    database = mongo.Dataset.avantages_0424
+    database = mongo.Dataset.avantages_1024
     search_database = mongo.Dataset.search
 
     before = datetime.datetime.now()

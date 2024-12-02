@@ -124,7 +124,7 @@ export type Comment = {
     auteur?: any
     image_thumb_url: string
     nb_like: number
-    likesIdCompte: boolean | number[]
+    likesIdCompte: false | number[]
 }
 
 export type Note = {
@@ -155,4 +155,6 @@ export interface TransactionAvantage extends Avantage {
     id_transaction: number
     date_transaction: string
     type_transaction: "dématérialisé" | string
+    coupon_traite?: boolean
+    organisme: Organisme
 }

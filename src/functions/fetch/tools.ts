@@ -1,6 +1,5 @@
 import {getToken, logOut} from "@/functions/fetch/account"
 import { APIResponse } from "@/functions/fetch/interfaces"
-import { displayToast } from "@/functions/toasts"
 import {getCredentials} from "@/functions/credentials"
 
 
@@ -16,7 +15,7 @@ function getIDFromToken(token: string) {
     return JSON.parse(jsonPayload)["id_compte"]
 }
 
-async function post(url: string, data: any, cors = true) {
+async function post(url: string, data: any, cors = true, checks = true) {
     if (data) data["token"] = localStorage.getItem("currentCardToken")
 
     const config = {
@@ -32,11 +31,11 @@ async function post(url: string, data: any, cors = true) {
 
     if (data) config.body = JSON.stringify(data)
 
-    return await handleResponse(fetch(url, config), true, config)
+    return await handleResponse(fetch(url, config), checks, config)
 }
 
 
-async function get(url: string) {
+async function get(url: string, checks = true) {
     const config = {
         method: "GET",
         headers: {
@@ -45,7 +44,7 @@ async function get(url: string) {
         },
         url: url
     } as any
-    return await handleResponse(fetch(url, config), true, config)
+    return await handleResponse(fetch(url, config), checks, config)
 }
 
 
@@ -58,7 +57,10 @@ async function handleResponse(request: Promise<Response>, checks = true, request
     if (requestConfig.body) requestClone.body = requestConfig.body
     try {
         const response = await request
-        const data = await response.json()
+        const data = await response.json().catch((e) => {
+            if (!response.ok) throw e
+            return { code: 200, status_code: 200, status: true, data: {}, message: "" }
+        })
         return data
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -80,19 +82,7 @@ async function handleResponse(request: Promise<Response>, checks = true, request
                 const newRequest = fetch(requestConfig.url, requestClone)
                 return await handleResponse(newRequest,false, requestConfig)
             } else {
-                // await displayToast('Error', 'Unable to access API: forbidden. Please (re)login.', 3000, 'danger')
                 logOut()
-                // setTimeout(() => {
-                //     location.href = '/resume'
-                // }, 3000)
-            }
-        } else {
-            if (err.response) await displayToast(`Error ${err.response.data.status}`, err.response.data.message, 2000, "danger")
-            else {
-                // await displayToast('Error', 'Unable to access API: forbidden. Please (re)login.', 3000, 'danger')
-                // setTimeout(() => {
-                //     location.href = '/resume'
-                // }, 3000)
             }
         }
         if (err.response) {

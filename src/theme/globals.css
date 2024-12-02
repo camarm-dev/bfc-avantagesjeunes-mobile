@@ -5,13 +5,18 @@
     --ion-tab-bar-color: var(--ion-color-secondary);
     --ion-tab-bar-color-selected: var(--ion-color-secondary-shade);
     --ion-text-color: var(--ion-color-primary-contrast);
-    --ion-color-heart: #d5595a;
-    --ion-color-like: #3a3af0;
-    --ion-color-star: #b99c33;
+    --ion-color-heart: #a84748;
+    --ion-color-like: #2f2fbd;
+    --ion-color-star: #9b832c;
 }
 
 ion-nav-link {
     width: max-content;
+}
+
+.swiper-pagination span.swiper-pagination-bullet {
+    background: var(--ion-color-secondary) !important;
+    box-shadow: none !important;
 }
 
 ion-item.ion-color-secondary ion-input * {
@@ -168,6 +173,10 @@ ion-spinner.small {
     height: 14px
 }
 
+.is-underlined {
+    text-decoration: underline;
+}
+
 .ion-color-warning :not(.toast-header, .toast-message) {
     color: var(--ion-color-warning);
 }
@@ -192,7 +201,7 @@ ion-spinner.small {
     color: var(--ion-color-danger);
 }
 
-.ion-color-medium :not(.toast-header, .toast-message) {
+.ion-color-medium :not(.toast-header, .toast-message), a.ion-color-medium {
     color: var(--ion-color-medium);
 }
 
@@ -200,12 +209,24 @@ input {
     caret-color: var(--ion-color-primary) !important;
 }
 
-.ion-color-secondary::part(native) {
-    --background: linear-gradient(90deg, #e8d384, var(--ion-color-secondary));
+.ion-color-secondary:not(.button-outline)::part(native) {
+    --background: linear-gradient(90deg, var(--ion-color-secondary), var(--ion-color-secondary-tint), var(--ion-color-secondary));
     background: var(--background);
 }
 
-.ion-color-secondary.gradient-button ion-label, .ion-color-secondary.gradient-button ion-label *, .ion-color-secondary.gradient-button .icon * {
+.gradient-button.button-outline::part(native) {
+    --border-color: linear-gradient(90deg, var(--ion-color-secondary), var(--ion-color-secondary-tint), var(--ion-color-secondary));
+    border-color: var(--border-color) !important;
+    color: var(--ion-color-secondary);
+    border-right-width: var(--border-width);
+    border-left-width: var(--border-width);
+}
+
+ion-button[expand="full"] {
+    width: 100%;
+}
+
+.ion-color-secondary.gradient-button::part(native), .ion-color-secondary.gradient-button *, .ion-color-secondary.gradient-button .icon * {
     --color: var(--ion-color-primary);
     color: var(--color) !important;
 }
@@ -216,7 +237,7 @@ input {
 }
 
 .ion-color-secondary:hover::part(native), .ion-color-secondary:hover::part(native)::after {
-    --background: linear-gradient(90deg, #c7b571, var(--ion-color-secondary-shade));
+    --background: linear-gradient(90deg, var(--ion-color-secondary-shade), var(--ion-color-secondary), var(--ion-color-secondary-shade));
     background: var(--background);
 }
 
@@ -242,8 +263,12 @@ input {
 }
 
 .card-picture {
-    height: 275px !important;
+    width: 275px !important;
     border-radius: 18px;
+}
+
+.alert-button.sc-ion-alert-ios {
+    color: var(--ion-color-primary-contrast)
 }
 
 @media (min-width: 1024px) {
@@ -305,6 +330,10 @@ ion-toolbar ion-label p {
     border-radius: 12px;
     margin: 2em auto auto;
     padding: .8em 1.2em 2em;
+}
+
+.floating.small {
+    padding: .8em 1.2em;
 }
 
 .floating p {
@@ -595,5 +624,5 @@ ion-list ion-nav-link:first-child:last-child ion-item:last-child {
 
 ion-list ion-nav-link:not(:first-child):last-child ion-item:last-child {
     border-radius: 0 0 10px 10px;
-    --inner-border-width: 0 0 0 0 !important;
+    --inner-border-width: 0.55px 0 0 0 !important;
 }
